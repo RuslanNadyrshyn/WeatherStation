@@ -1,0 +1,275 @@
+<!doctype html>  <!-- html код -->
+<html>
+	<head>
+        <meta charset="utf-8">					<!-- Підключення кирилиці -->
+		<link rel="stylesheet" href="css/styles.css">
+        <script src="js/chart.min.js"></script> <!-- Підключення додаткових бібліотек -->
+        <script src="js/utils.js"></script>
+		<script src="js/jquery.js"></script>
+	</head>
+
+	<body>				<!-- Колір фону сторінки -->
+        <div class="container">
+<!-- Створення таблиці "Дані датчика BME280" -->
+		<h1>Дані датчика BME280</h1>
+		<table class="current-table" cellspacing="0">
+		    <tr>
+                <th>Температура</th>
+                <th>Тиск</th>
+                <th>Висота над рівнем моря</th>
+                <th>Вологість</th>
+            </tr>
+			<tr>
+                <td class="current-table-td">21.5</td>
+			    <td class="current-table-td">1001 ГПа</td>
+			    <td class="current-table-td">800 м</td>
+			    <td class="current-table-td">67 %</td> 
+            </tr>	
+		</table>
+    
+		<h1>База даних</h2>
+        <div class="page-navigator">
+            Сторінка: 
+            <div class="page-navigator-item" onclick="window.location='index.php?count=20';">1</div>
+            <div class="page-navigator-item" onclick="window.location='index.php?count=20';">2</div>
+            <div class="page-navigator-item" onclick="window.location='index.php?count=20';">3</div>
+            <div class="page-navigator-item" onclick="window.location='index.php?count=20';">5</div>
+        </div>
+<!-- Створення таблиці "База даних"-->
+        <div class="db-table-container">
+            <table cellspacing="0">
+                <tr>		<!-- Фон першого рядка таблиці-->
+                    <th>ID</th>
+                    <th>Дата</th>
+                    <th>Час</th>
+                    <th>Температура</th>
+                    <th>Тиск</th>
+                    <th>Висота</th>
+                    <th>Вологість</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:06:2022</td>
+                    <td>23:23:09</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>12:11:2022</td>
+                    <td>23:11:01</td>
+                    <td>23.5 `</td>
+                    <td>1011 ГПа</td>
+                    <td>1000 v</td>
+                    <td>61 %</td>
+                </tr>
+            </table>
+        </div>
+        <div class="navigator">
+            <div class="nav-counter" onclick="window.location='index.php?count=20';">20</div>
+            <div class="nav-counter" onclick="window.location='index.php?count=50';">50</div>
+            <div class="nav-counter" onclick="window.location='index.php?count=100';">100</div>
+            <div class="nav-counter" onclick="window.location='index.php?count=';">Всі()</div>
+        </div>
+		<caption><h2>Графіки</h2></caption> 
+		<div class="container"> 	<!--Ініціалізація графіків  -->
+			<div class="chart-container"> 
+				<canvas id="chart-temp"></canvas>
+			</div>
+			<div class="chart-container">
+				<canvas id="chart-press"></canvas>
+			</div>
+			<div class="chart-container">
+				<canvas id="chart-alt"></canvas>
+			</div>
+			<div class="chart-container">
+				<canvas id="chart-hum"></canvas>
+			</div> 
+		</div>
+        <script>
+            function createConfig(data, text, colorName) {
+                return {
+                    type: 'line',
+                    data: {
+                        labels: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5],
+                        datasets: [{
+                            label: text,
+                            data: data,
+                            backgroundColor: colorName,
+                            borderColor: colorName,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                };
+            }
+    
+            window.onload = function() {
+                [{
+                    id: 'chart-temp',	// Графік температури
+                    color: 'yellow',
+                    text: 'Температура',
+                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                }, {
+                    id: 'chart-press',	// Графік тиску
+                    color: 'red',
+                    text: 'Тиск',
+                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                }, {
+                    id: 'chart-alt', 	// Графік Висоти
+                    color: 'green',
+                    text: 'Висота над рівнем моря',
+                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                }, {
+                    id: 'chart-hum', 	// Графік вологості
+                    color: 'blue',
+                    text: 'Вологість',
+                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                }].forEach(function(details) {
+                    var ctx = document.getElementById(details.id).getContext('2d');
+                    var config = createConfig(details.data, details.text, details.color);
+                    new Chart(ctx, config);
+                });
+            };
+        </script>	
+	</body>
+</html>

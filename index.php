@@ -1,5 +1,6 @@
 <?php
 include "connect_db.php";    					// З'єднання з файлом connect_db.php
+include "scripts.php";
 
 $page=1;                                        // 1 сторінка
 if (isset($_GET['page']))                       // Створення змінної Сторінка з URL сторінки
@@ -30,31 +31,15 @@ else
 <!doctype html>  <!-- html код -->
 <html>
 	<head>
-		<script src="js/Chart.min.js"></script>	<!-- Підключення додаткових бібліотек -->
-		<script src="js/utils.js"></script>
+		<script src="js/utils.js"></script>			<!-- Підключення додаткових бібліотек -->
+		<script src="js/Chart.min.js"></script>	
 		<script src="js/jquery.js"></script>
+		<link rel="stylesheet" href="css/style.css">
 		<meta charset="utf-8">					<!-- Підключення кирилиці -->
-			<style>								<!-- Стиль графіків -->
-			canvas{ 
-				-moz-user-select: none;
-				-webkit-user-select: none;
-				-ms-user-select: none;
-			}
-			.chart-container {
-				width: 800px;
-				margin-left: 40px;
-				margin-right: 40px;
-			}
-			.container {
-				display: flex;
-				flex-direction: row;
-				flex-wrap: wrap;
-				justify-content: center;
-			}
-			</style>
 	</head>
 
-	<body bgcolor="#dfffde">				<!-- Колір фону сторінки -->
+	<body>									<!-- Блок відображення сторінки -->
+	<div class="container">
 		<script>							<!-- Скрипт для динамічного оновлення інформації у таблиці "Дані датчика BME280" -->
 		$(document).ready(function(){
 			loadData();
@@ -74,25 +59,30 @@ else
 			});
 		};	
 		</script>
+	
+		<!-- Створення таблиці "Дані датчика BME280" -->
+		<caption><h1>Дані датчика BME280</h1></caption>
 
-<!-- Створення таблиці "Дані датчика BME280" -->
-		<caption><h1 style="font-family : Arial;" align=center>Дані датчика BME280</h1></caption>
-		<table bordercolor="black" border ="1" style="font-size : 24px; font-family : Arial; background:Khaki" cellspacing="0" cellpadding="10px" align=center width=45%>
-		  <tr style="background:#a5f2c1;">
-			<th>Температура</th>
-			<th>Тиск</th>
-			<th>Висота над рівнем моря</th>
-			<th>Вологість</th>
-			<tr><td align=center id="temp"></td>
-			<td align=center id="press"></td>
-			<td align=center id="alt"></td>
-			<td align=center id="hum"></td></tr>	
+		<table class="current-table" cellspacing="0" border=1 width=1200>
+			<tr>
+				<th>Температура</th>
+				<th>Тиск</th>
+				<th>Висота над рівнем моря</th>
+				<th>Вологість</th>
+			</tr>
+			<tr>
+				<td id="temp"></td>
+				<td id="press"></td>
+				<td id="alt"></td>
+				<td id="hum"></td>
+			</tr>	
 		</table>
-		<caption><h2 style="font-family : Arial;" align=center>База даних</h2></caption>
+
+		<caption><h1>База даних</h1></caption>
 
 		<?php 	// Функція виводу навігатора кількості значень БД
 		function Count_navigator($count, $all_rec){
-			echo "<div style='font-family : Arial;' align='center'> Кількість значень: ";         
+			echo "<div>Кількість значень: ";         
 			for ($i = 1; $i <= 4; $i++){
 				if($i == 1)
 					if($count==20)
@@ -111,16 +101,18 @@ else
 						echo "<a style='font-size : 24px;' href=index.php?count=".$all_rec.">| ".$all_rec." |</a>";
 					else echo "<a href=index.php?count=".$all_rec.">| ".$all_rec." |</a>";
 			}
+			echo "</div>"; 
 		}
 // Функція виводу навігатора сторінок БД
 		function Page_navigator($count, $page, $num_of_pages){
-			echo "<div> Сторінка ";   
+			echo "<div>";   
 			for ($i = 1; $i <= $num_of_pages; $i++){
 				if($page==$i)
 					echo "<a style='font-size : 24px;' href=index.php?page=".$i."&count=".$count.">| ".$i." |</a>";
 				else 
 					echo "<a href=index.php?page=".$i."&count=".$count.">| ".$i." |</a>";
 			}
+			echo "</div>"; 
 		}
 // Вивід навігатора сторінок БД
 		Count_navigator($count, $all_rec);
@@ -128,7 +120,7 @@ else
 		?>
 		
 <!-- Створення таблиці "База даних"-->	
-		<table bordercolor="black" border="1" style="font-family : Arial;" cellspacing="0" align=center width=600>
+		<table bordercolor="black" border="1" style="font-family : Arial;" cellspacing="0" align=center width=850>
 		<colgroup>
 			<col span="1" style="background:#84b591">                   <!-- Фон першого стовбця таблиці-->
 			<col span="6" style="background-color:#aee8bd">             <!-- Фон для інших стовбців таблиці-->
@@ -170,11 +162,11 @@ else
 
 		<?php // Вивід навігатора сторінок БД
 		Page_navigator($count, $page, $num_of_pages);
-		Count_navigator($count, $all_rec);
+
 		?>
 
 		<caption><h2>Графіки</h2></caption> 
-		<div class="container"> 	<!-- Ініціалізація графіків -->
+		<div class="chart-container"> 	<!-- Ініціалізація графіків -->
 			<div class="chart-container"> 
 				<canvas id="chart-temp"></canvas>
 			</div>
@@ -189,55 +181,15 @@ else
 			</div>
 		</div>
 		<script>
-		var color = Chart.helpers.color;
-		function createConfig(data, text, colorName) {
-			return {
-				type: 'line',
-				data: {
-					labels: [<?php while ($o = mysqli_fetch_array($ch_date)) { echo '"' . $o['date_bme280'] . '",';}?>],
-					datasets: [{
-						label: text,
-						data: data,
-						backgroundColor: color(window.chartColors[colorName]).alpha(0.9).rgbString(),
-						borderColor: window.chartColors[colorName],
-						borderWidth: 1
-					}]
-				},
-				options: {
-					responsive: true
-				}
-			};
-		}
+			var data = [];	
+			data[0] = [<?php while($t=mysqli_fetch_array($ch_temp)){echo '"'.$t['temp_bme280'].'",';}?>].slice(0, -1);
+			data[1] = [<?php while($p=mysqli_fetch_array($ch_press)){echo '"'.$p['press_bme280'].'",';}?>].slice(0, -1);
+			data[2] = [<?php while($l=mysqli_fetch_array($ch_alt)){echo '"'.$l['alt_bme280'].'",';}?>].slice(0, -1);
+			data[3] = [<?php while($h=mysqli_fetch_array($ch_hum)){echo '"'.$h['hum_bme280'].'",';}?>].slice(0, -1);
+			var labels = [<?php while ($o = mysqli_fetch_array($ch_date)) { echo '"' . $o['date_bme280'] . '",';}?>].slice(0, -1);
 
-		window.onload = function() {
-			[{
-				id: 'chart-temp',	// Графік температури
-				color: 'yellow',
-				text: 'Температура',
-				data: [<?php while($t=mysqli_fetch_array($ch_temp)){echo '"'.$t['temp_bme280'].'",';}?>]
-			}, {
-				id: 'chart-press',	// Графік тиску
-				color: 'red',
-				text: 'Тиск',
-				data: [<?php while($p=mysqli_fetch_array($ch_press)){echo '"'.$p['press_bme280'].'",';}?>]
-			}, {
-				id: 'chart-alt', 	// Графік Висоти
-				color: 'green',
-				text: 'Висота над рівнем моря',
-				data: [<?php while($l=mysqli_fetch_array($ch_alt)){echo '"'.$l['alt_bme280'].'",';}?>]
-			}, {
-				id: 'chart-hum', 	// Графік вологості
-				color: 'blue',
-				text: 'Вологість',
-				data: [<?php while($h=mysqli_fetch_array($ch_hum)){echo '"'.$h['hum_bme280'].'",';}?>]
-			}].forEach(function(details) {
-				var ctx = document.getElementById(details.id).getContext('2d');
-				var config = createConfig(details.data, details.text, details.color);
-				new Chart(ctx, config);
-			});
-		};
+			drawCharts(data, labels);
 		</script>	
+		</div>
 	</body>
 </html>
-
-<!--<meta http-equiv="Refresh" content="20; URL=\"> -->                 				<!-- Оновлення сторінки раз у 20 секунд  -->
