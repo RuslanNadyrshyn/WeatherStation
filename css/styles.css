@@ -48,34 +48,20 @@ tr:not(:first-child):hover {
     max-height: 500px;
 }
 
-.navigator {
+.navigator-block {
 	display: flex;
 }
-
-.nav-counter {
+.navigator-item {
 	padding: 10px;
-	background-color: darkgray;
 	cursor: pointer;
+	background-color: darkgray;
 	margin: 5px 1px;
 }
-.nav-counter:hover {
+.navigator-item:hover {
 	background-color: gray;
 }
-
-.page-navigator {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: auto;
-}
-.page-navigator-item {
-	padding: 10px;
-	background-color: lightgrey;
-	cursor: pointer;
-	margin: 3px;
-}
-.page-navigator-item:hover {
-	background-color: dimgrey;
+.navigator-item.selected {
+	background-color: darkslategray;
 }
 
 canvas { 
