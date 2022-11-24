@@ -8,8 +8,8 @@ develop branch - Master's diploma code
 TODO: 
 1. line up comments +
 2. rename functions (use underscore beetwen words) +
-3. separate code to php, js, html
-4. edit db table code (151-171)
+3. separate code to php, js, html +
+4. edit db table code (151-171) +-
 5. fix charts
 6. update comments
 

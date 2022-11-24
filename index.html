@@ -13,7 +13,67 @@
         <div class="container">
 <!-- Створення таблиці "Дані датчика BME280" -->
         <h1 id="myHeader">Hello World!</h1>
-        <button onclick="displayResult()">Change text</button>
+        <button onclick="updateTable()">Change Table</button>
+
+        <div class="db-table-container">
+            <div id="myDiv"></div>
+        </div>
+
+        <script>
+            var db = [];
+            for (let i = 0; i < 15; i++) {
+                db.push({
+                    id: i,
+                    date: "date"+i,
+                    time: "time"+i,
+                    temp: "temp"+i,
+                    press: "press"+i,
+                    alt: "alt"+i,
+                    hum: "hum"+i
+                })
+            }
+            function fillInTable () {
+                var $table = $("<table></table>");
+                for (let index = 0; index < db.length; index++) {
+                    var element = db[index];
+                    var $line = $("<tr></tr>");
+                    console.log();
+                    $line.append($("<td></td>").html(element.id));
+                    $line.append($("<td></td>").html(element.date));
+                    $line.append($("<td></td>").html(element.time));
+                    $line.append($("<td></td>").html(element.temp));
+                    $line.append($("<td></td>").html(element.press));
+                    $line.append($("<td></td>").html(element.alt));
+                    $line.append($("<td></td>").html(element.hum));
+                    $table.append($line);
+                }
+
+                $table.appendTo($("#myDiv"));
+            }
+            fillInTable();
+            function updateTable() {
+                for (let i = 0; i < 15; i++) {
+                    db[i].id=i+5;
+                    db[i].date="date"+i+5;
+                }
+                var $newTable = $("<table></table>");
+                for (let index = 0; index < db.length; index++) {
+                    var element = db[index];
+                    var $line = $("<tr></tr>");
+                    console.log();
+                    $line.append($("<td></td>").html(element.id));
+                    $line.append($("<td></td>").html(element.date));
+                    $line.append($("<td></td>").html(element.time));
+                    $line.append($("<td></td>").html(element.temp));
+                    $line.append($("<td></td>").html(element.press));
+                    $line.append($("<td></td>").html(element.alt));
+                    $line.append($("<td></td>").html(element.hum));
+                    $newTable.append($line);
+                }
+
+                $newTable.replaceAll($("#myDiv"));
+            }
+        </script>
 		<h1>Дані датчика BME280</h1>
 		<table class="current-table" cellspacing="0">
 		    <tr>
@@ -212,7 +272,8 @@
             <div class="navigator-item" onclick="window.location='index.php?count=';">Всі()</div>
         </div>
 		<caption><h2>Графіки</h2></caption> 
-		<div class="container"> 	<!--Ініціалізація графіків  -->
+
+		<div class="charts-block"> 	<!--Ініціалізація графіків  -->
 			<div class="chart-container"> 
 				<canvas id="chart-temp"></canvas>
 			</div>
@@ -227,11 +288,16 @@
 			</div> 
 		</div>
         <script>
+            var arr = [];
+            for (let i = 0; i < 100; i++) {
+                arr.push(i);
+            }
             function createConfig(data, text, colorName) {
+                console.log(arr);
                 return {
                     type: 'line',
                     data: {
-                        labels: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5],
+                        labels: arr,
                         datasets: [{
                             label: text,
                             data: data,
@@ -251,28 +317,29 @@
                     id: 'chart-temp',	// Графік температури
                     color: 'yellow',
                     text: 'Температура',
-                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                    data: arr
                 }, {
                     id: 'chart-press',	// Графік тиску
                     color: 'red',
                     text: 'Тиск',
-                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                    data: arr
                 }, {
                     id: 'chart-alt', 	// Графік Висоти
                     color: 'green',
                     text: 'Висота над рівнем моря',
-                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                    data: arr
                 }, {
                     id: 'chart-hum', 	// Графік вологості
                     color: 'blue',
                     text: 'Вологість',
-                    data: [5,3,2,3,4,4,656,76,2,2,34,4,5,6,7,8,2,5]
+                    data: arr
                 }].forEach(function(details) {
                     var ctx = document.getElementById(details.id).getContext('2d');
                     var config = createConfig(details.data, details.text, details.color);
                     new Chart(ctx, config);
                 });
             };
+            
         </script>	
 	</body>
 </html>
