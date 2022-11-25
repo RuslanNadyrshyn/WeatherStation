@@ -15,20 +15,25 @@
         <h1 id="myHeader">Hello World!</h1>
         <button onclick="updateTable()">Change Table</button>
 
-        <!-- <div class="db-table-container">
+        <div class="db-table-container">
             <div id="myDiv"></div>
-        </div> -->
+        </div>
 
         <div class="db-table-container">
             <table id="dbTable"></table>
         </div>
 
         <script>
-            function printRow(object) {
+            function printRow(object, isHeader) {
                 var $line = $("<tr></tr>");
+
+                if (isHeader) object.forEach(element => 
+                        $line.append($("<th></th>").html(element)));
+                else {
                 for (const key in object)
                     if (Object.hasOwnProperty.call(object, key))
                         $line.append($("<td></td>").html(object[key]));
+                }
                 return $line;
             }
 
@@ -47,11 +52,10 @@
 
             function fillInTable (data) {
                 var $table = $("<table></table>");
+                $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
                 for (let index = 0; index < data.length; index++) {
                     var element = data[index];
-                    var $line = $("<tr></tr>");
-                    console.log();
-                    $table.append(printRow(element));
+                    $table.append(printRow(element), false);
                 }
                 $table.appendTo($("#myDiv"));
             }

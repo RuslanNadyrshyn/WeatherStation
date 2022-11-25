@@ -69,4 +69,35 @@ function drawCharts (data, labels) {
     };
 }
 
+function printRow(object, isHeader) {
+		var $line = $("<tr></tr>");
+		if (isHeader) object.forEach(element =>
+			$line.append($("<th></th>").html(element)));
+		else {
+			for (const key in object)
+				if (Object.hasOwnProperty.call(object, key))
+				{
+					if (key == "date_bme280"){
+						datetime = object[key].split(" ");
+						date = datetime[0];
+						time = datetime[1];
+						$line.append($("<td></td>").html(date));
+						$line.append($("<td></td>").html(time));
+					} else $line.append($("<td></td>").html(object[key]));
+				}
+					
+		}
+		return $line;
+	}
+	function fillInTable(data) {
+		var $table = $("<table cellspacing='0' ></table>");
+		$table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
+		for (let index = 0; index < data.length; index++) {
+			var element = data[index];
+			var $line = $("<tr></tr>");
+			$table.append(printRow(element), false);
+		}
+		return $table;
+	}
+
 </script>

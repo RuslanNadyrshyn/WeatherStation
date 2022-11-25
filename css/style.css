@@ -69,11 +69,11 @@ tr:not(:first-child):hover {
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
-canvas { 
+/* canvas { 
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
-}
+} */
 .chart-container {
 	margin: auto;
 	width: 100%;
