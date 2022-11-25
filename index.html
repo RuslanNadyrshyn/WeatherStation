@@ -19,7 +19,19 @@
             <div id="myDiv"></div>
         </div>
 
+        <div class="db-table-container">
+            <table id="dbTable"></table>
+        </div>
+
         <script>
+            function printRow(object) {
+                var $line = $("<tr></tr>");
+                for (const key in object)
+                    if (Object.hasOwnProperty.call(object, key))
+                        $line.append($("<td></td>").html(object[key]));
+                return $line;
+            }
+
             var db = [];
             for (let i = 0; i < 15; i++) {
                 db.push({
@@ -32,25 +44,19 @@
                     hum: "hum"+i
                 })
             }
-            function fillInTable () {
+
+            function fillInTable (data) {
                 var $table = $("<table></table>");
-                for (let index = 0; index < db.length; index++) {
-                    var element = db[index];
+                for (let index = 0; index < data.length; index++) {
+                    var element = data[index];
                     var $line = $("<tr></tr>");
                     console.log();
-                    $line.append($("<td></td>").html(element.id));
-                    $line.append($("<td></td>").html(element.date));
-                    $line.append($("<td></td>").html(element.time));
-                    $line.append($("<td></td>").html(element.temp));
-                    $line.append($("<td></td>").html(element.press));
-                    $line.append($("<td></td>").html(element.alt));
-                    $line.append($("<td></td>").html(element.hum));
-                    $table.append($line);
+                    $table.append(printRow(element));
                 }
-
                 $table.appendTo($("#myDiv"));
             }
-            fillInTable();
+            fillInTable(db);
+
             function updateTable() {
                 for (let i = 0; i < 15; i++) {
                     db[i].id=i+5;
@@ -60,18 +66,33 @@
                 for (let index = 0; index < db.length; index++) {
                     var element = db[index];
                     var $line = $("<tr></tr>");
-                    console.log();
-                    $line.append($("<td></td>").html(element.id));
-                    $line.append($("<td></td>").html(element.date));
-                    $line.append($("<td></td>").html(element.time));
-                    $line.append($("<td></td>").html(element.temp));
-                    $line.append($("<td></td>").html(element.press));
-                    $line.append($("<td></td>").html(element.alt));
-                    $line.append($("<td></td>").html(element.hum));
-                    $newTable.append($line);
+                    $newTable.append(printRow(element));
                 }
 
                 $newTable.replaceAll($("#myDiv"));
+            }
+
+            function printRow1(data, isHeader) {
+                var row = "";
+                row += "<tr>";
+                for (let i = 0; i < data.length; i++) {
+                    if (isHeader) row += "<th>"+data[i]+"</th>";
+                    else row += "<td>"+data[i]+"</td>";
+                }
+                row += "</tr>";
+                console.log("row", row);
+                return row;
+            }
+
+            function fillInTable1() {
+                var html = "";
+                var dbTableHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+                html+=printRow1(dbTableHeader, true);
+                console.log(html);
+                for (let index = 0; index < db.length; index++) {
+                    html+=printRow1([db[index].id, db[index].date, db[index].time, db[index].temp, db[index].press, db[index].alt, db[index].hum], false);
+                }
+                document.getElementById("dbTable").innerHTML = html;
             }
         </script>
 		<h1>Дані датчика BME280</h1>

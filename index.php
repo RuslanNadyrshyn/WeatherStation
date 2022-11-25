@@ -28,8 +28,8 @@ else $num_of_pages = $all_rec/$count+1;
 	$ch_hum=$conn->query("SELECT hum_bme280 FROM bme280 ORDER BY id_bme280 LIMIT $art, $count");             
 	$ch_date=$conn->query("SELECT date_bme280 FROM bme280 ORDER BY date_bme280 LIMIT $art, $count");
 
-	// Запит до БД для виводу усіх значень з таблиці "bme280"
-	$result=$conn->query("SELECT * FROM bme280 ORDER BY id_bme280 LIMIT $art, $count");
+	// // Запит до БД для виводу усіх значень з таблиці "bme280"
+	// $result=$conn->query("SELECT * FROM bme280 ORDER BY id_bme280 LIMIT $art, $count");
 	
 	function echo_count($count, $num) {								// Функція виводу навігатора кількості рядків з БД 
 		if($count==$num) echo '<div class="navigator-item selected" '; //на одній сторінці
@@ -66,7 +66,8 @@ else $num_of_pages = $all_rec/$count+1;
 <!----------------------------------------------------------------------------------------->
 <script>									
 $(document).ready(function(){ 										// Скрипт для динамічного оновлення інформації 
-	loadData();														// у таблиці "Дані датчика BME280"
+	loadData();
+	loadDB();														// у таблиці "Дані датчика BME280"
 });
 var loadData = function() {
 	$.ajax({														// ajax-запит до бази даних 
@@ -79,6 +80,34 @@ var loadData = function() {
 			$("#alt").text(result.alt_bme280 + ' м');
 			$("#hum").text(result.hum_bme280 + ' %');
 			setTimeout(loadData, 2000); 
+		}
+	});
+};	
+
+function printRow(data) {
+	var row = "";
+	row += "<tr>";
+	for (var element in data)
+		row += "<th>"+element+"</th>";
+	row += "</tr>";
+	return row;
+}
+
+var loadDB = function() {
+	$.ajax({														// ajax-запит до бази даних 
+		type:"GET",
+		url:"/extract_db.php",										// звертання до файла extract_db.php 
+		dataType: "json",
+		success: function(result){
+			var html = "";
+			var dbTableHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+			html+=printRow(dbTableHeader);
+            for (let index = 0; index < db.length; index++) {
+                console.log(row);
+				html+=printRow(db[index]);
+    	    }
+
+			document.getElementById("dbTable").innerHTML = html;
 		}
 	});
 };	
@@ -107,7 +136,10 @@ drawCharts(data, labels);											// виклик функції з scripts.ph
 	</head>
 
 	<body>															<!-- Блок відображення сторінки -->
-		<div class="container">					
+		<div class="container">
+			<div class="db-table-container">
+				<table id="dbTable"></table>
+			</div>					
 			<h1>Дані датчика BME280</h1>							<!-- Створення таблиці "Дані датчика BME280" -->
 			<table class="current-table" cellspacing="0">
 				<tr>
