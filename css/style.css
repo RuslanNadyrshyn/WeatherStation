@@ -52,6 +52,7 @@ tr:not(:first-child):hover {
 
 .navigator-block {
 	display: flex;
+	overflow: auto;
 }
 .navigator-item {
 	padding: 10px;
@@ -71,11 +72,11 @@ tr:not(:first-child):hover {
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
-/* canvas { 
+canvas { 
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
-} */
+}
 .chart-container {
 	margin: auto;
 	width: 100%;

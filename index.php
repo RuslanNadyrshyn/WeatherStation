@@ -166,7 +166,8 @@ function page_navigator($count, $page, $num_of_pages)
 			dataType: "json",
 			success: function (result) {
 				var $table = fillInTable(result);
-				$table.appendTo($("#dbTable"));
+				$("#dbTable").replaceWith($table);
+				// $table.appendTo($("#dbTable"));
 			}
 		});
 	};
