@@ -19,4 +19,6 @@ TODO:
 7. Weather predict from internet
 8. deploy to server 
 
+Инвертировать не график, а данные в нём до этого, чтобы корректно отображалось
+
 

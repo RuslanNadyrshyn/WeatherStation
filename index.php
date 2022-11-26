@@ -169,11 +169,24 @@ function page_navigator($count, $page, $num_of_pages)
 			url: "/extract_db.php",										// звертання до файла extract_db.php 
 			dataType: "json",
 			success: function (result) {
+				console.log(result);
 				var $table = fillInTable(result);
 				$("#dbTable").replaceWith($table);
 			}
 		});
 	};
+
+	// var loadCharts = function () {
+	// 	$.ajax({														// ajax-запит до бази даних 
+	// 		type: "GET",
+	// 		url: "/extract_charts.php",										// звертання до файла extract_db.php 
+	// 		dataType: "json",
+	// 		success: function (result) {
+	// 			var $table = fillInTable(result);
+	// 			$("#dbTable").replaceWith($table);
+	// 		}
+	// 	});
+	// };
 
 	var data = [];														// Допоміжний масив для відображення графіків
 	// var labels = fetchArray($ch_date, 'date_bme280');					// Заповнення масиву даними з БД для відображення графіків
@@ -183,6 +196,5 @@ function page_navigator($count, $page, $num_of_pages)
 			data[2] = [<?php while($l=mysqli_fetch_array($ch_alt)){echo '"'.$l['alt_bme280'].'",';}?>].slice(0, -1);
 			data[3] = [<?php while($h=mysqli_fetch_array($ch_hum)){echo '"'.$h['hum_bme280'].'",';}?>].slice(0, -1);
 			var labels = [<?php while ($o = mysqli_fetch_array($ch_date)) { echo '"' . $o['date_bme280'] . '",';}?>].slice(0, -1);
-	console.log("data ", data);
 	drawCharts(data, labels); // виклик функції з scripts.php відображення графіків
 </script>

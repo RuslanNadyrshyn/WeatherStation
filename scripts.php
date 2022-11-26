@@ -37,29 +37,22 @@
                 labels: labels,
                 datasets: [{
                     data: data,
-                    backgroundColor: colorName,
                     borderColor: colorName,
                     borderWidth: 1,
                 }]
             },
             options: {
+                responsive: true,
                 plugins: {
                     legend: {
-                    display: false
+                        display: false,
                     }
                 },
-                scales: {
-                    xAxis: {
-                        reverse: true
-                    }
-                }
             }
         };
     }
 
     function drawCharts(data, labels) {
-        console.log("data: ", data);
-        console.log("labels: ", labels);
         window.onload = function () {
             [{
                 id: 'chart-temp',	// Графік температури
@@ -81,6 +74,7 @@
                 var ctx = document.getElementById(details.id).getContext('2d');
                 var config = createConfig(labels, details.data, details.color);
                 new Chart(ctx, config);
+                console.log(Chart);
             });
                 };
             }
