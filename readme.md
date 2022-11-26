@@ -6,16 +6,17 @@ develop branch - Master's diploma code
 
 
 TODO: 
-1. line up comments +
-2. rename functions (use underscore beetwen words) +
-3. separate code to php, js, html +
-4. edit db table code (151-171) +-
-5. fix charts
-6. update comments
-
-remake db table (use $ch_temp, ... to print instead of one more query)
+1. - line up comments -
+2. + rename functions (use underscore beetwen words) 
+3. + separate code to php, js, html 
+4. + edit db table code (151-171) 
+5. + fix charts 
+6. - update comments
+7. update charts fetching (use one request to db, fetch it in js)
 
 
 6. Add screen adaptivity
 7. Weather predict from internet
 8. deploy to server 
+
+
