@@ -19,7 +19,7 @@
         return $line;
     }
     function fillInTable(data) {
-        var $table = $("<table cellspacing='0' ></table>");
+        var $table = $("<table cellspacing='0'></table>");
         $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
@@ -30,13 +30,12 @@
     }
 
 
-    function createConfig(labels, data, text, colorName) {
+    function createConfig(labels, data, colorName) {
         return {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: text,
                     data: data,
                     backgroundColor: colorName,
                     borderColor: colorName,
@@ -44,6 +43,11 @@
                 }]
             },
             options: {
+                plugins: {
+                    legend: {
+                    display: false
+                    }
+                },
                 scales: {
                     xAxis: {
                         reverse: true
@@ -60,31 +64,31 @@
             [{
                 id: 'chart-temp',	// Графік температури
                 color: 'yellow',
-                text: 'Температура',
                 data: data[0]
             }, {
                 id: 'chart-press',	// Графік тиску
                 color: 'red',
-                text: 'Тиск',
                 data: data[1]
             }, {
                 id: 'chart-alt', 	// Графік Висоти
                 color: 'green',
-                text: 'Висота над рівнем моря',
                 data: data[2]
             }, {
                 id: 'chart-hum', 	// Графік вологості
                 color: 'blue',
-                text: 'Вологість',
                 data: data[3]
             }].forEach(function (details) {
                 var ctx = document.getElementById(details.id).getContext('2d');
-                var config = createConfig(labels, details.data, details.text, details.color);
+                var config = createConfig(labels, details.data, details.color);
                 new Chart(ctx, config);
             });
-        };
+                };
+            }
+
+    function toggleChart(id) {
+        console.log(id.id);
+        var element = document.getElementById(id.id);
+        element.classList.toggle("large");
     }
-
-
 
 </script>

@@ -1,5 +1,6 @@
 body {
 	font-family : Arial;
+	background-color: lightgrey;
 }
 
 .container {
@@ -7,6 +8,7 @@ body {
 	max-width: 1200px;
 	margin: auto;
 	padding: 8px;
+	background-color: whitesmoke;
 }
 
 h1 {
@@ -36,6 +38,7 @@ tr:not(:first-child):hover {
 	border-radius: 10px;
 	font-size: 24px; 
 	margin-bottom: 20px;
+	height: 100px;
 }
 .current-table-td {
 	padding: 15px;
@@ -67,18 +70,31 @@ tr:not(:first-child):hover {
 	background-color: green;
 }
 
-.charts-block {
+.chart-block {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: space-between; 
 }
 canvas { 
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.chart-label {
+	margin: 5px;
+	font-size: 24;
+}
 .chart-container {
-	margin: auto;
-	width: 100%;
+	border: lightblue 2px solid;
+	border-radius: 10px;
+	text-align: center;
+	width: 45%;
+	margin: 20px auto;
+	align-items: center;
+	padding: 10px;
+}
+.chart-container.large {
+	width: 90%;
+	margin: 20px auto;
 }
 

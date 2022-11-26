@@ -114,16 +114,20 @@ function page_navigator($count, $page, $num_of_pages)
 		<!-- Вивід навігатора сторінок БД -->
 		<h2>Графіки</h2>
 		 <div class="chart-block"> <!--Ініціалізація графіків -->
-			<div class="chart-container">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-temp">
+				<label class="chart-label">Температура</label>
 				<canvas id="chart-temp"></canvas>
 			</div>
-			<div class="chart-container">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-press">
+				<label class="chart-label">Тиск</label>
 				<canvas id="chart-press"></canvas>
 			</div>
-			<div class="chart-container">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-alt">
+				<label class="chart-label">Висота над рівнем моря</label>
 				<canvas id="chart-alt"></canvas>
 			</div>
-			<div class="chart-container">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-hum">
+				<label class="chart-label">Вологість</label>
 				<canvas id="chart-hum"></canvas>
 			</div>
 		</div>
@@ -167,7 +171,6 @@ function page_navigator($count, $page, $num_of_pages)
 			success: function (result) {
 				var $table = fillInTable(result);
 				$("#dbTable").replaceWith($table);
-				// $table.appendTo($("#dbTable"));
 			}
 		});
 	};
@@ -181,7 +184,5 @@ function page_navigator($count, $page, $num_of_pages)
 			data[3] = [<?php while($h=mysqli_fetch_array($ch_hum)){echo '"'.$h['hum_bme280'].'",';}?>].slice(0, -1);
 			var labels = [<?php while ($o = mysqli_fetch_array($ch_date)) { echo '"' . $o['date_bme280'] . '",';}?>].slice(0, -1);
 	console.log("data ", data);
-	drawCharts(data, labels);
-
-								// виклик функції з scripts.php відображення графіків
+	drawCharts(data, labels); // виклик функції з scripts.php відображення графіків
 </script>
