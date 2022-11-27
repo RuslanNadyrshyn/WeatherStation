@@ -1,8 +1,23 @@
 <script>
+    var loadData = function () {
+        $.ajax({														// ajax-запит до бази даних 
+            type: "GET",
+            url: "/extract.php",											// звертання до файла extract.php 
+            dataType: "json",
+            success: function (result) {
+                $("#temp").text(result.temp_bme280 + ' °С');
+                $("#press").text(result.press_bme280 + ' гПа');
+                $("#alt").text(result.alt_bme280 + ' м');
+                $("#hum").text(result.hum_bme280 + ' %');
+                setTimeout(loadData, 2000);
+            }
+        });
+    };
+
     function printRow(object, isHeader) {
         var $line = $("<tr></tr>");
         if (isHeader) object.forEach(element =>
-            $line.append($("<th></th>").html(element)));
+            $line.append($("<th class='sticky'></th>").html(element)));
         else {
             for (const key in object)
                 if (Object.hasOwnProperty.call(object, key)) {
@@ -18,6 +33,7 @@
         }
         return $line;
     }
+
     function fillInTable(data) {
         var $table = $("<table cellspacing='0'></table>");
         $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
@@ -29,8 +45,35 @@
         return $table;
     }
 
+    function printDB(data) {
+        var $table = fillInTable(data);
+        $("#dbTable").replaceWith($table);
+    }
 
-    function createConfig(labels, data, colorName) {
+    function printCharts(data) {
+        var res = fetchResult(data);
+        drawCharts(res, res.date);
+    }
+
+    function fetchResult(result) {
+        var temp = [];
+        var press = [];
+        var alt = [];
+        var hum = [];
+        var date = [];
+
+        result.forEach(element => {
+            temp.push(element.temp_bme280);
+            press.push(element.press_bme280);
+            alt.push(element.alt_bme280);
+            hum.push(element.hum_bme280);
+            date.push(element.date_bme280);
+        });
+
+        return {temp, press, alt, hum, date};
+    }
+
+    function createConfig(labels, data, colorName, scopes) {
         return {
             type: 'line',
             data: {
@@ -48,39 +91,47 @@
                         display: false,
                     }
                 },
+                scales: {
+                    y: {
+                        offset: true
+                    }
+                }
             }
         };
     }
 
-    function drawCharts(data, labels) {
+    function drawCharts(res, labels) {
+        for (const key in res) {
+            if (Object.hasOwnProperty.call(res, key)) {
+                res[key].reverse();
+            }
+        }
         window.onload = function () {
             [{
                 id: 'chart-temp',	// Графік температури
                 color: 'yellow',
-                data: data[0]
+                data: res.temp,
             }, {
                 id: 'chart-press',	// Графік тиску
                 color: 'red',
-                data: data[1]
+                data: res.press,
             }, {
                 id: 'chart-alt', 	// Графік Висоти
                 color: 'green',
-                data: data[2]
+                data: res.alt,
             }, {
                 id: 'chart-hum', 	// Графік вологості
                 color: 'blue',
-                data: data[3]
+                data: res.hum,
             }].forEach(function (details) {
                 var ctx = document.getElementById(details.id).getContext('2d');
                 var config = createConfig(labels, details.data, details.color);
                 new Chart(ctx, config);
-                console.log(Chart);
             });
-                };
-            }
+        };
+    }
 
     function toggleChart(id) {
-        console.log(id.id);
         var element = document.getElementById(id.id);
         element.classList.toggle("large");
     }

@@ -22,7 +22,6 @@ $_SESSION['count'] = $count;
 $_SESSION['art'] = $art;
 
 
-
 $result = $conn->query("SELECT id_bme280 FROM bme280"); // Запит для визначення кількості записів таблиці bme280
 $all_rec = $result->num_rows; // Кількість записів таблиці bme280 
 if ($all_rec % $count == 0) // Визначення кількості сторінок навігатора
@@ -30,46 +29,53 @@ if ($all_rec % $count == 0) // Визначення кількості стор�
 else
 	$num_of_pages = $all_rec / $count + 1;
 
-// Отримання значень ТЕМПЕРАТУРИ, ТИСКУ, ВИСОТИ, ВОЛОГОСТІ та ДАТИ для графіків
-$ch_temp=$conn->query("SELECT temp_bme280 FROM bme280 ORDER BY id_bme280 DESC LIMIT $art, $count");
-$ch_press=$conn->query("SELECT press_bme280 FROM bme280 ORDER BY id_bme280 DESC LIMIT $art, $count");
-$ch_alt=$conn->query("SELECT alt_bme280 FROM bme280 ORDER BY id_bme280 DESC LIMIT $art, $count");
-$ch_hum=$conn->query("SELECT hum_bme280 FROM bme280 ORDER BY id_bme280 DESC LIMIT $art, $count");             
-$ch_date=$conn->query("SELECT date_bme280 FROM bme280 ORDER BY date_bme280 DESC LIMIT $art, $count");
+// Запит до БД для виводу усіх значень з таблиці "bme280"
+$rows = array();
+if($count == -1) 
+	$result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 DESC"); // Отримання даних таблиці bme280;
+else
+	$result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 DESC LIMIT $art, $count"); // Отримання даних таблиці bme280
 
-// // Запит до БД для виводу усіх значень з таблиці "bme280"
-// $result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 LIMIT $art, $count");
+while($r=$result->fetch_array(MYSQLI_ASSOC)) {
+    $rows[] = $r;
+}
+
 
 function echo_count($count, $num)
 { // Функція виводу навігатора кількості рядків з БД 
 	if ($count == $num)
-		echo '<div class="navigator-item selected" '; //на одній сторінці
+		echo '<a class="navigator-item selected" '; //на одній сторінці
 	else
-		echo '<div class="navigator-item" ';
-	echo "onclick=\"window.location='index.php?count=${num}';\">${num}</div>";
+		echo '<a class="navigator-item" ';
+	if($num == -1) echo "href='index.php?count=${num}'>Всі</a>";
+	else echo "href='index.php?count=${num}'>${num}</a>";
+
 }
 
-function count_navigator($count, $all_rec)
+function count_navigator($count)
 { // Функція виклику різних значень БД
-	echo "<div class=\"navigator-block\">Кількість значень: ";
+	echo "<nav class=\"navigator-block\">";
+	echo "<p class=\"navigator-label\">Кількість значень:</p>";
 	echo_count($count, 20);
 	echo_count($count, 50);
 	echo_count($count, 100);
-	echo_count($count, $all_rec);
-	echo "</div>";
+	echo_count($count, 500);
+	echo_count($count, 1000);
+	echo_count($count, -1);
+	echo "</nav>";
 }
 // Функція виводу навігатора сторінок БД
 function page_navigator($count, $page, $num_of_pages)
 {
-	echo "<div class='navigator-block'>";
+	echo "<nav class='navigator-block'>";
 	for ($i = 1; $i <= $num_of_pages; $i++) {
 		if ($page == $i)
-			echo "<div class=\"navigator-item selected\"";
+			echo "<a class=\"navigator-item selected\"";
 		else
-			echo "<div class=\"navigator-item\"";
-		echo "onclick=\"window.location='index.php?page=${i}&count=${count}'\">${i}</div>";
+			echo "<a class=\"navigator-item\" ";
+		echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
 	}
-	echo "</div>";
+	echo "</nav>";
 }
 ?>
 
@@ -80,16 +86,23 @@ function page_navigator($count, $page, $num_of_pages)
 <html>
 
 <head>
-	<script src="js/chart.min.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 	<meta charset="utf-8"> <!-- Підключення кирилиці -->
 </head>
 
 <body>
+	<header>
+		<div class="container">
+			<nav>
+				<a style="margin-left: auto;" href="#current-label">Дані датчика BME280</a>
+				<a href="#db-label">База даних</a>
+				<a href="#charts-label">Графіки</a>
+			</nav>
+		</div>
+	</header>
 	<!-- Блок відображення сторінки -->
 	<div class="container">
-		
-		<h1>Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
+		<h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
 		<table class="current-table" cellspacing="0">
 			<tr>
 				<th>Температура</th>
@@ -104,17 +117,17 @@ function page_navigator($count, $page, $num_of_pages)
 				<td class="current-table-td" id="hum"></td>
 			</tr>
 		</table>
-		<h1>База даних</h1>
-		<?php count_navigator($count, $all_rec); ?>
+		<h1 id="db-label">База даних</h1>
+		<?php count_navigator($count); ?>
 		<!-- Вивід навігатора сторінок і кількості значень БД -->
 		<div class="db-table-container">
 			<table id="dbTable"></table>
 		</div>
 		<?php page_navigator($count, $page, $num_of_pages); ?>
 		<!-- Вивід навігатора сторінок БД -->
-		<h2>Графіки</h2>
+		<h1 id="charts-label">Графіки</h1>
 		 <div class="chart-block"> <!--Ініціалізація графіків -->
-			<div class="chart-container" onclick="toggleChart({id})" id="container-temp">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
 				<label class="chart-label">Температура</label>
 				<canvas id="chart-temp"></canvas>
 			</div>
@@ -133,7 +146,7 @@ function page_navigator($count, $page, $num_of_pages)
 		</div>
 	</div> <!-- container -->
 	<script src="js/utils.js"></script> <!-- Підключення додаткових бібліотек -->
-	
+	<script src="js/chart.min.js"></script>
 	<script src="js/jquery.js"></script>
 </body>
 
@@ -146,55 +159,11 @@ function page_navigator($count, $page, $num_of_pages)
 <script>
 	$(document).ready(function () { 										// Скрипт для динамічного оновлення інформації 
 		loadData();
-		loadDB();
-		// loadCharts();
 	});
-	var loadData = function () {
-		$.ajax({														// ajax-запит до бази даних 
-			type: "GET",
-			url: "/extract.php",											// звертання до файла extract.php 
-			dataType: "json",
-			success: function (result) {
-				$("#temp").text(result.temp_bme280 + ' °С');
-				$("#press").text(result.press_bme280 + ' гПа');
-				$("#alt").text(result.alt_bme280 + ' м');
-				$("#hum").text(result.hum_bme280 + ' %');
-				setTimeout(loadData, 2000);
-			}
-		});
-	};
-	var loadDB = function () {
-		$.ajax({														// ajax-запит до бази даних 
-			type: "GET",
-			url: "/extract_db.php",										// звертання до файла extract_db.php 
-			dataType: "json",
-			success: function (result) {
-				console.log(result);
-				var $table = fillInTable(result);
-				$("#dbTable").replaceWith($table);
-			}
-		});
-	};
 
-	// var loadCharts = function () {
-	// 	$.ajax({														// ajax-запит до бази даних 
-	// 		type: "GET",
-	// 		url: "/extract_charts.php",										// звертання до файла extract_db.php 
-	// 		dataType: "json",
-	// 		success: function (result) {
-	// 			var $table = fillInTable(result);
-	// 			$("#dbTable").replaceWith($table);
-	// 		}
-	// 	});
-	// };
-
-	var data = [];														// Допоміжний масив для відображення графіків
-	// var labels = fetchArray($ch_date, 'date_bme280');					// Заповнення масиву даними з БД для відображення графіків
-	// var data = [];	
-			data[0] = [<?php while($t=mysqli_fetch_array($ch_temp)){echo '"'.$t['temp_bme280'].'",';}?>].slice(0, -1);
-			data[1] = [<?php while($p=mysqli_fetch_array($ch_press)){echo '"'.$p['press_bme280'].'",';}?>].slice(0, -1);
-			data[2] = [<?php while($l=mysqli_fetch_array($ch_alt)){echo '"'.$l['alt_bme280'].'",';}?>].slice(0, -1);
-			data[3] = [<?php while($h=mysqli_fetch_array($ch_hum)){echo '"'.$h['hum_bme280'].'",';}?>].slice(0, -1);
-			var labels = [<?php while ($o = mysqli_fetch_array($ch_date)) { echo '"' . $o['date_bme280'] . '",';}?>].slice(0, -1);
-	drawCharts(data, labels); // виклик функції з scripts.php відображення графіків
+	var data = <?php 
+		echo json_encode($rows);
+		?>;
+	printDB(data);
+	printCharts(data);
 </script>

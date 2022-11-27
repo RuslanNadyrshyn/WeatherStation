@@ -45,3 +45,22 @@ console.log("db: ", db);
 function displayResult() {
     document.getElementById("myHeader").innerHTML = "Have a nice day!";
 }
+
+
+function fetchResult(result) {	
+    var temp = [];
+    var press = [];
+    var alt = [];
+    var hum = [];
+    var date = [];
+    
+    result.forEach(element => {
+        temp.push(element.temp_bme280);
+        press.push(element.press_bme280);
+        alt.push(element.alt_bme280);
+        hum.push(element.hum_bme280);
+        date.push(element.date_bme280);
+    });
+
+    return [temp, press, alt, hum, date];
+}

@@ -1,19 +1,47 @@
 body {
 	font-family : Arial;
-	background-color: lightgrey;
+	background-color: whitesmoke;
+	margin: 0px;
+	padding: 0px;
+}
+
+header {
+	position: fixed;
+	top: 0;
+	z-index: 5;
+	width: 100%;
+	background-color: grey;
+	/* border-bottom: #566573 solid 1px; */
+}
+
+nav {
+	display:flex;
+	flex-direction: row;
+}
+nav a {
+	text-decoration: none;
+	display:block;
+	padding: 15px 25px;
+	text-align: center;
+	background-color: rgb(213, 216, 220);
+	color:#262d33;
+	font-family:sans-serif;
+}
+nav a:hover {
+	background-color: #566573;
+	color:#ffffff;
 }
 
 .container {
 	flex-direction: column;
 	max-width: 1200px;
 	margin: auto;
-	padding: 8px;
-	background-color: whitesmoke;
 }
 
 h1 {
-	margin: 10px;
+	margin: 5px;
 	text-align: center;
+	padding-top: 50px;
 }
 
 table {
@@ -26,6 +54,8 @@ td, th {
 }
 th {
 	background-color: #a5f2c1;
+}
+th.sticky {
 	position: sticky;
 	top: 0;
 }
@@ -56,12 +86,21 @@ tr:not(:first-child):hover {
 .navigator-block {
 	display: flex;
 	overflow: auto;
+	align-items: center;
+	text-align: center;
+	
+}
+.navigator-label {
+	font-size: 18px;
+	margin-right: 10px;
 }
 .navigator-item {
 	padding: 10px;
 	cursor: pointer;
 	background-color: darkgray;
 	margin: 5px 1px;
+	border-radius: 3px;
+	color: #000;
 }
 .navigator-item:hover {
 	background-color: gray;
@@ -92,9 +131,13 @@ canvas {
 	margin: 20px auto;
 	align-items: center;
 	padding: 10px;
+	transition: width 800ms;
 }
 .chart-container.large {
 	width: 90%;
 	margin: 20px auto;
+}
+.chart-container:hover {
+	background-color: beige;
 }
 
