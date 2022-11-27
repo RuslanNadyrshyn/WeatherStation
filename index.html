@@ -1,294 +1,70 @@
-<!doctype html>  <!-- html код -->
+<!doctype html> <!-- html код -->
 <html>
-	<head>
-        <meta charset="utf-8">					<!-- Підключення кирилиці -->
-		<link rel="stylesheet" href="css/style.css">
-        <script src="js/chart.min.js"></script> <!-- Підключення додаткових бібліотек -->
-        <script src="js/utils.js"></script>
-		<script src="js/jquery.js"></script>
-        <script src="js/script.js"></script>
-	</head>
 
-	<body>				<!-- Колір фону сторінки -->
+<head>
+    <meta charset="utf-8"> <!-- Підключення кирилиці -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/chart.min.js"></script> <!-- Підключення додаткових бібліотек -->
+    <script src="js/utils.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/script.js"></script>
+</head>
+
+<body>
+    <header>
         <div class="container">
-<!-- Створення таблиці "Дані датчика BME280" -->
-        <h1 id="myHeader">Hello World!</h1>
-        <button onclick="updateTable()">Change Table</button>
-
-        <div class="db-table-container">
-            <div id="myDiv"></div>
+            <nav>
+                <div class="dropdown">
+                    <a id="location">Львів</a>
+                    <nav class="dropdown-content">
+                        <a onclick="changeLocation('Київ')">Київ</a>
+                        <a onclick="changeLocation('Львів')">Львів</a>
+                        <a onclick="changeLocation('Харків')">Харків</a>
+                    </nav>
+                </div> 
+                <div class="dropdown-weather">
+                    <div id="location-weather">-1</div>
+                    <div class="weather-block">
+                        <div class="weather-content">
+                            here is weather
+                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
+                        </div>
+                    </div>
+                </div> 
+                <a style="margin-left: auto;" href="#current-label">Дані датчика BME280</a>
+                <a href="#db-label">База даних</a>
+                <a href="#charts-label">Графіки</a>
+            </nav>
         </div>
-
-        <div class="db-table-container">
-            <table id="dbTable"></table>
-        </div>
-
-        <script>
-            function printRow(object, isHeader) {
-                var $line = $("<tr></tr>");
-
-                if (isHeader) object.forEach(element => 
-                        $line.append($("<th></th>").html(element)));
-                else {
-                for (const key in object)
-                    if (Object.hasOwnProperty.call(object, key))
-                        $line.append($("<td></td>").html(object[key]));
-                }
-                return $line;
-            }
-
-            var db = [];
-            for (let i = 0; i < 15; i++) {
-                db.push({
-                    id: i,
-                    date: "date"+i,
-                    time: "time"+i,
-                    temp: "temp"+i,
-                    press: "press"+i,
-                    alt: "alt"+i,
-                    hum: "hum"+i
-                })
-            }
-
-            function fillInTable (data) {
-                var $table = $("<table></table>");
-                $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
-                for (let index = 0; index < data.length; index++) {
-                    var element = data[index];
-                    $table.append(printRow(element), false);
-                }
-                $table.appendTo($("#myDiv"));
-            }
-            fillInTable(db);
-
-            function updateTable() {
-                for (let i = 0; i < 15; i++) {
-                    db[i].id=i+5;
-                    db[i].date="date"+i+5;
-                }
-                var $newTable = $("<table></table>");
-                for (let index = 0; index < db.length; index++) {
-                    var element = db[index];
-                    var $line = $("<tr></tr>");
-                    $newTable.append(printRow(element));
-                }
-
-                $newTable.replaceWith($("#myDiv"));
-            }
-
-            function printRow1(data, isHeader) {
-                var row = "";
-                row += "<tr>";
-                for (let i = 0; i < data.length; i++) {
-                    if (isHeader) row += "<th>"+data[i]+"</th>";
-                    else row += "<td>"+data[i]+"</td>";
-                }
-                row += "</tr>";
-                console.log("row", row);
-                return row;
-            }
-
-            function fillInTable1() {
-                var html = "";
-                var dbTableHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-                html+=printRow1(dbTableHeader, true);
-                console.log(html);
-                for (let index = 0; index < db.length; index++) {
-                    html+=printRow1([db[index].id, db[index].date, db[index].time, db[index].temp, db[index].press, db[index].alt, db[index].hum], false);
-                }
-                document.getElementById("dbTable").innerHTML = html;
-            }
-        </script>
-		<h1>Дані датчика BME280</h1>
-		<table class="current-table" cellspacing="0">
-		    <tr>
+    </header>
+    <div class="container">
+        <h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
+        <table class="current-table" cellspacing="0">
+            <tr>
                 <th>Температура</th>
                 <th>Тиск</th>
                 <th>Висота над рівнем моря</th>
                 <th>Вологість</th>
             </tr>
-			<tr>
-                <td class="current-table-td">21.5</td>
-			    <td class="current-table-td">1001 ГПа</td>
-			    <td class="current-table-td">800 м</td>
-			    <td class="current-table-td">67 %</td> 
-            </tr>	
-		</table>
-    
-		<h1>База даних</h2>
+            <tr>
+                <td class="current-table-td" id="temp">21.5</td>
+                <td class="current-table-td" id="press">1001 ГПа</td>
+                <td class="current-table-td" id="alt">800 м</td>
+                <td class="current-table-td" id="hum">67 %</td>
+            </tr>
+        </table>
+        <h1 id="db-label">База даних</h1>
+        <button onclick="updateTable()">Update table</button>
         <div class="navigator-block">
-            Сторінка: 
+            Сторінка:
             <div class="navigator-item" onclick="window.location='index.php?count=20';">1</div>
             <div class="navigator-item" onclick="window.location='index.php?count=20';">2</div>
             <div class="navigator-item" onclick="window.location='index.php?count=20';">3</div>
             <div class="navigator-item" onclick="window.location='index.php?count=20';">5</div>
         </div>
-<!-- Створення таблиці "База даних"-->
+        <!-- Вивід навігатора сторінок і кількості значень БД -->
         <div class="db-table-container">
-            <table cellspacing="0">
-                <tr>		<!-- Фон першого рядка таблиці-->
-                    <th>ID</th>
-                    <th>Дата</th>
-                    <th>Час</th>
-                    <th>Температура</th>
-                    <th>Тиск</th>
-                    <th>Висота</th>
-                    <th>Вологість</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:06:2022</td>
-                    <td>23:23:09</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>12:11:2022</td>
-                    <td>23:11:01</td>
-                    <td>23.5 `</td>
-                    <td>1011 ГПа</td>
-                    <td>1000 v</td>
-                    <td>61 %</td>
-                </tr>
-            </table>
+            <table id="dbTable"></table>
         </div>
         <div class="navigator-block">
             <div class="navigator-item" onclick="window.location='index.php?count=20';">20</div>
@@ -296,75 +72,184 @@
             <div class="navigator-item" onclick="window.location='index.php?count=100';">100</div>
             <div class="navigator-item" onclick="window.location='index.php?count=';">Всі()</div>
         </div>
-		<caption><h2>Графіки</h2></caption> 
+        <!-- Вивід навігатора сторінок БД -->
+        <h1 id="charts-label">Графіки</h1>
+        <div class="chart-block">
+            <!--Ініціалізація графіків -->
+            <div class="chart-container" onclick="toggleChart({id})" id="container-temp">
+                <label class="chart-label">Температура</label>
+                <canvas id="chart-temp"></canvas>
+            </div>
+            <div class="chart-container" onclick="toggleChart({id})" id="container-press">
+                <label class="chart-label">Тиск</label>
+                <canvas id="chart-press"></canvas>
+            </div>
+            <div class="chart-container" onclick="toggleChart({id})" id="container-alt">
+                <label class="chart-label">Висота над рівнем моря</label>
+                <canvas id="chart-alt"></canvas>
+            </div>
+            <div class="chart-container" onclick="toggleChart({id})" id="container-hum">
+                <label class="chart-label">Вологість</label>
+                <canvas id="chart-hum"></canvas>
+            </div>
+        </div>
+    </div> <!-- container -->
+    <script>
+        function changeLocation(Location) {
+            const loc = document.getElementById('location');
 
-		<div class="charts-block"> 	<!--Ініціалізація графіків  -->
-			<div class="chart-container"> 
-				<canvas id="chart-temp"></canvas>
-			</div>
-			<div class="chart-container">
-				<canvas id="chart-press"></canvas>
-			</div>
-			<div class="chart-container">
-				<canvas id="chart-alt"></canvas>
-			</div>
-			<div class="chart-container">
-				<canvas id="chart-hum"></canvas>
-			</div> 
-		</div>
-        <script>
-            var arr = [];
-            for (let i = 0; i < 100; i++) {
-                arr.push(i);
+            // ✅ Change button text on click
+            loc.textContent = Location;
+        }
+
+        var db = [];
+        for (let i = 0; i < 15; i++) {
+            db.push({
+                id: i,
+                date: "date" + i,
+                time: "time" + i,
+                temp: "temp" + i,
+                press: "press" + i,
+                alt: "alt" + i,
+                hum: "hum" + i
+            })
+        }
+        var arr = [];
+        for (let i = 0; i < 100; i++) {
+            arr.push(i);
+        }
+
+        printDB(db);
+        drawCharts(arr, arr);
+
+        function updateTable() {
+            for (let i = 0; i < 15; i++) {
+                db[i].id += 5;
+                db[i].date += 5;
             }
-            function createConfig(data, text, colorName) {
-                console.log(arr);
-                return {
-                    type: 'line',
-                    data: {
-                        labels: arr,
-                        datasets: [{
-                            label: text,
-                            data: data,
-                            backgroundColor: colorName,
-                            borderColor: colorName,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true
+            printDB(db);
+        }
+
+        function printRow(object, isHeader) {
+            var $line = $("<tr></tr>");
+            if (isHeader) object.forEach(element =>
+                $line.append($("<th class='sticky'></th>").html(element)));
+            else {
+                for (const key in object)
+                    if (Object.hasOwnProperty.call(object, key)) {
+                        if (key == "date_bme280") {
+                            datetime = object[key].split(" ");
+                            date = datetime[0];
+                            time = datetime[1];
+                            $line.append($("<td></td>").html(date));
+                            $line.append($("<td></td>").html(time));
+                        } else $line.append($("<td></td>").html(object[key]));
                     }
-                };
+
             }
-    
-            window.onload = function() {
+            return $line;
+        }
+
+        function createTable(data) {
+            var $table = $("<table cellspacing='0'></table>");
+            $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
+            for (let index = 0; index < data.length; index++) {
+                var element = data[index];
+                var $line = $("<tr></tr>");
+                $table.append(printRow(element), false);
+            }
+            return $table;
+        }
+
+        function printDB(data) {
+            var $table = createTable(data);
+            // $("#dbTable").replaceWith($table);
+            $("#dbTable").empty();
+            $table.appendTo($("#dbTable"));
+        }
+
+        function printCharts(data) {
+            var res = fetchResult(data);
+            drawCharts(res, res.date);
+        }
+
+        function fetchResult(result) {
+            var temp = [];
+            var press = [];
+            var alt = [];
+            var hum = [];
+            var date = [];
+
+            result.forEach(element => {
+                temp.push(element.temp_bme280);
+                press.push(element.press_bme280);
+                alt.push(element.alt_bme280);
+                hum.push(element.hum_bme280);
+                date.push(element.date_bme280);
+            });
+
+            return { temp, press, alt, hum, date };
+        }
+
+        function createConfig(labels, data, colorName) {
+            return {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: colorName,
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            offset: true
+                        }
+                    }
+                }
+            };
+        }
+
+        function drawCharts(res, labels) {
+            window.onload = function () {
                 [{
                     id: 'chart-temp',	// Графік температури
                     color: 'yellow',
-                    text: 'Температура',
-                    data: arr
+                    data: arr,
                 }, {
                     id: 'chart-press',	// Графік тиску
                     color: 'red',
-                    text: 'Тиск',
-                    data: arr
+                    data: arr,
                 }, {
                     id: 'chart-alt', 	// Графік Висоти
                     color: 'green',
-                    text: 'Висота над рівнем моря',
-                    data: arr
+                    data: arr,
                 }, {
                     id: 'chart-hum', 	// Графік вологості
                     color: 'blue',
-                    text: 'Вологість',
-                    data: arr
-                }].forEach(function(details) {
+                    data: arr,
+                }].forEach(function (details) {
                     var ctx = document.getElementById(details.id).getContext('2d');
-                    var config = createConfig(details.data, details.text, details.color);
+                    var config = createConfig(labels, details.data, details.color);
                     new Chart(ctx, config);
                 });
             };
-            
-        </script>	
-	</body>
+        }
+
+        function toggleChart(id) {
+            var element = document.getElementById(id.id);
+            element.classList.toggle("large");
+        }
+
+    </script>
+</body>
+
 </html>

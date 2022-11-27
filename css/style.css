@@ -25,11 +25,68 @@ nav a {
 	text-align: center;
 	background-color: rgb(213, 216, 220);
 	color:#262d33;
-	font-family:sans-serif;
 }
-nav a:hover {
+nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	background-color: #566573;
 	color:#ffffff;
+}
+.dropdown {
+	float: left;
+	overflow: hidden;
+	font-size: 16px;
+	background-color: rgb(213, 216, 220);
+	cursor: pointer;
+	min-width: 140px;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	min-width: 140px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	text-align: left;
+}
+
+.dropdown-content a:hover {
+	background-color: #566573;
+	color:#ffffff;
+}
+
+.dropdown:hover .dropdown-content {
+  	display: block;	
+}
+
+
+.dropdown-weather {
+	padding: 15px;
+	text-align: center;
+	min-width: 50px;
+    color: white;
+	cursor: pointer;
+}
+.weather-block {
+	display: none;
+	position: absolute;
+	width: 240px;
+	height: 200px;
+	background-color: white;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	cursor: default;
+}
+.dropdown-weather:hover .weather-block {
+	display: block;	
+	color: black;
+}
+.weather-content {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .container {

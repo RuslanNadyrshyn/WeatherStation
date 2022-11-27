@@ -34,7 +34,7 @@
         return $line;
     }
 
-    function fillInTable(data) {
+    function createTable(data) {
         var $table = $("<table cellspacing='0'></table>");
         $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
         for (let index = 0; index < data.length; index++) {
@@ -46,8 +46,9 @@
     }
 
     function printDB(data) {
-        var $table = fillInTable(data);
-        $("#dbTable").replaceWith($table);
+        var $table = createTable(data);
+        $("#dbTable").empty();
+        $table.appendTo($("#dbTable"));
     }
 
     function printCharts(data) {
