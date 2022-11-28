@@ -91,15 +91,34 @@ function page_navigator($count, $page, $num_of_pages)
 </head>
 
 <body>
-	<header>
-		<div class="container">
-			<nav>
-				<a style="margin-left: auto;" href="#current-label">Дані датчика BME280</a>
-				<a href="#db-label">База даних</a>
-				<a href="#charts-label">Графіки</a>
-			</nav>
-		</div>
-	</header>
+<header>
+        <nav>
+            <div class="weather-container">
+                <div class="dropdown">
+                    <a id="location">Львів</a>
+                    <nav class="dropdown-content">
+                        <a onclick="changeLocation('Київ')">Київ</a>
+                        <a onclick="changeLocation('Львів')">Львів</a>
+                        <a onclick="changeLocation('Харків')">Харків</a>
+                    </nav>
+                </div>
+                <div class="dropdown-weather">
+                    <div id="location-weather">-1</div>
+                    <div class="weather-block">
+                        <div class="weather-content">
+                            <table id="weatherTable"></table>
+                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#current-label">Дані датчика BME280</a>
+                <a href="#db-label">База даних</a>
+                <a href="#charts-label">Графіки</a>
+            </div>
+        </nav>
+    </header>
 	<!-- Блок відображення сторінки -->
 	<div class="container">
 		<h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
@@ -161,9 +180,39 @@ function page_navigator($count, $page, $num_of_pages)
 		loadData();
 	});
 
+	printWeather(weatherData);
 	var data = <?php 
 		echo json_encode($rows);
-		?>;
+	?>;
+	
+	weatherData = [
+            {
+                title: "Ранок",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "День",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Вечір",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Ніч",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Зараз",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+        ]
+	printWeather(weatherData);
 	printDB(data);
 	printCharts(data);
 </script>

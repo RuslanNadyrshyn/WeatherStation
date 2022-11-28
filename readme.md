@@ -12,11 +12,11 @@ TODO:
 4. + edit db table code (151-171) 
 5. + fix charts 
 6. - update comments
-7. update charts fetching (use one request to db, fetch it in js)
+7. + update charts fetching (use one request to db, fetch it in js)
 
 
-6. Add screen adaptivity
-7. Weather predict from internet
+6. + Add screen adaptivity
+7. +- Weather predict from internet
 8. deploy to server 
 
 + Инвертировать не график, а данные в нём до этого, чтобы корректно отображалось

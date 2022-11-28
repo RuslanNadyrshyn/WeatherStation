@@ -12,32 +12,32 @@
 
 <body>
     <header>
-            <nav>
-                <div class="weather-container">
-                    <div class="dropdown">
-                        <a id="location">Львів</a>
-                        <nav class="dropdown-content">
-                            <a onclick="changeLocation('Київ')">Київ</a>
-                            <a onclick="changeLocation('Львів')">Львів</a>
-                            <a onclick="changeLocation('Харків')">Харків</a>
-                        </nav>
-                    </div> 
-                    <div class="dropdown-weather">
-                        <div id="location-weather">-1</div>
-                        <div class="weather-block">
-                            <div class="weather-content">
-                                here is weather
-                                <a href="https://www.meteo.gov.ua/">Докладніше</a>
-                            </div>
+        <nav>
+            <div class="weather-container">
+                <div class="dropdown">
+                    <a id="location">Львів</a>
+                    <nav class="dropdown-content">
+                        <a onclick="changeLocation('Київ')">Київ</a>
+                        <a onclick="changeLocation('Львів')">Львів</a>
+                        <a onclick="changeLocation('Харків')">Харків</a>
+                    </nav>
+                </div>
+                <div class="dropdown-weather">
+                    <div id="location-weather">-1</div>
+                    <div class="weather-block">
+                        <div class="weather-content">
+                            <table id="weatherTable"></table>
+                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
                         </div>
                     </div>
                 </div>
-                <div class="nav-menu">
-                    <a href="#current-label">Дані датчика BME280</a>
-                    <a href="#db-label">База даних</a>
-                    <a href="#charts-label">Графіки</a>
-                </div> 
-            </nav>
+            </div>
+            <div class="nav-menu">
+                <a href="#current-label">Дані датчика BME280</a>
+                <a href="#db-label">База даних</a>
+                <a href="#charts-label">Графіки</a>
+            </div>
+        </nav>
     </header>
     <div class="container">
         <h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
@@ -121,8 +121,38 @@
         for (let i = 0; i < 100; i++) {
             arr.push(i);
         }
+        var header = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+        var weatherHeader = ["", "Температура", "Вологість"];
 
-        printDB(db);
+        weatherData = [
+            {
+                title: "Ранок",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "День",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Вечір",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Ніч",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+            {
+                title: "Зараз",
+                temp: 15 + " °С",
+                hum: 60 + " %"
+            },
+        ]
+        printWeather(weatherData, weatherHeader);
+        printDB(db, header);
         drawCharts(arr, arr);
 
         function updateTable() {
@@ -130,7 +160,7 @@
                 db[i].id += 5;
                 db[i].date += 5;
             }
-            printDB(db);
+            printDB(db, header);
         }
 
         function printRow(object, isHeader) {
@@ -153,9 +183,9 @@
             return $line;
         }
 
-        function createTable(data) {
+        function createTable(data, header) {
             var $table = $("<table cellspacing='0'></table>");
-            $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
+            $table.append(printRow(header, true));
             for (let index = 0; index < data.length; index++) {
                 var element = data[index];
                 var $line = $("<tr></tr>");
@@ -164,9 +194,14 @@
             return $table;
         }
 
-        function printDB(data) {
-            var $table = createTable(data);
-            // $("#dbTable").replaceWith($table);
+        function printWeather(data, header) {
+            var $table = createTable(data, header);
+            $("#weatherTable").empty();
+            $table.appendTo($("#weatherTable"));
+        }
+
+        function printDB(data, header) {
+            var $table = createTable(data, header);
             $("#dbTable").empty();
             $table.appendTo($("#dbTable"));
         }

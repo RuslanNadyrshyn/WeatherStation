@@ -44,7 +44,6 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 }
 
 .dropdown {
-	float: left;
 	overflow: hidden;
 	font-size: 16px;
 	background-color: rgb(213, 216, 220);
@@ -53,6 +52,7 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 }
 
 .dropdown-content {
+	padding: 0;
 	display: none;
 	position: absolute;
 	min-width: 140px;
@@ -74,12 +74,14 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 .weather-block {
 	display: none;
 	position: absolute;
-	width: 400px;
-	height: 300px;
+	border-radius: 5px;
 	background-color: white;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
 	cursor: default;
+}
+.weather-block a {
+	border-radius: 0 0px 5px 5px;
 }
 .dropdown-weather:hover .weather-block {
 	display: block;	
@@ -90,6 +92,12 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+}
+.weather-content th {
+	background-color: transparent;
+}
+.weather-item {
+	padding: 10px;
 }
 
 .container {

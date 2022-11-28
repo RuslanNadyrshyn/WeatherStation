@@ -34,9 +34,9 @@
         return $line;
     }
 
-    function createTable(data) {
+    function createTable(data, header) {
         var $table = $("<table cellspacing='0'></table>");
-        $table.append(printRow(["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"], true));
+        $table.append(printRow(header, true));
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
             var $line = $("<tr></tr>");
@@ -45,8 +45,16 @@
         return $table;
     }
 
+    function printWeather(data) {
+        var weatherHeader = ["", "Температура", "Вологість"];
+        var $table = createTable(data, weatherHeader);
+        $("#weatherTable").empty();
+        $table.appendTo($("#weatherTable"));
+    }
+
     function printDB(data) {
-        var $table = createTable(data);
+        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+        var $table = createTable(data, dbHeader);
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }
