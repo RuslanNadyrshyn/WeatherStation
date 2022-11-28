@@ -3,20 +3,27 @@ body {
 	background-color: whitesmoke;
 	margin: 0px;
 	padding: 0px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 header {
 	position: fixed;
 	top: 0;
-	z-index: 5;
+	z-index: 3;
 	width: 100%;
 	background-color: grey;
-	/* border-bottom: #566573 solid 1px; */
+	align-items: center;
 }
 
 nav {
 	display:flex;
 	flex-direction: row;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 8px;
 }
 nav a {
 	text-decoration: none;
@@ -30,6 +37,12 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	background-color: #566573;
 	color:#ffffff;
 }
+
+.weather-container, .nav-menu {
+	display: flex;
+	flex-direction: row;
+}
+
 .dropdown {
 	float: left;
 	overflow: hidden;
@@ -47,19 +60,9 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	z-index: 1;
 }
 
-.dropdown-content a {
-	text-align: left;
-}
-
-.dropdown-content a:hover {
-	background-color: #566573;
-	color:#ffffff;
-}
-
 .dropdown:hover .dropdown-content {
   	display: block;	
 }
-
 
 .dropdown-weather {
 	padding: 15px;
@@ -71,8 +74,8 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 .weather-block {
 	display: none;
 	position: absolute;
-	width: 240px;
-	height: 200px;
+	width: 400px;
+	height: 300px;
 	background-color: white;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
@@ -92,14 +95,12 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 .container {
 	flex-direction: column;
 	max-width: 1200px;
-	margin: auto;
+	margin: 8px;
 }
 
 h1 {
-	margin: 5px;
+	margin: 60px auto 20px;
 	text-align: center;
-	padding-top: 60px;
-	padding-bottom: 20px;
 }
 
 table {
@@ -122,10 +123,11 @@ tr:not(:first-child):hover {
 }
 
 .current-table {
-	border: 1px solid lightblue;
+	border: 2px solid lightblue;
 	font-size: 24px; 
 	margin-bottom: 20px;
 	height: 100px;
+	overflow: auto;
 }
 .current-table-td {
 	padding: 15px;
@@ -194,7 +196,41 @@ canvas {
 	margin: 20px auto;
 }
 .chart-container:hover {
-	/* background-color: lightgray; */
 	border: gray 2px solid;
 }
 
+@media (max-width: 900px) {
+	h1 {
+		margin: 50px auto 10px;
+		font-size: 18px;
+	}
+	.current-table {
+		font-size: 18px;
+	}
+	.db-table-container {
+		font-size: 14px;
+		height: 350px;
+	}
+	td, th, .current-table-td {
+		padding: 5px;
+	}
+	.chart-container {
+		width: 90%;
+	}
+	.nav-menu {
+		display: none;
+	}
+	.navigator-item {
+		padding: 8px;
+		/* font-size: 14px; */
+	}
+}
+
+@media (max-width: 480px) {
+	.current-table {
+		font-size: 16px;
+	}
+	.db-table-container {
+		font-size: 12px;
+	}
+}

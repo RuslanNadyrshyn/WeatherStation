@@ -12,30 +12,32 @@
 
 <body>
     <header>
-        <div class="container">
             <nav>
-                <div class="dropdown">
-                    <a id="location">Львів</a>
-                    <nav class="dropdown-content">
-                        <a onclick="changeLocation('Київ')">Київ</a>
-                        <a onclick="changeLocation('Львів')">Львів</a>
-                        <a onclick="changeLocation('Харків')">Харків</a>
-                    </nav>
-                </div> 
-                <div class="dropdown-weather">
-                    <div id="location-weather">-1</div>
-                    <div class="weather-block">
-                        <div class="weather-content">
-                            here is weather
-                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
+                <div class="weather-container">
+                    <div class="dropdown">
+                        <a id="location">Львів</a>
+                        <nav class="dropdown-content">
+                            <a onclick="changeLocation('Київ')">Київ</a>
+                            <a onclick="changeLocation('Львів')">Львів</a>
+                            <a onclick="changeLocation('Харків')">Харків</a>
+                        </nav>
+                    </div> 
+                    <div class="dropdown-weather">
+                        <div id="location-weather">-1</div>
+                        <div class="weather-block">
+                            <div class="weather-content">
+                                here is weather
+                                <a href="https://www.meteo.gov.ua/">Докладніше</a>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="nav-menu">
+                    <a href="#current-label">Дані датчика BME280</a>
+                    <a href="#db-label">База даних</a>
+                    <a href="#charts-label">Графіки</a>
                 </div> 
-                <a style="margin-left: auto;" href="#current-label">Дані датчика BME280</a>
-                <a href="#db-label">База даних</a>
-                <a href="#charts-label">Графіки</a>
             </nav>
-        </div>
     </header>
     <div class="container">
         <h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
@@ -74,6 +76,7 @@
         </div>
         <!-- Вивід навігатора сторінок БД -->
         <h1 id="charts-label">Графіки</h1>
+        <p>*Натисніть на графік для його збільшення</p>
         <div class="chart-block">
             <!--Ініціалізація графіків -->
             <div class="chart-container" onclick="toggleChart({id})" id="container-temp">
