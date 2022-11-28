@@ -98,7 +98,8 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 h1 {
 	margin: 5px;
 	text-align: center;
-	padding-top: 50px;
+	padding-top: 60px;
+	padding-bottom: 20px;
 }
 
 table {
@@ -110,19 +111,18 @@ td, th {
 	padding: 10px;
 }
 th {
-	background-color: #a5f2c1;
+	background-color: rgb(54, 103, 228);
 }
 th.sticky {
 	position: sticky;
 	top: 0;
 }
 tr:not(:first-child):hover {
-	background-color: khaki;
+	background-color: lightgray;
 }
 
 .current-table {
 	border: 1px solid lightblue;
-	border-radius: 10px;
 	font-size: 24px; 
 	margin-bottom: 20px;
 	height: 100px;
@@ -133,7 +133,6 @@ tr:not(:first-child):hover {
 
 .db-table-container {
 	border: 3px solid lightblue;
-	border-radius: 10px;
 	font-size: 20px; 
 	width: 100%;
 	overflow: auto;
@@ -181,7 +180,7 @@ canvas {
 	font-size: 24;
 }
 .chart-container {
-	border: lightblue 2px solid;
+	border: white 2px solid;
 	border-radius: 10px;
 	text-align: center;
 	width: 45%;
@@ -195,6 +194,7 @@ canvas {
 	margin: 20px auto;
 }
 .chart-container:hover {
-	background-color: beige;
+	/* background-color: lightgray; */
+	border: gray 2px solid;
 }
 
