@@ -6,11 +6,17 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 
 $page = 1; 								// 1 сторінка по дефолту
 $count = 20; 							// Кількість записів для виводу таблиці та графіку
+$city = "Kyiv";
+
 if (isset($_GET['page'])) 				// Зчитування з URL змінної $page з номером сторінки
 	$page = $_GET['page'];
 
 if (isset($_GET['count']))				// Зчитування з URL змінної $count з кількістю значень, 
 	$count = $_GET['count'];			// які будуть ви водитися в таблиці Бази даних
+
+if (isset($_GET['city']))				//  
+	$city = $_GET['city'];				// 
+
 
 $start = ($page * $count) - $count; 	// Визначення початкового значення для діапазону
 
@@ -82,7 +88,7 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
         <nav>
             <div class="weather-container">
                 <div class="dropdown">
-                    <a id="location">Львів</a>
+                    <a id="location"></a>
                     <nav class="dropdown-content">
                         <a onclick="changeLocation('Київ')">Київ</a>
                         <a onclick="changeLocation('Львів')">Львів</a>
@@ -128,9 +134,9 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 		<div class="db-table-container">
 			<table id="dbTable"></table>
 		</div>
-		<?php page_navigator($count, $page, $num_of_pages); ?>
 		<!-- Вивід навігатора сторінок БД -->
-		<h1 id="charts-label">Графіки</h1>
+		<?php page_navigator($count, $page, $num_of_pages); ?>
+		<h1 id="charts-label">Графіки</h1>				
 		<div class="chart-block"> 						<!--Вивід графіків -->
 			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
 				<label class="chart-label">Температура</label>
@@ -149,7 +155,7 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 				<canvas id="chart-hum"></canvas>
 			</div>
 		</div>
-	</div> <!-- container -->
+	</div> <!-- /container -->
 	<script src="js/utils.js"></script> 				<!-- Підключення додаткових бібліотек -->
 	<script src="js/chart.min.js"></script>
 	<script src="js/jquery.js"></script>
@@ -160,43 +166,26 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 <!-- Поле script -->
 <!----------------------------------------------------------------------------------------->
 <script>
+	var city = <?php echo "\"$city\""; ?>
+	
+
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
+		
 	});
+
+	function changeLocation(newLocation) {
+		document.getElementById("location").innerHTML = newLocation;
+		loadWeather(newLocation);						// Виклик функції для створення таблиці з даними погоди
+	}
 
 	var data = <?php 
 		echo json_encode($rows);
 	?>;
-	
-	var weatherData = [
-            {
-                title: "Ранок",
-                temp: 15 + " °С",
-                hum: 60 + " %"
-            },
-            {
-                title: "День",
-                temp: 15 + " °С",
-                hum: 60 + " %"
-            },
-            {
-                title: "Вечір",
-                temp: 15 + " °С",
-                hum: 60 + " %"
-            },
-            {
-                title: "Ніч",
-                temp: 15 + " °С",
-                hum: 60 + " %"
-            },
-            {
-                title: "Зараз",
-                temp: 15 + " °С",
-                hum: 60 + " %"
-            },
-        ];
+	console.log("city", city);
 
-	printWeather(weatherData);							// Виклик функції для створення таблиці з даними погоди
+	changeLocation('Kyiv');
+	loadWeather(city);									// Виклик функції для створення таблиці з даними погоди
 	printDB(data);										// Виклик функції для створення таблиці "База даних"
 	printCharts(data);									// Виклик функції для створення графіків
 </script>

@@ -13,6 +13,7 @@
 <body>
     <header>
         <nav>
+            
             <div class="weather-container">
                 <div class="dropdown">
                     <a id="location">Львів</a>
@@ -31,6 +32,33 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="dropdown-weather">
+                    <div id="location-weather">-1</div>
+                    <div class="weather-block">
+                        <div class="weather-content">
+                            <table id="weatherTable">
+                                <thead>
+                                    <tr><th>Погода</th></tr>
+                                    <tr><th>Температура</th></tr>
+                                    <tr><th>Тиск</th></tr>
+                                    <tr><th>Вологість</th></tr>
+                                    <tr><th>Хмарність</th></tr>
+                                    <tr><th>Вітер</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Кілька хмар</td></tr>
+                                    <tr><td>2,11</td></tr>
+                                    <tr><td>1025</td></tr>
+                                    <tr><td>60</td></tr>
+                                    <tr><td>12</td></tr>
+                                    <tr><td>4,3</td></tr>
+                                </tbody>
+                            </table>
+
+                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
+                        </div>
+                    </div>
+                </div> -->
             </div>
             <div class="nav-menu">
                 <a href="#current-label">Дані датчика BME280</a>
@@ -121,34 +149,28 @@
         for (let i = 0; i < 100; i++) {
             arr.push(i);
         }
+        
         var header = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var weatherHeader = ["", "Температура", "Вологість"];
+        var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"];
 
         weatherData = [
             {
-                title: "Ранок",
-                temp: 15 + " °С",
-                hum: 60 + " %"
+                data: "Кілька хмар"
             },
             {
-                title: "День",
-                temp: 15 + " °С",
-                hum: 60 + " %"
+                data: "2,11"
             },
             {
-                title: "Вечір",
-                temp: 15 + " °С",
-                hum: 60 + " %"
+                data: "1025"
             },
             {
-                title: "Ніч",
-                temp: 15 + " °С",
-                hum: 60 + " %"
+                data: "60"
             },
             {
-                title: "Зараз",
-                temp: 15 + " °С",
-                hum: 60 + " %"
+                data: "12"
+            },
+            {
+                data: "4,3"
             },
         ]
         printWeather(weatherData, weatherHeader);
@@ -165,11 +187,14 @@
 
         function printRow(object, isHeader) {
             var $line = $("<tr></tr>");
-            if (isHeader) object.forEach(element =>
-                $line.append($("<th class='sticky'></th>").html(element)));
-            else {
-                for (const key in object)
-                    if (Object.hasOwnProperty.call(object, key)) {
+            for (const key in object) {
+                if (Object.hasOwnProperty.call(object, key)) { 
+                    if (isHeader) {
+                        console.log("line item", object[key]);
+                        $line.append($("<th class='sticky'></th>").html(object[key]));
+                    }
+                    
+                    else {
                         if (key == "date_bme280") {
                             datetime = object[key].split(" ");
                             date = datetime[0];
@@ -178,30 +203,138 @@
                             $line.append($("<td></td>").html(time));
                         } else $line.append($("<td></td>").html(object[key]));
                     }
-
+                }
             }
             return $line;
         }
 
-        function createTable(data, header) {
+
+        function createTable(data, header, isVertical) {
+            console.log("weather table data:", data);
             var $table = $("<table cellspacing='0'></table>");
-            $table.append(printRow(header, true));
+            var $thead = $("<thead></thead>");
+            var $tbody = $("<tbody></tbody>");
+
+            if(isVertical) {
+                for (let index = 0; index < header.length; index++) {
+                    var element = header[index];
+                    console.log("element", element);
+
+                    var $head = $("<th></th>");
+                    var $line = $("<tr></tr>");
+
+                    $head.append(element);
+                    $line.append($head);
+                    $thead.append($line);
+                }
+            } else $thead.append(printRow(header, true));
+            
+            $table.append($thead);
+
             for (let index = 0; index < data.length; index++) {
                 var element = data[index];
                 var $line = $("<tr></tr>");
-                $table.append(printRow(element), false);
+                $tbody.append(printRow(element, false));
             }
+            $table.append($tbody);
             return $table;
         }
 
+        
+        function createVerticalTable(data, header) {
+            console.log("weather table data:", data);
+            var $table = $("<table cellspacing='0'></table>");
+            var $thead = $("<thead></thead>");
+            var $tbody = $("<tbody></tbody>");
+
+            console.log("header.length", header.length);
+            for (let index = 0; index < header.length; index++) {
+                var element = header[index];
+                console.log("element", element);
+
+                var $head = $("<th></th>");
+                var $line = $("<tr></tr>");
+
+                $head.append(element);
+                $line.append($head);
+                $thead.append($line);
+            }
+            $table.append($thead);
+            
+            for (let index = 0; index < data.length; index++) {
+                var element = data[index];
+                var $line = $("<tr></tr>");
+                $tbody.append(printRow(element, false));
+            }
+            $table.append($tbody);
+            return $table;
+        }
+
+
+
+/*
+    { 
+        "coord": { 
+            "lon": 24.0232, 
+            "lat": 49.8383 
+        }, 
+        "weather": [{ 
+            "id": 801, 
+            "main": "Clouds", 
+            "description": "кілька хмар", 
+            "icon": "02d" 
+        }], 
+        "base": "stations", 
+        "main": { 
+            "temp": 2.11, 
+            "feels_like": -1.89, 
+            "temp_min": 2.11, 
+            "temp_max": 2.11, 
+            "pressure": 1026,
+            "humidity": 73, 
+            "sea_level": 1026, 
+            "grnd_level": 990 
+        }, 
+        "visibility": 10000, 
+        "wind": { 
+            "speed": 4.32, 
+            "deg": 123, 
+            "gust": 6.28 
+        }, 
+        "clouds": { 
+            "all": 12 
+        }, 
+        "dt": 1669719089, 
+        "sys": { 
+            "country": "UA", 
+            "sunrise": 1669701429, 
+            "sunset": 1669732052 
+        },
+        "timezone": 7200, 
+        "id": 702550, 
+        "name": "Lviv", 
+        "cod": 200 
+    }
+
+    https://api.openweathermap.org/data/2.5/weather?q=Lviv&appid=&units=metric&lang=ua
+    
+    */
+
+
         function printWeather(data, header) {
-            var $table = createTable(data, header);
+            console.log(data);
+            var $table = createTable(data, header, true);
             $("#weatherTable").empty();
             $table.appendTo($("#weatherTable"));
         }
+        // function loadWeather(data, header) {
+        //     var $table = createTable(data, header);
+        //     $("#weatherTable").empty();
+        //     $table.appendTo($("#weatherTable"));
+        // }
 
         function printDB(data, header) {
-            var $table = createTable(data, header);
+            var $table = createTable(data, header, false);
             $("#dbTable").empty();
             $table.appendTo($("#dbTable"));
         }

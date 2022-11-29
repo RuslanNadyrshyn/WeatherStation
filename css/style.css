@@ -1,3 +1,7 @@
+#weatherTable thead,#weatherTable tbody{
+	display:inline-block;
+}
+
 body {
 	font-family : Arial;
 	background-color: lightgrey;
@@ -126,10 +130,10 @@ td, th {
 th {
 	background-color: rgb(54, 103, 228);
 }
-th.sticky {
-	position: sticky;
-	top: 0;
-}
+/* th.sticky {
+	position: sticky; 
+	top: 0; 
+} */
 tr:not(:first-child):hover {
 	background-color: lightgray;
 }

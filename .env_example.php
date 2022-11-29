@@ -1,0 +1,4 @@
+
+<?php
+$APPID = "appid";
+?>

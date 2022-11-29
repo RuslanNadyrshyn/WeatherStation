@@ -1,10 +1,16 @@
+<?php 
+include ".env.php";
+?>
 <script>
+    const APPID = "<?php echo '$APPID';?>";
+
     var loadData = function () {
         $.ajax({													// ajax-запит до бази даних для динамічного 
             type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
             url: "/extract.php",									// Виклик файла extract.php, в якому виконується запит до БД
             dataType: "json",
             success: function (result) {
+                
                 $("#temp").text(result.temp_bme280 + ' °С');
                 $("#press").text(result.press_bme280 + ' гПа');
                 $("#alt").text(result.alt_bme280 + ' м');
@@ -13,6 +19,90 @@
             }
         });
     };
+
+    var loadWeather = function (city) {
+        $.ajax({													// ajax-запит до бази даних для динамічного 
+            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
+            dataType: "json",
+            success: function (result) {
+                weatherData = [
+                    {
+                        description: result.weather.description
+                    },
+                    {
+                        temp: result.main.temp
+                    },
+                    {
+                        pressure: result.main.pressure
+                    },
+                    {
+                        humidity: result.main.humidity
+                    },
+                    {
+                        clouds: result.clouds.all
+                    },
+                    {
+                        wind: result.wind.speed
+                    },
+                ]
+                console.log(result);
+                var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
+                var $table = createTable(weatherData, weatherHeader);              // виклик ф-ції createTable() з відповідними даними
+                $("#weatherTable").empty();
+
+                $table.appendTo($("#weatherTable"));
+            }
+        });
+    };
+
+    /*
+    { 
+        "coord": { 
+            "lon": 24.0232, 
+            "lat": 49.8383 
+        }, 
+        "weather": [{ 
+            "id": 801, 
+            "main": "Clouds", 
+            "description": "кілька хмар", 
+            "icon": "02d" 
+        }], 
+        "base": "stations", 
+        "main": { 
+            "temp": 2.11, 
+            "feels_like": -1.89, 
+            "temp_min": 2.11, 
+            "temp_max": 2.11, 
+            "pressure": 1026,
+            "humidity": 73, 
+            "sea_level": 1026, 
+            "grnd_level": 990 
+        }, 
+        "visibility": 10000, 
+        "wind": { 
+            "speed": 4.32, 
+            "deg": 123, 
+            "gust": 6.28 
+        }, 
+        "clouds": { 
+            "all": 12 
+        }, 
+        "dt": 1669719089, 
+        "sys": { 
+            "country": "UA", 
+            "sunrise": 1669701429, 
+            "sunset": 1669732052 
+        },
+        "timezone": 7200, 
+        "id": 702550, 
+        "name": "Lviv", 
+        "cod": 200 
+    }
+
+    https://api.openweathermap.org/data/2.5/weather?q=Lviv&appid=&units=metric&lang=ua
+    
+    */
 
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
@@ -35,21 +125,27 @@
     }
 
     function createTable(data, header) {                            // Функція для створення таблиці, яка приймає
-        var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header) 
-        $table.append(printRow(header, true));
-        for (let index = 0; index < data.length; index++) {
-            var element = data[index];
-            var $line = $("<tr></tr>");
-            $table.append(printRow(element), false);
-        }
-        return $table;
+            var $table = $("<table cellspacing='0'></table>");      // масив даних таблиці(data) та головний рядок(header)
+            var $thead = $("<thead></thead>");
+            var $tbody = $("<tbody></tbody>");
+
+            $thead.append(printRow(header, true));
+            $table.append($thead);
+
+            for (let index = 0; index < data.length; index++) {
+                var element = data[index];
+                var $line = $("<tr></tr>");
+                $tbody.append(printRow(element, false));
+            }
+            $table.append($tbody);
+            return $table;
     }
 
-    function printWeather(data) {                                   // Функція для створення таблиці даних погоди
-        var weatherHeader = ["", "Температура", "Вологість"];       // головний рядок таблиці
-        var $table = createTable(data, weatherHeader);              // виклик ф-ції createTable() з відповідними даними
-        $("#weatherTable").empty();
-        $table.appendTo($("#weatherTable"));
+    function printWeather(data) {                                        // Функція для створення таблиці "База даних"
+        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+        var $table = createTable(data, dbHeader);                   // виклик ф-ції createTable() з відповідними даними
+        $("#dbTable").empty();
+        $table.appendTo($("#dbTable"));
     }
 
     function printDB(data) {                                        // Функція для створення таблиці "База даних"
@@ -60,8 +156,8 @@
     }
 
     function printCharts(data) {                                    // Функція для створення графіків
-        var res = fetchResult(data);                                
-        drawCharts(res, res.date);                                  
+        var res = fetchResult(data);
+        drawCharts(res, res.date);
     }
 
     function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
@@ -79,7 +175,7 @@
             date.push(element.date_bme280);
         });
 
-        return {temp, press, alt, hum, date};
+        return { temp, press, alt, hum, date };
     }
 
     function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
