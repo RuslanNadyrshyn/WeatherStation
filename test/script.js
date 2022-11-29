@@ -43,59 +43,10 @@ var loadWeather = function (city) {
             var $table = createTable(weatherData, weatherHeader, true);              // виклик ф-ції createTable() з відповідними даними
             $("#weatherTable").empty();
             
-
             $table.appendTo($("#weatherTable"));
         }
     });
 };
-
-/*
-{ 
-    "coord": { 
-        "lon": 24.0232, 
-        "lat": 49.8383 
-    }, 
-    "weather": [{ 
-        "id": 801, 
-        "main": "Clouds", 
-        "description": "кілька хмар", 
-        "icon": "02d" 
-    }], 
-    "base": "stations", 
-    "main": { 
-        "temp": 2.11, 
-        "feels_like": -1.89, 
-        "temp_min": 2.11, 
-        "temp_max": 2.11, 
-        "pressure": 1026,
-        "humidity": 73, 
-        "sea_level": 1026, 
-        "grnd_level": 990 
-    }, 
-    "visibility": 10000, 
-    "wind": { 
-        "speed": 4.32, 
-        "deg": 123, 
-        "gust": 6.28 
-    }, 
-    "clouds": { 
-        "all": 12 
-    }, 
-    "dt": 1669719089, 
-    "sys": { 
-        "country": "UA", 
-        "sunrise": 1669701429, 
-        "sunset": 1669732052 
-    },
-    "timezone": 7200, 
-    "id": 702550, 
-    "name": "Lviv", 
-    "cod": 200 
-}
-
-https://api.openweathermap.org/data/2.5/weather?q=Lviv&appid=&units=metric&lang=ua
-
-*/
 
 function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
     var $line = $("<tr></tr>");

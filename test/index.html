@@ -28,8 +28,7 @@
                     <img class="weather-icon" id="weather-icon" src=""/>
                     <div class="weather-block">
                         <div class="weather-content">
-                            <img class="weather-icon" id="weather-content-icon"
-                            src=""/>
+                            <img class="weather-icon" id="weather-content-icon" src=""/>
                             <table id="weatherTable"></table>
                             <a href="https://www.meteo.gov.ua/">Докладніше</a>
                         </div>
@@ -60,7 +59,6 @@
             </tr>
         </table>
         <h1 id="db-label">База даних</h1>
-        <button onclick="updateTable()">Update table</button>
         <nav class="navigator-block">
             Сторінка:
             <a class="navigator-item" onclick="window.location='index.php?count=20';">1</a>
@@ -126,7 +124,7 @@
         var header = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
         
         changeLocation('Київ');
-        printDB(db, header);
+        printDB(db);
         drawCharts(arr, arr.date);
     </script>
 </body>

@@ -48,7 +48,7 @@ function echo_count($count, $num) { 						// Функція виводу для 
 
 function count_navigator($count) {							// Функція виводу навігатора кількості рядків з БД 
 	echo "<nav class=\"navigator-block\">";
-	echo "<p class=\"navigator-label\">Кількість значень:</p>";
+	echo "Кількість значень: ";
 	echo_count($count, 20);
 	echo_count($count, 50);
 	echo_count($count, 100);
@@ -96,9 +96,11 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
                     </nav>
                 </div>
                 <div class="dropdown-weather">
-                    <div id="location-weather">-1</div>
+                    <div id="location-weather"> °С</div>
+					<img class="weather-icon" id="weather-icon" src=""/>
                     <div class="weather-block">
                         <div class="weather-content">
+							<img class="weather-icon" id="weather-content-icon" src=""/>
                             <table id="weatherTable"></table>
                             <a href="https://www.meteo.gov.ua/">Докладніше</a>
                         </div>
@@ -168,24 +170,13 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 <script>
 	var city = <?php echo "\"$city\""; ?>
 	
-
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
-		
+		changeLocation('Київ');							// Виклик функції для створення таблиці з даними погоди									
+		printDB(data);									// Виклик функції для створення таблиці "База даних"
 	});
 
-	// function changeLocation(newLocation) {
-	// 	document.getElementById("location").innerHTML = newLocation;
-	// 	loadWeather(newLocation);						// Виклик функції для створення таблиці з даними погоди
-	// }
+	var data = <?php echo json_encode($rows); ?>;
 
-	var data = <?php 
-		echo json_encode($rows);
-	?>;
-	console.log("city", city);
-
-	changeLocation('Kyiv');								// Виклик функції для створення таблиці з даними погоди
-	// loadWeather(city);									
-	printDB(data);										// Виклик функції для створення таблиці "База даних"
 	printCharts(data);									// Виклик функції для створення графіків
 </script>

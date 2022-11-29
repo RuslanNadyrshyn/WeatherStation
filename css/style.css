@@ -1,15 +1,16 @@
 #weatherTable thead,#weatherTable tbody{
 	display:inline-block;
 }
+#dbTable thead {
+	position: sticky; 
+	top: 0; 
+}
 
 body {
 	font-family : Arial;
 	background-color: lightgrey;
 	margin: 0px;
 	padding: 0px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 }
 
 header {
@@ -125,6 +126,7 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	max-width: 1160px;
 	padding: 0 20px;
 	background-color: whitesmoke;
+	margin: 0 auto;
 }
 
 h1 {
@@ -143,11 +145,11 @@ td, th {
 th {
 	background-color: rgb(54, 103, 228);
 }
-th.sticky {
+/* th.sticky {
 	position: sticky; 
 	top: 0; 
-}
-tr:not(:first-child):hover {
+} */
+tbody td:hover {
 	background-color: lightgray;
 }
 
@@ -156,13 +158,12 @@ tr:not(:first-child):hover {
 	font-size: 24px; 
 }
 .current-table-td {
-	padding: 15px;
+	padding: 10px;
 }
 
 .db-table-container {
 	border: 3px solid lightblue;
 	font-size: 20px; 
-	width: 100%;
 	overflow: auto;
     height: 500px;
 }
@@ -252,7 +253,7 @@ canvas {
 	}
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
 	.current-table {
 		font-size: 16px;
 	}
