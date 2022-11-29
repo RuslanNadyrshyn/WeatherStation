@@ -1,2 +1,3 @@
 .htaccess
-.env.php
+env/.env.php
+test/.env.js

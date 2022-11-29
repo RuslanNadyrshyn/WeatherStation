@@ -1,5 +1,5 @@
 <?php 
-include ".env.php";
+include "env/.env.php";
 ?>
 <script>
     const APPID = "<?php echo '$APPID';?>";
@@ -27,28 +27,16 @@ include ".env.php";
             dataType: "json",
             success: function (result) {
                 weatherData = [
-                    {
-                        description: result.weather.description
-                    },
-                    {
-                        temp: result.main.temp
-                    },
-                    {
-                        pressure: result.main.pressure
-                    },
-                    {
-                        humidity: result.main.humidity
-                    },
-                    {
-                        clouds: result.clouds.all
-                    },
-                    {
-                        wind: result.wind.speed
-                    },
+                    { description: result.weather.description },
+                    { temp: result.main.temp },
+                    { pressure: result.main.pressure },
+                    { humidity: result.main.humidity },
+                    { clouds: result.clouds.all },
+                    { wind: result.wind.speed }
                 ]
                 console.log(result);
                 var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
-                var $table = createTable(weatherData, weatherHeader);              // виклик ф-ції createTable() з відповідними даними
+                var $table = createTable(weatherData, weatherHeader, true);              // виклик ф-ції createTable() з відповідними даними
                 $("#weatherTable").empty();
 
                 $table.appendTo($("#weatherTable"));
@@ -124,33 +112,38 @@ include ".env.php";
         return $line;
     }
 
-    function createTable(data, header) {                            // Функція для створення таблиці, яка приймає
-            var $table = $("<table cellspacing='0'></table>");      // масив даних таблиці(data) та головний рядок(header)
-            var $thead = $("<thead></thead>");
-            var $tbody = $("<tbody></tbody>");
+    function createTable(data, header, isVertical) {                // Функція для створення таблиці, яка приймає               
+        var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
+        var $thead = $("<thead></thead>");
+        var $tbody = $("<tbody></tbody>");
 
-            $thead.append(printRow(header, true));
-            $table.append($thead);
+        if(isVertical) {
+            for (let index = 0; index < header.length; index++) {
+                var element = header[index];
 
-            for (let index = 0; index < data.length; index++) {
-                var element = data[index];
+                var $head = $("<th></th>");
                 var $line = $("<tr></tr>");
-                $tbody.append(printRow(element, false));
-            }
-            $table.append($tbody);
-            return $table;
-    }
 
-    function printWeather(data) {                                        // Функція для створення таблиці "База даних"
-        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader);                   // виклик ф-ції createTable() з відповідними даними
-        $("#dbTable").empty();
-        $table.appendTo($("#dbTable"));
+                $head.append(element);
+                $line.append($head);
+                $thead.append($line);
+            }
+        } else $thead.append(printRow(header, true));
+            
+        $table.append($thead);
+
+        for (let index = 0; index < data.length; index++) {
+            var element = data[index];
+            var $line = $("<tr></tr>");
+            $tbody.append(printRow(element, false));
+        }
+        $table.append($tbody);
+        return $table;
     }
 
     function printDB(data) {                                        // Функція для створення таблиці "База даних"
         var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader);                   // виклик ф-ції createTable() з відповідними даними
+        var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }
@@ -240,5 +233,10 @@ include ".env.php";
         var element = document.getElementById(id.id);
         element.classList.toggle("large");
     }
+
+    function changeLocation(newLocation) {
+		document.getElementById("location").innerHTML = newLocation;
+		loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
+	}
 
 </script>

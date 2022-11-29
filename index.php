@@ -1,7 +1,7 @@
 <!-- Поле php -->
 <!----------------------------------------------------------------------------------------->
 <?php
-include "connect_db.php"; 				// З'єднання з файлом connect_db.php
+include "database/connect_db.php"; 		// З'єднання з файлом connect_db.php
 include "scripts.php";					// Підключення файлу scripts.php з реалізацією функцій 
 
 $page = 1; 								// 1 сторінка по дефолту
@@ -174,18 +174,18 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 		
 	});
 
-	function changeLocation(newLocation) {
-		document.getElementById("location").innerHTML = newLocation;
-		loadWeather(newLocation);						// Виклик функції для створення таблиці з даними погоди
-	}
+	// function changeLocation(newLocation) {
+	// 	document.getElementById("location").innerHTML = newLocation;
+	// 	loadWeather(newLocation);						// Виклик функції для створення таблиці з даними погоди
+	// }
 
 	var data = <?php 
 		echo json_encode($rows);
 	?>;
 	console.log("city", city);
 
-	changeLocation('Kyiv');
-	loadWeather(city);									// Виклик функції для створення таблиці з даними погоди
+	changeLocation('Kyiv');								// Виклик функції для створення таблиці з даними погоди
+	// loadWeather(city);									
 	printDB(data);										// Виклик функції для створення таблиці "База даних"
 	printCharts(data);									// Виклик функції для створення графіків
 </script>
