@@ -14,11 +14,6 @@ if (isset($_GET['count']))				// Зчитування з URL змінної $cou
 
 $start = ($page * $count) - $count; 	// Визначення початкового значення для діапазону
 
-session_start();						// Створення сесії для можливості зчитування змінних в інших файлах
-$_SESSION['count'] = $count;
-$_SESSION['art'] = $start;
-
-
 $result = $conn->query("SELECT id_bme280 FROM bme280"); // Запит для визначення кількості записів таблиці bme280
 $all_rec = $result->num_rows; 			// Кількість записів таблиці bme280 
 if ($all_rec % $count == 0) 			// Визначення кількості сторінок навігатора
@@ -58,6 +53,7 @@ function count_navigator($count) {							// Функція виводу наві
 }
 
 function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
+	if($count < 0) return;
 	echo "<nav class='navigator-block'>";
 	for ($i = 1; $i <= $num_of_pages; $i++) {
 		if ($page == $i)
@@ -168,12 +164,11 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 		loadData();										// в таблиці "Дані датчика BME280"
 	});
 
-	printWeather(weatherData);
 	var data = <?php 
 		echo json_encode($rows);
 	?>;
 	
-	weatherData = [
+	var weatherData = [
             {
                 title: "Ранок",
                 temp: 15 + " °С",
@@ -199,7 +194,8 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
                 temp: 15 + " °С",
                 hum: 60 + " %"
             },
-        ]
+        ];
+
 	printWeather(weatherData);							// Виклик функції для створення таблиці з даними погоди
 	printDB(data);										// Виклик функції для створення таблиці "База даних"
 	printCharts(data);									// Виклик функції для створення графіків

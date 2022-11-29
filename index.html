@@ -57,23 +57,23 @@
         </table>
         <h1 id="db-label">База даних</h1>
         <button onclick="updateTable()">Update table</button>
-        <div class="navigator-block">
+        <nav class="navigator-block">
             Сторінка:
-            <div class="navigator-item" onclick="window.location='index.php?count=20';">1</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=20';">2</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=20';">3</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=20';">5</div>
-        </div>
+            <a class="navigator-item" onclick="window.location='index.php?count=20';">1</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=20';">2</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=20';">3</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=20';">5</a>
+        </nav>
         <!-- Вивід навігатора сторінок і кількості значень БД -->
         <div class="db-table-container">
             <table id="dbTable"></table>
         </div>
-        <div class="navigator-block">
-            <div class="navigator-item" onclick="window.location='index.php?count=20';">20</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=50';">50</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=100';">100</div>
-            <div class="navigator-item" onclick="window.location='index.php?count=';">Всі()</div>
-        </div>
+        <nav class="navigator-block">
+            <a class="navigator-item" onclick="window.location='index.php?count=20';">20</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=50';">50</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=100';">100</a>
+            <a class="navigator-item" onclick="window.location='index.php?count=';">Всі()</a>
+        </nav>
         <!-- Вивід навігатора сторінок БД -->
         <h1 id="charts-label">Графіки</h1>
         <p>*Натисніть на графік для його збільшення</p>

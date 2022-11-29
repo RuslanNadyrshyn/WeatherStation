@@ -1,10 +1,6 @@
 <?php
 include "connect_db.php";    				// З'єднання з файлом connect_db.php
 
-session_start();                            // Зчитування змінних $count та $start з сесії
-$count = $_SESSION['count'];                
-$start = $_SESSION['start'];
-
 $rows = array();                            // Створення масиву для даних з БД 
 // Отримання даних таблиці bme280
 $result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 DESC LIMIT $start, $count"); 
