@@ -1,6 +1,6 @@
 body {
 	font-family : Arial;
-	background-color: whitesmoke;
+	background-color: lightgrey;
 	margin: 0px;
 	padding: 0px;
 	display: flex;
@@ -23,7 +23,6 @@ nav {
 	justify-content: space-between;
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 8px;
 }
 nav a {
 	text-decoration: none;
@@ -102,12 +101,13 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 
 .container {
 	flex-direction: column;
-	max-width: 1200px;
-	margin: 8px;
+	max-width: 1160px;
+	padding: 20px;
+	background-color: whitesmoke;
 }
 
 h1 {
-	margin: 60px auto 20px;
+	padding-top: 30px;
 	text-align: center;
 }
 
@@ -133,9 +133,6 @@ tr:not(:first-child):hover {
 .current-table {
 	border: 2px solid lightblue;
 	font-size: 24px; 
-	margin-bottom: 20px;
-	height: 100px;
-	overflow: auto;
 }
 .current-table-td {
 	padding: 15px;
@@ -166,7 +163,7 @@ tr:not(:first-child):hover {
 	background-color: darkgray;
 	margin: 5px 1px;
 	border-radius: 3px;
-	color: #000;
+	color: black;
 }
 .navigator-item:hover {
 	background-color: gray;
@@ -178,7 +175,7 @@ tr:not(:first-child):hover {
 .chart-block {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between; 
+	justify-content: space-evenly; 
 }
 canvas { 
 	-moz-user-select: none;
@@ -194,7 +191,7 @@ canvas {
 	border-radius: 10px;
 	text-align: center;
 	width: 45%;
-	margin: 20px auto;
+	margin: 10px;
 	align-items: center;
 	padding: 10px;
 	transition: width 800ms;

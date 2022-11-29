@@ -1,20 +1,20 @@
 <script>
     var loadData = function () {
-        $.ajax({														// ajax-запит до бази даних 
-            type: "GET",
-            url: "/extract.php",											// звертання до файла extract.php 
+        $.ajax({													// ajax-запит до бази даних для динамічного 
+            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
+            url: "/extract.php",									// Виклик файла extract.php, в якому виконується запит до БД
             dataType: "json",
             success: function (result) {
                 $("#temp").text(result.temp_bme280 + ' °С');
                 $("#press").text(result.press_bme280 + ' гПа');
                 $("#alt").text(result.alt_bme280 + ' м');
                 $("#hum").text(result.hum_bme280 + ' %');
-                setTimeout(loadData, 2000);
+                setTimeout(loadData, 2000);                         // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
             }
         });
     };
 
-    function printRow(object, isHeader) {
+    function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
         if (isHeader) object.forEach(element =>
             $line.append($("<th class='sticky'></th>").html(element)));
@@ -34,8 +34,8 @@
         return $line;
     }
 
-    function createTable(data, header) {
-        var $table = $("<table cellspacing='0'></table>");
+    function createTable(data, header) {                            // Функція для створення таблиці, яка приймає
+        var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header) 
         $table.append(printRow(header, true));
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
@@ -45,27 +45,27 @@
         return $table;
     }
 
-    function printWeather(data) {
-        var weatherHeader = ["", "Температура", "Вологість"];
-        var $table = createTable(data, weatherHeader);
+    function printWeather(data) {                                   // Функція для створення таблиці даних погоди
+        var weatherHeader = ["", "Температура", "Вологість"];       // головний рядок таблиці
+        var $table = createTable(data, weatherHeader);              // виклик ф-ції createTable() з відповідними даними
         $("#weatherTable").empty();
         $table.appendTo($("#weatherTable"));
     }
 
-    function printDB(data) {
+    function printDB(data) {                                        // Функція для створення таблиці "База даних"
         var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader);
+        var $table = createTable(data, dbHeader);                   // виклик ф-ції createTable() з відповідними даними
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }
 
-    function printCharts(data) {
-        var res = fetchResult(data);
-        drawCharts(res, res.date);
+    function printCharts(data) {                                    // Функція для створення графіків
+        var res = fetchResult(data);                                
+        drawCharts(res, res.date);                                  
     }
 
-    function fetchResult(result) {
-        var temp = [];
+    function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
+        var temp = [];                                              // показників від загальних даних, отриманих в БД
         var press = [];
         var alt = [];
         var hum = [];
@@ -82,7 +82,7 @@
         return {temp, press, alt, hum, date};
     }
 
-    function createConfig(labels, data, colorName, scopes) {
+    function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
         return {
             type: 'line',
             data: {
@@ -109,7 +109,7 @@
         };
     }
 
-    function drawCharts(res, labels) {
+    function drawCharts(res, labels) {                              // Ф-ція створення графіків
         for (const key in res) {
             if (Object.hasOwnProperty.call(res, key)) {
                 res[key].reverse();
@@ -117,19 +117,19 @@
         }
         window.onload = function () {
             [{
-                id: 'chart-temp',	// Графік температури
+                id: 'chart-temp',	                                // Графік температури
                 color: 'yellow',
                 data: res.temp,
             }, {
-                id: 'chart-press',	// Графік тиску
+                id: 'chart-press',	                                // Графік тиску
                 color: 'red',
                 data: res.press,
             }, {
-                id: 'chart-alt', 	// Графік Висоти
+                id: 'chart-alt', 	                                // Графік висоти
                 color: 'green',
                 data: res.alt,
             }, {
-                id: 'chart-hum', 	// Графік вологості
+                id: 'chart-hum', 	                                // Графік вологості
                 color: 'blue',
                 data: res.hum,
             }].forEach(function (details) {
@@ -140,7 +140,7 @@
         };
     }
 
-    function toggleChart(id) {
+    function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
         var element = document.getElementById(id.id);
         element.classList.toggle("large");
     }
