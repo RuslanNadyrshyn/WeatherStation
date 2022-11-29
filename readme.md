@@ -14,11 +14,11 @@ TODO:
 6. + update comments
 7. + update charts fetching (use one request to db, fetch it in js)
 8. + Инвертировать не график, а данные в нём до этого, чтобы корректно отображалось
-9. обновлять бд отдельно, а не всю страницу
 10. дані за день, тиждень, місяць
 11. + Add screen adaptivity
-12. +- Weather predict from internet
+12. + Weather predict from internet
 
-
+fix table header
+refactor css file
  deploy to server 
 

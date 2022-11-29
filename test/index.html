@@ -14,10 +14,9 @@
 <body>
     <header>
         <nav>
-            
             <div class="weather-container">
                 <div class="dropdown">
-                    <a id="location">Львів</a>
+                    <a id="location"></a>
                     <nav class="dropdown-content">
                         <a onclick="changeLocation('Київ')">Київ</a>
                         <a onclick="changeLocation('Львів')">Львів</a>
@@ -25,9 +24,12 @@
                     </nav>
                 </div>
                 <div class="dropdown-weather">
-                    <div id="location-weather">-1</div>
+                    <div id="location-weather"> °С</div>
+                    <img class="weather-icon" id="weather-icon" src=""/>
                     <div class="weather-block">
                         <div class="weather-content">
+                            <img class="weather-icon" id="weather-content-icon"
+                            src=""/>
                             <table id="weatherTable"></table>
                             <a href="https://www.meteo.gov.ua/">Докладніше</a>
                         </div>
@@ -123,7 +125,7 @@
         
         var header = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
         
-        changeLocation('Kyiv');
+        changeLocation('Київ');
         printDB(db, header);
         drawCharts(arr, arr.date);
     </script>

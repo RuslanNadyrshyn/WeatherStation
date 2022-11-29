@@ -71,15 +71,18 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 }
 
 .dropdown-weather {
-	padding: 15px;
-	text-align: center;
+	padding: 0 10px;
+	align-items: center;
 	min-width: 50px;
     color: white;
 	cursor: pointer;
+	display: flex;
+    flex-direction: row;
 }
 .weather-block {
 	display: none;
 	position: absolute;
+	top: 40px;
 	border-radius: 5px;
 	background-color: white;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -88,6 +91,8 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 }
 .weather-block a {
 	border-radius: 0 0px 5px 5px;
+	width: 100%;
+	padding: 10px 0;
 }
 .dropdown-weather:hover .weather-block {
 	display: block;	
@@ -98,6 +103,7 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	align-items: center;
 }
 .weather-content th {
 	background-color: transparent;
@@ -105,17 +111,24 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 .weather-item {
 	padding: 10px;
 }
+.weather-icon {
+	max-height: 50px;
+	color: white;
+}
+.weather-content-icon {
+	max-height: 70px;
+	color: white;
+}
 
 .container {
 	flex-direction: column;
 	max-width: 1160px;
-	padding: 20px;
-	padding-top: 40px;
+	padding: 0 20px;
 	background-color: whitesmoke;
 }
 
 h1 {
-	margin: 20px;
+	padding-top: 50px;
 	text-align: center;
 }
 
@@ -130,10 +143,10 @@ td, th {
 th {
 	background-color: rgb(54, 103, 228);
 }
-/* th.sticky {
+th.sticky {
 	position: sticky; 
 	top: 0; 
-} */
+}
 tr:not(:first-child):hover {
 	background-color: lightgray;
 }
@@ -205,9 +218,11 @@ canvas {
 .chart-container.large {
 	width: 90%;
 	margin: 20px auto;
+	background-color: white;
 }
 .chart-container:hover {
 	border: gray 2px solid;
+	background-color: white;
 }
 
 @media (max-width: 900px) {

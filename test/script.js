@@ -1,3 +1,5 @@
+const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
+const PNG_ENDING = "@2x.png";
 
 var loadData = function () {
     $.ajax({													// ajax-запит до бази даних для динамічного 
@@ -23,16 +25,24 @@ var loadWeather = function (city) {
         success: function (result) {
             weatherData = [
                 { description: result.weather[0].description },
-                { temp: result.main.temp },
-                { pressure: result.main.pressure },
-                { humidity: result.main.humidity },
-                { clouds: result.clouds.all },
-                { wind: result.wind.speed }
+                { temp: result.main.temp+" °С" },
+                { pressure: result.main.pressure+" ГПа" },
+                { humidity: result.main.humidity+" %" },
+                { clouds: result.clouds.all+" %" },
+                { wind: result.wind.speed+" м/с" }
             ]
             console.log(result);
+
+            document.getElementById("location-weather").innerHTML = result.main.temp+" °С";
+            document.getElementById("weather-icon").src = 
+                    WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
+            document.getElementById("weather-content-icon").src = 
+                    WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
+            
             var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
             var $table = createTable(weatherData, weatherHeader, true);              // виклик ф-ції createTable() з відповідними даними
             $("#weatherTable").empty();
+            
 
             $table.appendTo($("#weatherTable"));
         }
