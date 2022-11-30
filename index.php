@@ -20,21 +20,12 @@ if (isset($_GET['city']))				//
 
 $start = ($page * $count) - $count; 	// Визначення початкового значення для діапазону
 
-$result = $conn->query("SELECT id_bme280 FROM bme280"); // Запит для визначення кількості записів таблиці bme280
+$result = $conn->query("SELECT COUNT(*) FROM bme280"); // Запит для визначення кількості записів таблиці bme280
 $all_rec = $result->num_rows; 			// Кількість записів таблиці bme280 
 if ($all_rec % $count == 0) 			// Визначення кількості сторінок навігатора
 	$num_of_pages = $all_rec / $count;
 else
 	$num_of_pages = $all_rec / $count + 1;
-
-$rows = array();
-if($count == -1) 						// Отримання усіх даних таблиці bme280
-	$result = $conn->query("SELECT * FROM bme280 ORDER BY date_bme280 DESC"); 
-else									// Отримання даних таблиці bme280 відповідно вказаній кількості та номеру сторінки
-	$result = $conn->query("SELECT * FROM bme280 ORDER BY date_bme280 DESC LIMIT $start, $count"); 
-while($r=$result->fetch_array(MYSQLI_ASSOC)) {
-    $rows[] = $r;
-}
 
 function echo_count($count, $num) { 						// Функція виводу для кожного значення кількості рядків
 	if ($count == "$num")
@@ -154,6 +145,9 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 			<table id="dbTable"></table>
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
+		<div>
+			<nav class="navigator-block pages" id="navPages"></nav>
+		</div>
 		<?php page_navigator($count, $page, $num_of_pages); ?>
 		<h1 id="charts-label">Графіки</h1>				
 		<div class="chart-block"> 						<!--Вивід графіків -->
@@ -194,9 +188,8 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
 		changeLocation('Київ');							// Виклик функції для створення таблиці з даними погоди									
-		 loadTable (page, count, param, order);
+		loadTable (page, count, param, order);
 	});
 
-	var data = <?php echo json_encode($rows); ?>;
-	// loadTable (page, count, param, order);
+	printNavPages();
 </script>

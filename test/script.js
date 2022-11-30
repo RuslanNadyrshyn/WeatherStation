@@ -2,9 +2,12 @@ const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
 const PNG_ENDING = "@2x.png";
 
 function updateTable() {
-    console.log("updateTable()");
+    // var page = document.getElementById("page").value;
+    // var counter = document.getElementById("counter").value;
+    // var param = document.getElementById("param").value;
     var order = document.getElementById("order").value;
     console.log("order: ", order);
+    loadTable(1, 20, "date", order);
 }
 
 var loadData = function () {

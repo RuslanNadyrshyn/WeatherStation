@@ -6,12 +6,70 @@ include "env/.env.php";
     const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
     const PNG_ENDING = "@2x.png";
 
+    function printNavPages() {  
+        // var numOfPages = document.getElementById("numOfPages").value;
+        // var count = document.getElementById("count").value;
+        var count = 20;
+        if(count < 0) return;
+
+        var numOfPages = getNumOfPages(count);
+        console.log("numOfPages: ", numOfPages);
+
+        var $pages = createNavList(numOfPages);
+        console.log("pages", $pages);
+         
+        $("#navPages").empty();
+        $pages.appendTo($("#navPages"));
+    }
+    var getNumOfPages = function (count) {
+        var numOfPages = 0;
+        $.ajax({		
+            async: false,											// ajax-запит до бази даних для динамічного 
+            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
+            url: "database/get_num_of_rows.php?count="+count,		// Виклик файла extract.php, в якому виконується запит до БД
+            dataType: "json",
+            success: function (result) {
+                console.log("NumOf rows: ", result.rows, typeof Number(result.rows));
+                var rows = Number(result.rows);
+                numOfPages = Math.ceil(rows/count);   
+            }
+        });
+        return numOfPages;
+    };
+
+    function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
+        var $nav = $("<nav class=\'navigator-block pages\'></table>");          // масив даних таблиці(data) та головний рядок(header)
+
+        for (let i = 0; i < count; i++) {
+            var $navItem;
+            if(i == 0) 
+                $navItem = $("<a class=\"navigator-item selected\"></a>");
+            else $navItem = $("<a class=\"navigator-item\"></a>");
+            $nav.append($navItem);
+        }
+        return $nav;
+    }
+
+    /*
+    function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
+        if($count < 0) return;
+        echo "<nav class='navigator-block pages'>";
+        for ($i = 1; $i <= $num_of_pages; $i++) {
+            if ($page == $i)
+                echo "<a class=\"navigator-item selected\"";
+            else
+                echo "<a class=\"navigator-item\" ";
+            echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
+	    }
+	    echo "</nav>";
+    }
+    */
+
     function updateTable() {
         // var page = document.getElementById("page").value;
         // var counter = document.getElementById("counter").value;
         // var param = document.getElementById("param").value;
         var order = document.getElementById("order").value;
-        console.log("order: ", order);
         loadTable(1, 20, "date", order);
     }
 
@@ -63,9 +121,8 @@ include "env/.env.php";
     };
 
     function loadTable (page, count, param, order) {
-		console.log("Loading table...");
 		var _page = "1";
-		var _count = "-1";
+		var _count = "0";
 		var _param = "date";
 		var _order = "DESC";
 
@@ -73,14 +130,13 @@ include "env/.env.php";
 		if(count) _count=count;
 		if(param) _param=param;
 		if(order) _order=order;
-        console.log("page="+_page+"&count="+_count+"&param="+_param+"&order="+_order);
+        // console.log("page="+_page+"&count="+_count+"&param="+_param+"&order="+_order);
 
 		$.ajax({													    
 			type: "GET",                                              
 			url: "database/fetch_db.php?"+"page="+_page+"&count="+_count+"&param="+_param+"&order="+_order,
 			dataType: "json",
 			success: function (result) {
-                console.log(result);
 				printDB(result);
                 printCharts(result);
 			}
@@ -139,7 +195,6 @@ include "env/.env.php";
     function printDB(data) {                                        // Функція для створення таблиці "База даних"
         var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
         var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
-        console.log($table);
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }
@@ -205,27 +260,25 @@ include "env/.env.php";
             color: 'yellow',
             data: res.temp,
         }, {
-                id: 'chart-press',	                                // Графік тиску
-                color: 'red',
-                data: res.press,
+            id: 'chart-press',	                                // Графік тиску
+            color: 'red',
+            data: res.press,
         }, {
-                id: 'chart-alt', 	                                // Графік висоти
-                color: 'green',
-                data: res.alt,
+            id: 'chart-alt', 	                                // Графік висоти
+            color: 'green',
+            data: res.alt,
         }, {
-                id: 'chart-hum', 	                                // Графік вологості
-                color: 'blue',
-                data: res.hum,
+            id: 'chart-hum', 	                                // Графік вологості
+            color: 'blue',
+            data: res.hum,
         }].forEach(function (details) {
             let chartStatus = Chart.getChart(details.id);
-            if (chartStatus != undefined) 
-                chartStatus.destroy();
+            if (chartStatus != undefined) chartStatus.destroy();
 
             var ctx = document.getElementById(details.id).getContext('2d');
             var config = createConfig(labels, details.data, details.color);
             new Chart(ctx, config);
         });
-
     }
 
     function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
