@@ -76,6 +76,13 @@
                 <a class="navigator-item" onclick="window.location='index.php?count=100';">За тиждень</a>
                 <a class="navigator-item" onclick="window.location='index.php?count=';">За місяць</a>
             </nav>
+            <div style="margin: auto 0;">
+                <label for="order">Порядок:</label>
+                <select name="order" id="order" onchange="updateTable()">
+                    <option value="ASC">По зростанню</option>
+                    <option value="DESC">По спаданню</option>
+                </select>
+            </div>
         </div>
         <!-- Вивід навігатора сторінок і кількості значень БД -->
         <div class="db-table-container">

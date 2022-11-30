@@ -6,6 +6,15 @@ include "env/.env.php";
     const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
     const PNG_ENDING = "@2x.png";
 
+    function updateTable() {
+        // var page = document.getElementById("page").value;
+        // var counter = document.getElementById("counter").value;
+        // var param = document.getElementById("param").value;
+        var order = document.getElementById("order").value;
+        console.log("order: ", order);
+        loadTable(1, 20, "date", order);
+    }
+
     var loadData = function () {
         $.ajax({													// ajax-запит до бази даних для динамічного 
             type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
@@ -64,14 +73,16 @@ include "env/.env.php";
 		if(count) _count=count;
 		if(param) _param=param;
 		if(order) _order=order;
+        console.log("page="+_page+"&count="+_count+"&param="+_param+"&order="+_order);
 
 		$.ajax({													    
 			type: "GET",                                              
 			url: "database/fetch_db.php?"+"page="+_page+"&count="+_count+"&param="+_param+"&order="+_order,
 			dataType: "json",
 			success: function (result) {
+                console.log(result);
 				printDB(result);
-				//updateDB and charts
+                printCharts(result);
 			}
 		});
 	};
@@ -189,29 +200,32 @@ include "env/.env.php";
                 res[key].reverse();
             }
         }
-        window.onload = function () {
-            [{
-                id: 'chart-temp',	                                // Графік температури
-                color: 'yellow',
-                data: res.temp,
-            }, {
+        [{
+            id: 'chart-temp',	                                // Графік температури
+            color: 'yellow',
+            data: res.temp,
+        }, {
                 id: 'chart-press',	                                // Графік тиску
                 color: 'red',
                 data: res.press,
-            }, {
+        }, {
                 id: 'chart-alt', 	                                // Графік висоти
                 color: 'green',
                 data: res.alt,
-            }, {
+        }, {
                 id: 'chart-hum', 	                                // Графік вологості
                 color: 'blue',
                 data: res.hum,
-            }].forEach(function (details) {
-                var ctx = document.getElementById(details.id).getContext('2d');
-                var config = createConfig(labels, details.data, details.color);
-                new Chart(ctx, config);
-            });
-        };
+        }].forEach(function (details) {
+            let chartStatus = Chart.getChart(details.id);
+            if (chartStatus != undefined) 
+                chartStatus.destroy();
+
+            var ctx = document.getElementById(details.id).getContext('2d');
+            var config = createConfig(labels, details.data, details.color);
+            new Chart(ctx, config);
+        });
+
     }
 
     function toggleChart(id) {                                      // Функція збільшення графіка при натисканні

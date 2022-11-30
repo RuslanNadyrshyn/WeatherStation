@@ -58,7 +58,6 @@ function count_navigator($count) {							// Функція виводу наві
 	echo "</nav>";
 
 	echo "<nav class=\"navigator-block\">";
-	echo "Кількість значень: ";
 	echo_count($count, "Сьогодні");
 	echo_count($count, "За 3 дні");
 	echo_count($count, "За тиждень");
@@ -143,6 +142,13 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 		<h1 id="db-label">База даних</h1>
 		<div class="navigator-container">
 			<?php count_navigator($count); ?> 			<!-- Вивід навігатора сторінок і кількості значень БД -->
+			<div style="margin: auto 0;">
+                <label for="order">Порядок:</label>
+                <select name="order" id="order" onchange="updateTable()">
+					<option value="DESC">По спаданню</option>
+                    <option value="ASC">По зростанню</option>
+                </select>
+            </div>
 		</div>
 		<div class="db-table-container">
 			<table id="dbTable"></table>
@@ -188,12 +194,9 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
 		changeLocation('Київ');							// Виклик функції для створення таблиці з даними погоди									
-		loadTable (page, count, param, order);
+		 loadTable (page, count, param, order);
 	});
 
 	var data = <?php echo json_encode($rows); ?>;
-
-	printCharts(data);									// Виклик функції для створення графіків
-
-	// loadTable ("3", "100", "hum", "DESC");
+	// loadTable (page, count, param, order);
 </script>

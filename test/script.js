@@ -1,6 +1,12 @@
 const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
 const PNG_ENDING = "@2x.png";
 
+function updateTable() {
+    console.log("updateTable()");
+    var order = document.getElementById("order").value;
+    console.log("order: ", order);
+}
+
 var loadData = function () {
     $.ajax({													// ajax-запит до бази даних для динамічного 
         type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
