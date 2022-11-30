@@ -22,36 +22,59 @@ include "env/.env.php";
         });
     };
 
-var loadWeather = function (city) {
-    $.ajax({													    // ajax-запит до бази даних для динамічного 
-        type: "GET",                                                // виводу даних в таблицю "Дані датчика BME280".
-        url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
-        dataType: "json",
-        success: function (result) {
-            weatherData = [
-                { description: result.weather[0].description },
-                { temp: result.main.temp+" °С" },
-                { pressure: result.main.pressure+" ГПа" },
-                { humidity: result.main.humidity+" %" },
-                { clouds: result.clouds.all+" %" },
-                { wind: result.wind.speed+" м/с" }
-            ]
-            console.log(result);
+    var loadWeather = function (city) {
+        $.ajax({													    // ajax-запит до бази даних для динамічного 
+            type: "GET",                                                // виводу даних в таблицю "Дані датчика BME280".
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
+            dataType: "json",
+            success: function (result) {
+                weatherData = [
+                    { description: result.weather[0].description },
+                    { temp: result.main.temp+" °С" },
+                    { pressure: result.main.pressure+" ГПа" },
+                    { humidity: result.main.humidity+" %" },
+                    { clouds: result.clouds.all+" %" },
+                    { wind: result.wind.speed+" м/с" }
+                ]
+                console.log(result);
 
-            document.getElementById("location-weather").innerHTML = result.main.temp+" °С";
-            document.getElementById("weather-icon").src = 
-                    WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
-            document.getElementById("weather-content-icon").src = 
-                    WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
-            
-            var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
-            var $table = createTable(weatherData, weatherHeader, true); // виклик ф-ції createTable() з відповідними даними
-            
-            $("#weatherTable").empty();
-            $table.appendTo($("#weatherTable"));
-        }
-    });
-};
+                document.getElementById("location-weather").innerHTML = result.main.temp+" °С";
+                document.getElementById("weather-icon").src = 
+                        WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
+                document.getElementById("weather-content-icon").src = 
+                        WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
+                
+                var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
+                var $table = createTable(weatherData, weatherHeader, true); // виклик ф-ції createTable() з відповідними даними
+                
+                $("#weatherTable").empty();
+                $table.appendTo($("#weatherTable"));
+            }
+        });
+    };
+
+    function loadTable (page, count, param, order) {
+		console.log("Loading table...");
+		var _page = "1";
+		var _count = "-1";
+		var _param = "date";
+		var _order = "DESC";
+
+		if(page) _page=page;
+		if(count) _count=count;
+		if(param) _param=param;
+		if(order) _order=order;
+
+		$.ajax({													    
+			type: "GET",                                              
+			url: "database/fetch_db.php?"+"page="+_page+"&count="+_count+"&param="+_param+"&order="+_order,
+			dataType: "json",
+			success: function (result) {
+				printDB(result);
+				//updateDB and charts
+			}
+		});
+	};
 
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
@@ -105,6 +128,7 @@ var loadWeather = function (city) {
     function printDB(data) {                                        // Функція для створення таблиці "База даних"
         var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
         var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
+        console.log($table);
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }

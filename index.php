@@ -29,19 +29,19 @@ else
 
 $rows = array();
 if($count == -1) 						// Отримання усіх даних таблиці bme280
-	$result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 DESC"); 
+	$result = $conn->query("SELECT * FROM bme280 ORDER BY date_bme280 DESC"); 
 else									// Отримання даних таблиці bme280 відповідно вказаній кількості та номеру сторінки
-	$result = $conn->query("SELECT * FROM bme280 ORDER BY id_bme280 DESC LIMIT $start, $count"); 
+	$result = $conn->query("SELECT * FROM bme280 ORDER BY date_bme280 DESC LIMIT $start, $count"); 
 while($r=$result->fetch_array(MYSQLI_ASSOC)) {
     $rows[] = $r;
 }
 
 function echo_count($count, $num) { 						// Функція виводу для кожного значення кількості рядків
-	if ($count == $num)
+	if ($count == "$num")
 		echo '<a class="navigator-item selected" '; 		// Стиль для обраного значення
 	else
 		echo '<a class="navigator-item" ';					// Стиль для необраного значення
-	if($num == -1) 
+	if($num == "-1") 
 		echo "href='index.php?count=${num}'>Всі</a>";		// Відображення "Всі" для усіх рядків
 	else echo "href='index.php?count=${num}'>${num}</a>"; 	// Відображення значення для кількості рядків
 }
@@ -56,11 +56,19 @@ function count_navigator($count) {							// Функція виводу наві
 	echo_count($count, 1000);
 	echo_count($count, -1);									// Вивід усіх наявних значень
 	echo "</nav>";
+
+	echo "<nav class=\"navigator-block\">";
+	echo "Кількість значень: ";
+	echo_count($count, "Сьогодні");
+	echo_count($count, "За 3 дні");
+	echo_count($count, "За тиждень");
+	echo_count($count, "За місяць");
+	echo "</nav>";
 }
 
 function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
 	if($count < 0) return;
-	echo "<nav class='navigator-block'>";
+	echo "<nav class='navigator-block pages'>";
 	for ($i = 1; $i <= $num_of_pages; $i++) {
 		if ($page == $i)
 			echo "<a class=\"navigator-item selected\"";
@@ -87,8 +95,9 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 	<header>
         <nav>
             <div class="weather-container">
-                <div class="dropdown">
-                    <a id="location"></a>
+				<div class="dropdown">
+                    <a class="dropdown-title" id="location"></a>
+                    <i class="fa fa-caret-down"></i>
                     <nav class="dropdown-content">
                         <a onclick="changeLocation('Київ')">Київ</a>
                         <a onclick="changeLocation('Львів')">Львів</a>
@@ -132,7 +141,9 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 			</tr>
 		</table>
 		<h1 id="db-label">База даних</h1>
-		<?php count_navigator($count); ?> 				<!-- Вивід навігатора сторінок і кількості значень БД -->
+		<div class="navigator-container">
+			<?php count_navigator($count); ?> 			<!-- Вивід навігатора сторінок і кількості значень БД -->
+		</div>
 		<div class="db-table-container">
 			<table id="dbTable"></table>
 		</div>
@@ -168,15 +179,21 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 <!-- Поле script -->
 <!----------------------------------------------------------------------------------------->
 <script>
-	var city = <?php echo "\"$city\""; ?>
+	var city = <?php echo "\"$city\""; ?>;
+	var page = <?php echo "$page"; ?>;
+	var count = <?php echo "$count"; ?>;
+	var param = "date";
+	var order = "DESC";
 	
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
 		changeLocation('Київ');							// Виклик функції для створення таблиці з даними погоди									
-		printDB(data);									// Виклик функції для створення таблиці "База даних"
+		loadTable (page, count, param, order);
 	});
 
 	var data = <?php echo json_encode($rows); ?>;
 
 	printCharts(data);									// Виклик функції для створення графіків
+
+	// loadTable ("3", "100", "hum", "DESC");
 </script>
