@@ -1,9 +1,10 @@
 #weatherTable thead,#weatherTable tbody{
 	display:inline-block;
 }
+
 #dbTable thead {
 	position: sticky; 
-	top: 0; 
+	top: 0;
 }
 
 body {
@@ -19,7 +20,6 @@ header {
 	z-index: 3;
 	width: 100%;
 	background-color: grey;
-	align-items: center;
 }
 
 nav {
@@ -32,14 +32,15 @@ header nav {
 	justify-content: space-between;
 }
 
-nav a {
+a {
 	text-decoration: none;
-	display:block;
+	display: block;
 	padding: 15px 25px;
 	text-align: center;
 	background-color: rgb(213, 216, 220);
 	color:#262d33;
 }
+
 nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	background-color: #566573;
 	color:#ffffff;
@@ -67,8 +68,9 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	z-index: 1;
 }
 
-.dropdown:hover .dropdown-content {
-  	display: block;	
+.dropdown:hover .dropdown-content, .dropdown-weather:hover .weather-block {
+  	display: flex;
+	flex-direction: column;	
 }
 
 .dropdown-weather {
@@ -86,7 +88,8 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	top: 40px;
 	border-radius: 5px;
 	background-color: white;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	color: black;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
 	z-index: 1;
 	cursor: default;
 }
@@ -95,34 +98,22 @@ nav a:hover, .dropdown:hover, .dropdown-weather:hover {
 	width: 100%;
 	padding: 10px 0;
 }
-.dropdown-weather:hover .weather-block {
-	display: block;	
-	color: black;
+
+.weather-block th, .weather-block td:hover {
+	background-color: white;
 }
-.weather-content {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-}
-.weather-content th {
-	background-color: transparent;
-}
-.weather-item {
-	padding: 10px;
-}
+
 .weather-icon {
-	max-height: 50px;
+	max-height: 45px;
 	color: white;
 }
 .weather-content-icon {
 	max-height: 70px;
 	color: white;
+	margin: 0 auto;
 }
 
 .container {
-	flex-direction: column;
 	max-width: 1160px;
 	padding: 0 20px;
 	background-color: whitesmoke;
@@ -138,6 +129,9 @@ table {
 	margin: 0 auto;
 	width: 100%;
 }
+tbody tr:hover {
+	background-color: lightgray;
+}
 td, th {
 	text-align: center;
 	padding: 10px;
@@ -145,25 +139,19 @@ td, th {
 th {
 	background-color: rgb(54, 103, 228);
 }
-/* th.sticky {
-	position: sticky; 
-	top: 0; 
-} */
-tbody td:hover {
-	background-color: lightgray;
-}
 
 .current-table {
 	border: 2px solid lightblue;
 	font-size: 24px; 
 }
 .current-table-td {
-	padding: 10px;
+	padding: 15px;
 }
 
 .db-table-container {
 	border: 3px solid lightblue;
 	font-size: 20px; 
+	width: 100%;
 	overflow: auto;
     height: 500px;
 }
@@ -218,7 +206,7 @@ canvas {
 }
 .chart-container.large {
 	width: 90%;
-	margin: 20px auto;
+	margin: 10px auto;
 	background-color: white;
 }
 .chart-container:hover {
@@ -253,7 +241,7 @@ canvas {
 	}
 }
 
-@media (max-width: 550px) {
+@media (max-width: 480px) {
 	.current-table {
 		font-size: 16px;
 	}
