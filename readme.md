@@ -6,19 +6,21 @@ develop branch - Master's diploma code
 
 
 TODO: 
-1. + line up comments 
-2. + rename functions (use underscore beetwen words) 
-3. + separate code to php, js, html 
-4. + edit db table code (151-171) 
-5. + fix charts 
-6. + update comments
-7. + update charts fetching (use one request to db, fetch it in js)
-8. + Инвертировать не график, а данные в нём до этого, чтобы корректно отображалось
-10. дані за день, тиждень, місяць
-11. + Add screen adaptivity
-12. + Weather predict from internet
+ + line up comments 
+ + rename functions (use underscore beetwen words) 
+ + separate code to php, js, html 
+ + edit db table code (151-171) 
+ + fix charts 
+ + update comments
+ + update charts fetching (use one request to db, fetch it in js)
+ + Инвертировать не график, а данные в нём до этого, чтобы корректно отображалось
 
-fix table header
-refactor css file
+ + Add screen adaptivity
+ + Weather predict from internet
+ + refactor css file
+  перенессти запити до БД в інші файли
+  дані за день, тиждень, місяць
+  Сортування за кожним показником
+
  deploy to server 
 
