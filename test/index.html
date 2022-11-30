@@ -3,19 +3,30 @@
 
 <head>
     <meta charset="utf-8"> <!-- Підключення кирилиці -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/chart.min.js"></script> <!-- Підключення додаткових бібліотек -->
     <script src="../js/utils.js"></script>
     <script src="../js/jquery.js"></script>
     <script src=".env.js"></script>
     <script src="script.js"></script>
+    <title>BME280 Nadyrshyn</title>
 </head>
 
 <body>
     <header>
         <nav>
             <div class="weather-container">
-                
+                <div class="dropdown">
+                    <a class="dropdown-title" id="location"></a>
+                    <i class="fa fa-caret-down"></i>
+                    <nav class="dropdown-content">
+                        <a onclick="changeLocation('Київ')">Київ</a>
+                        <a onclick="changeLocation('Львів')">Львів</a>
+                        <a onclick="changeLocation('Харків')">Харків</a>
+                    </nav>
+                </div>
                 <div class="dropdown-weather">
                     <div id="location-weather"> °С</div>
                     <img class="weather-icon" alt="weather icon" id="weather-icon" src=""/>
@@ -24,14 +35,6 @@
                         <table id="weatherTable"></table>
                         <a href="https://www.meteo.gov.ua/">Докладніше</a>
                     </div>
-                </div>
-                <div class="dropdown">
-                    <a id="location"></a>
-                    <nav class="dropdown-content">
-                        <a onclick="changeLocation('Київ')">Київ</a>
-                        <a onclick="changeLocation('Львів')">Львів</a>
-                        <a onclick="changeLocation('Харків')">Харків</a>
-                    </nav>
                 </div>
             </div>
             <div class="nav-menu">
@@ -59,18 +62,27 @@
         </table>
         <h1 id="db-label">База даних</h1>
       
-        <nav class="navigator-block">
-            Кількість рядків: 
-            <a class="navigator-item" onclick="window.location='index.php?count=20';">20</a>
-            <a class="navigator-item" onclick="window.location='index.php?count=50';">50</a>
-            <a class="navigator-item" onclick="window.location='index.php?count=100';">100</a>
-            <a class="navigator-item" onclick="window.location='index.php?count=';">Всі()</a>
-        </nav>
+        <div class="navigator-container">
+            <nav class="navigator-block">
+                Кількість рядків: 
+                <a class="navigator-item" onclick="window.location='index.php?count=20';">20</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=50';">50</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=100';">100</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=';">Всі()</a>
+            </nav>
+            <nav class="navigator-block">
+                <a class="navigator-item" onclick="window.location='index.php?count=20';">Сьогодні</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=50';">За 3 дні</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=100';">За тиждень</a>
+                <a class="navigator-item" onclick="window.location='index.php?count=';">За місяць</a>
+            </nav>
+        </div>
         <!-- Вивід навігатора сторінок і кількості значень БД -->
         <div class="db-table-container">
             <table id="dbTable"></table>
         </div>
-        <nav class="navigator-block">
+        <nav class="navigator-block pages">
+            Сторінка:
             <a class="navigator-item" onclick="window.location='index.php?count=20';">1</a>
             <a class="navigator-item" onclick="window.location='index.php?count=20';">2</a>
             <a class="navigator-item" onclick="window.location='index.php?count=20';">3</a>
