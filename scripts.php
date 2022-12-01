@@ -60,88 +60,77 @@ include "env/.env.php";
 
     /* ------------------------------- Navigator -------------------------------*/
 
-    function printNavCounter () {
+    function printNavCounter (count) {
         var counterArray = [20, 50, 100, 200, 500, 1000];
-        var $counterList = createCounterList(counterArray);
+
+        var $counterList = createCounterList(counterArray, count);
         
         $("#navCounter").empty();
         $counterList.appendTo($("#navCounter"));
     }
 
-    function printNavPages(count) {
+    function printNavPages(count, page) {
         if (count < 0) return;
         var numOfPages = getNumOfPages(count);
-        document.getElementById("numOfPages").innerText = numOfPages;
-        document.getElementById("page").innerText = localStorage.getItem("page");
-
         localStorage.setItem("numOfPages", numOfPages);
 
-        var $pages = createNavList(numOfPages); 
+        $("#page").text(page);
+        $("#numOfPages").text(numOfPages);
+
+        if (page > numOfPages) {
+            console.log(page,">", numOfPages);
+            localStorage.removeItem("page");
+            
+            return updateTable();
+        }
+
+        var $pages = createNavList(numOfPages, page); 
 
         $("#navPages").empty();
         $pages.appendTo($("#navPages"));
+        
+
+        var param = localStorage.getItem("param") != null ? 
+            localStorage.getItem("param") : "date";
+        var order = localStorage.getItem("order") != null ? 
+            localStorage.getItem("order") : "DESC";
+
+        loadTable(page, count, param, order);
     }
 
-    function createCounterList(counterArray) {
+    function createCounterList(counterArray, count) {
         var $nav = $("<nav class=\"navigator-block\"></nav>");
         
         for (let i = 0; i < counterArray.length; i++) {
             const element = counterArray[i];
-
-            var $counterItem = $("<a class=\"navigator-item\"></a>");
-            
-            if (i == 0) $counterItem.addClass("selected");
-
-            $counterItem.append(element);
-            $counterItem.attr('id', "counter" + element);
-            $counterItem.click(function () {
-                clickCounter(element);
-            });
-            $nav.append($counterItem);
-        }
-        return $nav;
-    }
-
-    function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
-        var $nav = $("<nav class=\'navigator-block pages\'></nav>");          // масив даних таблиці(data) та головний рядок(header)
-
-        for (let i = 1; i <= numOfPages; i++) {
-            var $navItem = $("<a class=\"navigator-item\"></a>");
-
-            if (i == 1) $navItem.addClass("selected-page");
-
-            $navItem.append(i);
-            $navItem.attr('id', "page" + i);
-            $navItem.click(function () {
-                clickPage(i);
-            });
+            var $navItem = createNavItem("count", element, count, "selected");
             $nav.append($navItem);
         }
         return $nav;
     }
 
-    function clickCounter(element) {
-        var elements = document.getElementsByClassName('selected');
-        for (let j = 0; j < elements.length; j++)
-            elements[j].classList.toggle("selected");
-
-        document.getElementById("counter" + element).classList.toggle("selected");
-        localStorage.setItem("count", element);
-
-        updateTable();
+    function createNavList(numOfPages, page) {                // Функція для створення таблиці, яка приймає               
+        var $nav = $("<nav class=\'navigator-block pages\'></nav>");          // масив даних таблиці(data) та головний рядок(header)
+        
+        for (let i = 1; i <= numOfPages; i++) {
+            var $navItem = createNavItem("page", i, page, "selected");
+            $nav.append($navItem);
+        }
+        return $nav;
     }
 
-    function clickPage(i) {
-        var elements = document.getElementsByClassName('selected-page');
-        for (let j = 0; j < elements.length; j++)
-            elements[j].classList.toggle("selected-page");
 
-        var element = document.getElementById("page" + i).classList.toggle("selected-page");
+    function createNavItem(item, element, selected, itemClass){
+        var $navItem = $("<a class=\"navigator-item\"></a>");
 
-        document.getElementById("page").innerText = i;
-        localStorage.setItem("count", i);
-
-        updateTable();
+        if (element == selected) $navItem.addClass(itemClass);
+        $navItem.append(element);
+        $navItem.click(function () {
+            localStorage.setItem(item, element);
+            console.log("setItem: ", item, ":", element);
+            updateTable();
+        });
+        return $navItem;
     }
 
     var getNumOfPages = function (count) {
@@ -162,39 +151,25 @@ include "env/.env.php";
     /* -------------------------------- Database --------------------------------*/
 
     function updateTable() {
-        // var page = document.getElementById("page").innerText;
-        // // var counter = document.getElementById("counter").value;
-        // var param = document.getElementById("param").value;
-        // var order = document.getElementById("order").value;
-
         var page = localStorage.getItem("page") != null ? 
 		    Number(localStorage.getItem("page")) : 1;
         var count = localStorage.getItem("count") != null ? 
             Number(localStorage.getItem("count")) : 20;
-        var param = localStorage.getItem("param") != null ? 
-            localStorage.getItem("param") : "date";
-        var order = localStorage.getItem("order") != null ? 
-            localStorage.getItem("order") : "DESC";
 
-        printNavCounter();
-        printNavPages(count);
-        loadTable(page, count, param, order);
+        console.log("page", page);
+        console.log("count", count);
+        console.log("param", param);
+        console.log("order", order);
+        console.log("" );
+
+        printNavCounter(count);
+        printNavPages(count, page);
     }
     
     function loadTable(page, count, param, order) {
-        var _page = "1";
-        var _count = "20";
-        var _param = "date";
-        var _order = "DESC";
-
-        if (page) _page = page;
-        if (count) _count = count;
-        if (param) _param = param;
-        if (order) _order = order;
-
         $.ajax({
             type: "GET",
-            url: "database/fetch_db.php?" + "page=" + _page + "&count=" + _count + "&param=" + _param + "&order=" + _order,
+            url: "database/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
             dataType: "json",
             success: function (result) {
                 printDB(result);
@@ -217,6 +192,7 @@ include "env/.env.php";
 
         $thead.append(printRow(header, true));
         $table.append($thead);
+        console.log("data", data);
 
         for (let index = 0; index < data.length; index++) {
             var element = data[index];

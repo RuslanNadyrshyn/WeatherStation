@@ -218,7 +218,7 @@ th {
 .navigator-item:hover {
 	background-color: gray;
 }
-.navigator-item.selected, .navigator-item.selected-page {
+.navigator-item.selected {
 	background-color: green;
 }
 .order-menu {
