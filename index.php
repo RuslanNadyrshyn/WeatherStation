@@ -37,35 +37,22 @@ function echo_count($count, $num) { 						// Функція виводу для 
 	else echo "href='index.php?count=${num}'>${num}</a>"; 	// Відображення значення для кількості рядків
 }
 
-function count_navigator($count) {							// Функція виводу навігатора кількості рядків з БД 
-	echo "<nav class=\"navigator-block\">";
-	echo "Кількість значень: ";
-	echo_count($count, 20);
-	echo_count($count, 50);
-	echo_count($count, 100);
-	echo_count($count, 500);
-	echo_count($count, 1000);
-	echo_count($count, -1);									// Вивід усіх наявних значень
-	echo "</nav>";
+// function count_navigator($count) {							// Функція виводу навігатора кількості рядків з БД 
+// 	echo "<nav class=\"navigator-block\">";
+// 	echo "Кількість значень: ";
+// 	echo_count($count, 20);
+// 	echo_count($count, 50);
+// 	echo_count($count, 100);
+// 	echo_count($count, 500);
+// 	echo_count($count, 1000);
+// 	echo_count($count, -1);									// Вивід усіх наявних значень
+// 	echo "</nav>";
 
-	echo "<nav class=\"navigator-block\">";
-	echo_count($count, "Сьогодні");
-	echo_count($count, "За 3 дні");
-	echo_count($count, "За тиждень");
-	echo_count($count, "За місяць");
-	echo "</nav>";
-}
-
-// function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
-// 	if($count < 0) return;
-// 	echo "<nav class='navigator-block pages'>";
-// 	for ($i = 1; $i <= $num_of_pages; $i++) {
-// 		if ($page == $i)
-// 			echo "<a class=\"navigator-item selected\"";
-// 		else
-// 			echo "<a class=\"navigator-item\" ";
-// 		echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
-// 	}
+// 	echo "<nav class=\"navigator-block\">";
+// 	echo_count($count, "Сьогодні");
+// 	echo_count($count, "За 3 дні");
+// 	echo_count($count, "За тиждень");
+// 	echo_count($count, "За місяць");
 // 	echo "</nav>";
 // }
 ?>
@@ -132,7 +119,8 @@ function count_navigator($count) {							// Функція виводу наві
 		</table>
 		<h1 id="db-label">База даних</h1>
 		<div class="navigator-container">
-			<?php count_navigator($count); ?> 			<!-- Вивід навігатора сторінок і кількості значень БД -->
+			<div id="navCounter"></div>
+			<label id="counter"></label>
 			<div style="margin: auto 0;">
                 <label for="order">Порядок:</label>
                 <select name="order" id="order" onchange="updateTable()">
@@ -193,5 +181,6 @@ function count_navigator($count) {							// Функція виводу наві
 		loadTable (page, count, param, order);
 	});
 
+	printNavCounter();
 	printNavPages(count);
 </script>

@@ -1,73 +1,50 @@
-<?php 
+<?php
 include "env/.env.php";
 ?>
 <script>
-    const APPID = "<?php echo $APPID;?>";
+    const APPID = "<?php echo $APPID; ?>";
     const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
     const PNG_ENDING = "@2x.png";
 
-    function printNavPages(count) {  
-        if(count < 0) return;
-        var numOfPages = getNumOfPages(count);
-        var $pages = createNavList(numOfPages);
 
-        $("#navPages").empty();
-        $pages.appendTo($("#navPages"));
-    }
-    var getNumOfPages = function (count) {
-        var numOfPages = 0;
-        $.ajax({		
-            async: false,											// ajax-запит до бази даних для динамічного 
-            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
-            url: "database/get_num_of_rows.php?count="+count,		// Виклик файла extract.php, в якому виконується запит до БД
-            dataType: "json",
-            success: function (result) {
-                var rows = Number(result.rows);
-                numOfPages = Math.ceil(rows/count);   
-            }
-        });
-        return numOfPages;
-    };
-
-    function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
-        var $nav = $("<nav class=\'navigator-block pages\'></table>");          // масив даних таблиці(data) та головний рядок(header)
+    function createCounterList(counterArray) {
+        console.log("createCounterList");
+        var $nav = $("<nav class=\"navigator-block\"></nav>");
         
-        for (let i = 1; i <= numOfPages; i++) {
-            var $navItem;
-            $navItem = $("<a class=\"page-navigator-item\"></a>");
+        for (let i = 0; i < counterArray.length; i++) {
+            const element = counterArray[i];
 
-            if(i == 1) $navItem.addClass("selected-page");
+            var $counterItem = $("<a class=\"navigator-item\"></a>");
+            
+            if (i == 0) $counterItem.addClass("selected");
 
-            $navItem.append(i);
-            $navItem.attr('id', "page"+i);
-            $navItem.click(function () {
-                clickPage(i);
+            $counterItem.append(element);
+            $counterItem.attr('id', "counter" + element);
+            $counterItem.click(function () {
+                clickCounter(element);
             });
-            $nav.append($navItem);
+            $nav.append($counterItem);
         }
         return $nav;
     }
 
+    function clickCounter(element) {
+        var elements = document.getElementsByClassName('selected');
+        for (let j = 0; j < elements.length; j++)
+            elements[j].classList.toggle("selected");
 
-    function clickPage(i) {
-        var elements = document.getElementsByClassName('selected-page');
-        for (let j = 0; j < elements.length; j++) 
-            elements[j].classList.toggle("selected-page");
-
-        var element = document.getElementById("page"+i).classList.toggle("selected-page");
-
-        document.getElementById("page").innerText = i;
+        document.getElementById("counter" + element).classList.toggle("selected");
+        document.getElementById("counter").value = element;
 
         updateTable();
     }
 
-
-    function updateTable() {
-        var page = document.getElementById("page").innerText;
-        // var counter = document.getElementById("counter").value;
-        // var param = document.getElementById("param").value;
-        var order = document.getElementById("order").value;
-        loadTable(page, 20, "date", order);
+    function printNavCounter () {
+        var counterArray = [20, 50, 100, 200, 500, 1000];
+        var $counterList = createCounterList(counterArray);
+        
+        $("#navCounter").empty();
+        $counterList.appendTo($("#navCounter"));
     }
 
     var loadData = function () {
@@ -76,7 +53,7 @@ include "env/.env.php";
             url: "database/extract.php",									// Виклик файла extract.php, в якому виконується запит до БД
             dataType: "json",
             success: function (result) {
-                
+
                 $("#temp").text(result.temp_bme280 + ' °С');
                 $("#press").text(result.press_bme280 + ' гПа');
                 $("#alt").text(result.alt_bme280 + ' м');
@@ -94,50 +71,90 @@ include "env/.env.php";
             success: function (result) {
                 weatherData = [
                     { description: result.weather[0].description },
-                    { temp: result.main.temp+" °С" },
-                    { pressure: result.main.pressure+" ГПа" },
-                    { humidity: result.main.humidity+" %" },
-                    { clouds: result.clouds.all+" %" },
-                    { wind: result.wind.speed+" м/с" }
+                    { temp: result.main.temp + " °С" },
+                    { pressure: result.main.pressure + " ГПа" },
+                    { humidity: result.main.humidity + " %" },
+                    { clouds: result.clouds.all + " %" },
+                    { wind: result.wind.speed + " м/с" }
                 ]
                 console.log(result);
 
-                document.getElementById("location-weather").innerHTML = result.main.temp+" °С";
-                document.getElementById("weather-icon").src = 
-                        WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
-                document.getElementById("weather-content-icon").src = 
-                        WEATHER_SOURCE+result.weather[0].icon+PNG_ENDING;
-                
-                var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"]; 
+                document.getElementById("location-weather").innerHTML = result.main.temp + " °С";
+                document.getElementById("weather-icon").src =
+                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING;
+                document.getElementById("weather-content-icon").src =
+                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING;
+
+                var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"];
                 var $table = createTable(weatherData, weatherHeader, true); // виклик ф-ції createTable() з відповідними даними
-                
+
                 $("#weatherTable").empty();
                 $table.appendTo($("#weatherTable"));
             }
         });
     };
 
-    function loadTable (page, count, param, order) {
-		var _page = "1";
-		var _count = "20";
-		var _param = "date";
-		var _order = "DESC";
+    function loadTable(page, count, param, order) {
+        var _page = "1";
+        var _count = "20";
+        var _param = "date";
+        var _order = "DESC";
 
-		if(page) _page=page;
-		if(count) _count=count;
-		if(param) _param=param;
-		if(order) _order=order;
+        if (page) _page = page;
+        if (count) _count = count;
+        if (param) _param = param;
+        if (order) _order = order;
 
-		$.ajax({													    
-			type: "GET",                                              
-			url: "database/fetch_db.php?"+"page="+_page+"&count="+_count+"&param="+_param+"&order="+_order,
-			dataType: "json",
-			success: function (result) {
-				printDB(result);
+        $.ajax({
+            type: "GET",
+            url: "database/fetch_db.php?" + "page=" + _page + "&count=" + _count + "&param=" + _param + "&order=" + _order,
+            dataType: "json",
+            success: function (result) {
+                printDB(result);
                 printCharts(result);
-			}
-		});
-	};
+            }
+        });
+    };
+
+    function printDB(data) {                                        // Функція для створення таблиці "База даних"
+        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+        var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
+        $("#dbTable").empty();
+        $table.appendTo($("#dbTable"));
+    }
+
+    function printNavPages(count) {
+        if (count < 0) return;
+        var numOfPages = getNumOfPages(count);
+        var $pages = createNavList(numOfPages);
+
+        $("#navPages").empty();
+        $pages.appendTo($("#navPages"));
+    }
+    var getNumOfPages = function (count) {
+        var numOfPages = 0;
+        $.ajax({
+            async: false,											// ajax-запит до бази даних для динамічного 
+            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
+            url: "database/get_num_of_rows.php?count=" + count,		// Виклик файла extract.php, в якому виконується запит до БД
+            dataType: "json",
+            success: function (result) {
+                var rows = Number(result.rows);
+                numOfPages = Math.ceil(rows / count);
+            }
+        });
+        return numOfPages;
+    };
+
+    function printCharts(data) {                                    // Функція для створення графіків
+        var res = fetchResult(data);
+        drawCharts(res, res.date);
+    }
+
+    function changeLocation(newLocation) {
+        document.getElementById("location").innerHTML = newLocation;
+        loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
+    }
 
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
@@ -164,7 +181,7 @@ include "env/.env.php";
         var $thead = $("<thead></thead>");
         var $tbody = $("<tbody></tbody>");
 
-        if(isVertical) {
+        if (isVertical) {
             for (let index = 0; index < header.length; index++) {
                 var element = header[index];
 
@@ -176,7 +193,7 @@ include "env/.env.php";
                 $thead.append($line);
             }
         } else $thead.append(printRow(header, true));
-            
+
         $table.append($thead);
 
         for (let index = 0; index < data.length; index++) {
@@ -188,16 +205,45 @@ include "env/.env.php";
         return $table;
     }
 
-    function printDB(data) {                                        // Функція для створення таблиці "База даних"
-        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
-        $("#dbTable").empty();
-        $table.appendTo($("#dbTable"));
+    function updateTable() {
+        var page = document.getElementById("page").innerText;
+        var counter = document.getElementById("counter").value;
+        console.log("counter:", counter);
+        // var param = document.getElementById("param").value;
+        var order = document.getElementById("order").value;
+        console.log("order:", order);
+        loadTable(page, counter, "date", order);
     }
 
-    function printCharts(data) {                                    // Функція для створення графіків
-        var res = fetchResult(data);
-        drawCharts(res, res.date);
+
+    function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
+        var $nav = $("<nav class=\'navigator-block pages\'></nav>");          // масив даних таблиці(data) та головний рядок(header)
+
+        for (let i = 1; i <= numOfPages; i++) {
+            var $navItem = $("<a class=\"navigator-item\"></a>");
+
+            if (i == 1) $navItem.addClass("selected-page");
+
+            $navItem.append(i);
+            $navItem.attr('id', "page" + i);
+            $navItem.click(function () {
+                clickPage(i);
+            });
+            $nav.append($navItem);
+        }
+        return $nav;
+    }
+
+    function clickPage(i) {
+        var elements = document.getElementsByClassName('selected-page');
+        for (let j = 0; j < elements.length; j++)
+            elements[j].classList.toggle("selected-page");
+
+        var element = document.getElementById("page" + i).classList.toggle("selected-page");
+
+        document.getElementById("page").innerText = i;
+
+        updateTable();
     }
 
     function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
@@ -246,10 +292,10 @@ include "env/.env.php";
     }
 
     function drawCharts(res, labels) {                              // Ф-ція створення графіків
-        for (const key in res) 
-            if (Object.hasOwnProperty.call(res, key)) 
+        for (const key in res)
+            if (Object.hasOwnProperty.call(res, key))
                 res[key].reverse();
-            
+
         [{
             id: 'chart-temp',	                                // Графік температури
             color: 'yellow',
@@ -280,9 +326,4 @@ include "env/.env.php";
         var element = document.getElementById(id.id);
         element.classList.toggle("large");
     }
-
-    function changeLocation(newLocation) {
-		document.getElementById("location").innerHTML = newLocation;
-		loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
-	}
 </script>

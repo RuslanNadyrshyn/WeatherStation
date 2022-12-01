@@ -193,21 +193,7 @@ th {
 .navigator-item:hover {
 	background-color: gray;
 }
-.navigator-item.selected {
-	background-color: green;
-}
-.page-navigator-item {
-	padding: 10px;
-	cursor: pointer;
-	background-color: darkgray;
-	margin: 5px 1px;
-	border-radius: 3px;
-	color: black;
-}
-.page-navigator-item:hover {
-	background-color: gray;
-}
-.page-navigator-item.selected-page {
+.navigator-item.selected, .navigator-item.selected-page {
 	background-color: green;
 }
 
