@@ -9,7 +9,9 @@ include "env/.env.php";
 /* ------------------------------- Weather -------------------------------*/
 
     function changeLocation(newLocation) {
-        document.getElementById("location").innerHTML = newLocation;
+        $("#location").html(newLocation);
+        localStorage.setItem("city", newLocation);
+
         loadWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
     }
 
@@ -19,26 +21,21 @@ include "env/.env.php";
             url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
             dataType: "json",
             success: function (result) {
-                weatherData = [
-                    { description: result.weather[0].description },
-                    { temp: result.main.temp + " °С" },
-                    { pressure: result.main.pressure + " ГПа" },
-                    { humidity: result.main.humidity + " %" },
-                    { clouds: result.clouds.all + " %" },
-                    { wind: result.wind.speed + " м/с" }
-                ]
-  
+                var $img = $("<img class='weather-content-icon' src=''/>");
+                $img.attr('src', WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
+                $("#weather").append($img);
+
+                $("#weather").append(result.weather[0].description);
+                $("#temp-weather").text(result.main.temp + " °С");
+                $("#temp-feels-weather").text(result.main.feels_like + " °С");
+                $("#press-weather").text(result.main.pressure + " ГПа");
+                $("#hum-weather").text(result.main.humidity + " %");
+                $("#cloud-weather").text(result.clouds.all + " %");
+                $("#wind-weather").text(result.wind.speed + " м/с");
+
                 $("#location-weather").html(result.main.temp + " °С");
                 $("#weather-icon").attr('src', 
                     WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
-                $("#weather-content-icon").attr('src',
-                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
-
-                var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"];
-                var $table = createTable(weatherData, weatherHeader, true); // виклик ф-ції createTable() з відповідними даними
-
-                $("#weatherTable").empty();
-                $table.appendTo($("#weatherTable"));
             }
         });
     };
@@ -75,7 +72,9 @@ include "env/.env.php";
         if (count < 0) return;
         var numOfPages = getNumOfPages(count);
         document.getElementById("numOfPages").innerText = numOfPages;
-        document.getElementById("page").innerText = 1;
+        document.getElementById("page").innerText = localStorage.getItem("page");
+
+        localStorage.setItem("numOfPages", numOfPages);
 
         var $pages = createNavList(numOfPages); 
 
@@ -127,7 +126,7 @@ include "env/.env.php";
             elements[j].classList.toggle("selected");
 
         document.getElementById("counter" + element).classList.toggle("selected");
-        document.getElementById("counter").value = element;
+        localStorage.setItem("count", element);
 
         updateTable();
     }
@@ -140,6 +139,7 @@ include "env/.env.php";
         var element = document.getElementById("page" + i).classList.toggle("selected-page");
 
         document.getElementById("page").innerText = i;
+        localStorage.setItem("count", i);
 
         updateTable();
     }
@@ -162,12 +162,23 @@ include "env/.env.php";
     /* -------------------------------- Database --------------------------------*/
 
     function updateTable() {
-        var page = document.getElementById("page").innerText;
-        var counter = document.getElementById("counter").value;
-        var param = document.getElementById("param").value;
-        var order = document.getElementById("order").value;
+        // var page = document.getElementById("page").innerText;
+        // // var counter = document.getElementById("counter").value;
+        // var param = document.getElementById("param").value;
+        // var order = document.getElementById("order").value;
 
-        loadTable(page, counter, param, order);
+        var page = localStorage.getItem("page") != null ? 
+		    Number(localStorage.getItem("page")) : 1;
+        var count = localStorage.getItem("count") != null ? 
+            Number(localStorage.getItem("count")) : 20;
+        var param = localStorage.getItem("param") != null ? 
+            localStorage.getItem("param") : "date";
+        var order = localStorage.getItem("order") != null ? 
+            localStorage.getItem("order") : "DESC";
+
+        printNavCounter();
+        printNavPages(count);
+        loadTable(page, count, param, order);
     }
     
     function loadTable(page, count, param, order) {
@@ -194,29 +205,17 @@ include "env/.env.php";
 
     function printDB(data) {                                        // Функція для створення таблиці "База даних"
         var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader, false);            // виклик ф-ції createTable() з відповідними даними
+        var $table = createTable(data, dbHeader);            // виклик ф-ції createTable() з відповідними даними
         $("#dbTable").empty();
         $table.appendTo($("#dbTable"));
     }
 
-    function createTable(data, header, isVertical) {                // Функція для створення таблиці, яка приймає               
+    function createTable(data, header) {                // Функція для створення таблиці, яка приймає               
         var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
         var $thead = $("<thead></thead>");
         var $tbody = $("<tbody></tbody>");
 
-        if (isVertical) {
-            for (let index = 0; index < header.length; index++) {
-                var element = header[index];
-
-                var $head = $("<th></th>");
-                var $line = $("<tr></tr>");
-
-                $head.append(element);
-                $line.append($head);
-                $thead.append($line);
-            }
-        } else $thead.append(printRow(header, true));
-
+        $thead.append(printRow(header, true));
         $table.append($thead);
 
         for (let index = 0; index < data.length; index++) {

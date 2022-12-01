@@ -8,6 +8,18 @@
 	top: 0;
 }
 
+.weather-table thead, .weather-table tbody{
+	display:inline-block;
+	background-color: whitesmoke;
+}
+.weather-table td, .weather-table th{
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 0 10px;
+	justify-content: center;
+}
+
 body {
 	font-family : Arial;
 	background-color: lightgrey;
@@ -119,7 +131,7 @@ i {
 .weather-content-icon {
 	max-height: 50px;
 	color: white;
-	margin: 0 auto;
+	margin: 0;
 }
 
 .container {

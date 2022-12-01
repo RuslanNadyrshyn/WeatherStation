@@ -33,11 +33,30 @@ include "scripts.php";					// Підключення файлу scripts.php з �
                     <div id="location-weather"> °С</div>
 					<img class="weather-icon" id="weather-icon" src=""/>
                     <div class="weather-block">
-						<img class="weather-content-icon" id="weather-content-icon" src=""/>
-                        <table id="weatherTable"></table>
+						<table class="weather-table" cellspacing='0'>
+							<thead>
+								<tr><th>Погода</th></tr>
+								<tr><th>Температура</th></tr>
+								<tr><th>Відчувається як</th></tr>
+								<tr><th>Тиск</th></tr>
+								<tr><th>Вологість</th></tr>
+								<tr><th>Хмарність</th></tr>
+								<tr><th>Вітер</th></tr>
+							</thead>
+							<tbody>
+								<tr><td id="weather"></td></tr>
+								<tr><td id="temp-weather"></td></tr>
+								<tr><td id="temp-feels-weather"></td></tr>
+								<tr><td id="press-weather"></td></tr>
+								<tr><td id="hum-weather"></td></tr>
+								<tr><td id="cloud-weather"></td></tr>
+								<tr><td id="wind-weather"></td></tr>
+							</tbody>
+						</table>
                         <a href="https://www.meteo.gov.ua/">Докладніше</a>
                     </div>
                 </div>
+				
             </div>
             <div class="nav-menu">						<!-- Блок навігації по сторінці-->
                 <a href="#current">Дані датчика BME280</a>
@@ -72,8 +91,6 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 				</div>
 				<div class="nav-counter" id="navCounter"></div>
 			</div>
-			<label id="counter"></label>
-
 			<div class="order-menu">
 				<div class="order">
 					<label form="param">Сортувати по: </label>
@@ -136,19 +153,15 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 <!-- Поле script -->
 <!----------------------------------------------------------------------------------------->
 <script>
-	var city = "Київ";
-	var page = 1;
-	var count = 20;
-	var param = "date";
-	var order = "DESC";
-	
+	var city = localStorage.getItem("city") != null ? 
+		localStorage.getItem("city") : "Київ";
+
+
+	console.log(city);
+
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
 		changeLocation(city);							// Виклик функції для створення таблиці з даними погоди									
-		loadTable (page, count, param, order);
-		printNavCounter();
-		printNavPages(count);
+		updateTable();
 	});
-
-	
 </script>
