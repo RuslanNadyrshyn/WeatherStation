@@ -94,7 +94,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 			<div class="order-menu">
 				<div class="order">
 					<label form="param">Сортувати по: </label>
-					<select class="select" name="param" id="param" onchange="updateTable()">
+					<select class="select" name="param" onchange="changeValue(name, value)">
 						<option value="id">Id</option>
 						<option value="date">Час</option>
 						<option value="temp">Температура</option>
@@ -105,7 +105,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 				</div>
 				<div class="order">
 					<label form="order">Порядок:</label>
-					<select class="select" name="order" id="order" onchange="updateTable()">
+					<select class="select" name="order" onchange="changeValue(name, value)">
 						<option value="DESC">По спаданню</option>
 						<option value="ASC">По зростанню</option>
 					</select>
@@ -155,9 +155,6 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 <script>
 	var city = localStorage.getItem("city") != null ? 
 		localStorage.getItem("city") : "Київ";
-
-
-	console.log(city);
 
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
