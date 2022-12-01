@@ -67,26 +67,28 @@ $city = "Kyiv";
 		</table>
 		<h1 id="db-label">База даних</h1>
 		<div class="navigator-container">
-			<div id="navCounter"></div>
+			<div class="nav-counter" id="navCounter"></div>
 			<label id="counter"></label>
-			<div class="order">
-                <label form="param">Сортувати по: </label>
-                <select class="select" name="param" id="param" onchange="updateTable()">
-					<option value="id">Id</option>
-					<option value="date">Час</option>
-					<option value="temp">Температура</option>
-                    <option value="press">Тиск</option>
-					<option value="alt">Висота</option>
-					<option value="hum">Вологість</option>
-                </select>
-            </div>
-			<div class="order">
-                <label form="order">Порядок:</label>
-                <select class="select" name="order" id="order" onchange="updateTable()">
-					<option value="DESC">По спаданню</option>
-                    <option value="ASC">По зростанню</option>
-                </select>
-            </div>
+			<div class="order-menu">
+				<div class="order">
+					<label form="param">Сортувати по: </label>
+					<select class="select" name="param" id="param" onchange="updateTable()">
+						<option value="id">Id</option>
+						<option value="date">Час</option>
+						<option value="temp">Температура</option>
+						<option value="press">Тиск</option>
+						<option value="alt">Висота</option>
+						<option value="hum">Вологість</option>
+					</select>
+				</div>
+				<div class="order">
+					<label form="order">Порядок:</label>
+					<select class="select" name="order" id="order" onchange="updateTable()">
+						<option value="DESC">По спаданню</option>
+						<option value="ASC">По зростанню</option>
+					</select>
+				</div>
+			</div>
 		</div>
 		<div class="db-table-container">
 			<table id="dbTable"></table>

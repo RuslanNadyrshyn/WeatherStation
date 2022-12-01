@@ -6,11 +6,11 @@ include "env/.env.php";
     const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
     const PNG_ENDING = "@2x.png";
     
-    /* ------------------------------- Weather -------------------------------*/
+/* ------------------------------- Weather -------------------------------*/
 
     function changeLocation(newLocation) {
         document.getElementById("location").innerHTML = newLocation;
-        loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
+        loadWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
     }
 
     var loadWeather = function (city) {
@@ -27,12 +27,12 @@ include "env/.env.php";
                     { clouds: result.clouds.all + " %" },
                     { wind: result.wind.speed + " м/с" }
                 ]
-
-                document.getElementById("location-weather").innerHTML = result.main.temp + " °С";
-                document.getElementById("weather-icon").src =
-                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING;
-                document.getElementById("weather-content-icon").src =
-                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING;
+  
+                $("#location-weather").html(result.main.temp + " °С");
+                $("#weather-icon").attr('src', 
+                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
+                $("#weather-content-icon").attr('src',
+                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
 
                 var weatherHeader = ["Погода", "Температура", "Тиск", "Вологість", "Хмарність", "Вітер"];
                 var $table = createTable(weatherData, weatherHeader, true); // виклик ф-ції createTable() з відповідними даними
@@ -44,7 +44,7 @@ include "env/.env.php";
     };
 
 
-    /* ------------------------------- Current_BME280 -------------------------------*/
+/* ------------------------------- Current_BME280 -------------------------------*/
 
     var loadData = function () {
         $.ajax({													// ajax-запит до бази даних для динамічного 
@@ -84,7 +84,6 @@ include "env/.env.php";
     }
 
     function createCounterList(counterArray) {
-        console.log("createCounterList");
         var $nav = $("<nav class=\"navigator-block\"></nav>");
         
         for (let i = 0; i < counterArray.length; i++) {
@@ -220,7 +219,6 @@ include "env/.env.php";
 
         $table.append($thead);
 
-        console.log(data);
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
             var $line = $("<tr></tr>");
@@ -233,7 +231,6 @@ include "env/.env.php";
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
         var param = document.getElementById("param").value;
-        console.log("param ", param);
 
         if (isHeader) object.forEach(element =>
             $line.append($("<th class='sticky'></th>").html(element)));
@@ -340,8 +337,6 @@ include "env/.env.php";
             }
         };
     }
-
-
 
     function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
         var element = document.getElementById(id.id);
