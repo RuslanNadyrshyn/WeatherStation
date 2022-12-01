@@ -196,6 +196,13 @@ th {
 .navigator-item.selected, .navigator-item.selected-page {
 	background-color: green;
 }
+.order {
+	margin-top: auto;
+	margin-bottom: 20px;
+}
+select {
+	font-size: 16px;
+}
 
 .chart-block {
 	display: flex;

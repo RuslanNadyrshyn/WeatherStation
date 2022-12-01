@@ -7,6 +7,10 @@ include "env/.env.php";
     const PNG_ENDING = "@2x.png";
 
 
+    // sort(param) {
+        
+    // }
+
     function createCounterList(counterArray) {
         console.log("createCounterList");
         var $nav = $("<nav class=\"navigator-block\"></nav>");
@@ -126,11 +130,15 @@ include "env/.env.php";
     function printNavPages(count) {
         if (count < 0) return;
         var numOfPages = getNumOfPages(count);
-        var $pages = createNavList(numOfPages);
+        document.getElementById("numOfPages").innerText = numOfPages;
+        document.getElementById("page").innerText = 1;
+
+        var $pages = createNavList(numOfPages); 
 
         $("#navPages").empty();
         $pages.appendTo($("#navPages"));
     }
+
     var getNumOfPages = function (count) {
         var numOfPages = 0;
         $.ajax({

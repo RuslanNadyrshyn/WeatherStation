@@ -4,57 +4,7 @@
 include "database/connect_db.php"; 		// З'єднання з файлом connect_db.php
 include "scripts.php";					// Підключення файлу scripts.php з реалізацією функцій 
 
-$page = 1; 								// 1 сторінка по дефолту
-$count = 20; 							// Кількість записів для виводу таблиці та графіку
 $city = "Kyiv";
-
-if (isset($_GET['page'])) 				// Зчитування з URL змінної $page з номером сторінки
-	$page = $_GET['page'];
-
-if (isset($_GET['count']))				// Зчитування з URL змінної $count з кількістю значень, 
-	$count = $_GET['count'];			// які будуть ви водитися в таблиці Бази даних
-
-if (isset($_GET['city']))				//  
-	$city = $_GET['city'];				// 
-
-
-$start = ($page * $count) - $count; 	// Визначення початкового значення для діапазону
-
-$result = $conn->query("SELECT COUNT(*) FROM bme280"); // Запит для визначення кількості записів таблиці bme280
-$all_rec = $result->num_rows; 			// Кількість записів таблиці bme280 
-if ($all_rec % $count == 0) 			// Визначення кількості сторінок навігатора
-	$num_of_pages = $all_rec / $count;
-else
-	$num_of_pages = $all_rec / $count + 1;
-
-function echo_count($count, $num) { 						// Функція виводу для кожного значення кількості рядків
-	if ($count == "$num")
-		echo '<a class="navigator-item selected" '; 		// Стиль для обраного значення
-	else
-		echo '<a class="navigator-item" ';					// Стиль для необраного значення
-	if($num == "-1") 
-		echo "href='index.php?count=${num}'>Всі</a>";		// Відображення "Всі" для усіх рядків
-	else echo "href='index.php?count=${num}'>${num}</a>"; 	// Відображення значення для кількості рядків
-}
-
-// function count_navigator($count) {							// Функція виводу навігатора кількості рядків з БД 
-// 	echo "<nav class=\"navigator-block\">";
-// 	echo "Кількість значень: ";
-// 	echo_count($count, 20);
-// 	echo_count($count, 50);
-// 	echo_count($count, 100);
-// 	echo_count($count, 500);
-// 	echo_count($count, 1000);
-// 	echo_count($count, -1);									// Вивід усіх наявних значень
-// 	echo "</nav>";
-
-// 	echo "<nav class=\"navigator-block\">";
-// 	echo_count($count, "Сьогодні");
-// 	echo_count($count, "За 3 дні");
-// 	echo_count($count, "За тиждень");
-// 	echo_count($count, "За місяць");
-// 	echo "</nav>";
-// }
 ?>
 
 <!----------------------------------------------------------------------------------------->
@@ -121,9 +71,9 @@ function echo_count($count, $num) { 						// Функція виводу для 
 		<div class="navigator-container">
 			<div id="navCounter"></div>
 			<label id="counter"></label>
-			<div style="margin: auto 0;">
-                <label for="order">Порядок:</label>
-                <select name="order" id="order" onchange="updateTable()">
+			<div class="order">
+                <label form="order">Порядок:</label>
+                <select class="select" name="order" id="order" onchange="updateTable()">
 					<option value="DESC">По спаданню</option>
                     <option value="ASC">По зростанню</option>
                 </select>
@@ -134,7 +84,7 @@ function echo_count($count, $num) { 						// Функція виводу для 
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
 		<div id="navPages"></div>
-		<div>Сторінка
+		<div style="float: right;">Сторінка
 			<label id="page"></label>
 			<label>/</label>
 			<label id="numOfPages"></label>
@@ -170,7 +120,7 @@ function echo_count($count, $num) { 						// Функція виводу для 
 <!----------------------------------------------------------------------------------------->
 <script>
 	var city = <?php echo "\"$city\""; ?>;
-	var page = <?php echo "$page"; ?>;
+	var page = 1;
 	var count = 20;
 	var param = "date";
 	var order = "DESC";
