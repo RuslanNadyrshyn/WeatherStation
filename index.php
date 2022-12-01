@@ -3,8 +3,6 @@
 <?php
 include "database/connect_db.php"; 		// З'єднання з файлом connect_db.php
 include "scripts.php";					// Підключення файлу scripts.php з реалізацією функцій 
-
-$city = "Kyiv";
 ?>
 
 <!----------------------------------------------------------------------------------------->
@@ -42,15 +40,15 @@ $city = "Kyiv";
                 </div>
             </div>
             <div class="nav-menu">						<!-- Блок навігації по сторінці-->
-                <a href="#current-label">Дані датчика BME280</a>
-                <a href="#db-label">База даних</a>
-                <a href="#charts-label">Графіки</a>
+                <a href="#current">Дані датчика BME280</a>
+                <a href="#db">База даних</a>
+                <a href="#charts">Графіки</a>
             </div>
         </nav>
     </header>
 	
 	<div class="container">
-		<h1 id="current-label">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
+		<h1 id="current">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
 		<table class="current-table" cellspacing="0">
 			<tr>
 				<th>Температура</th>
@@ -65,10 +63,17 @@ $city = "Kyiv";
 				<td class="current-table-td" id="hum"></td>
 			</tr>
 		</table>
-		<h1 id="db-label">База даних</h1>
+		<h1 id="db">База даних</h1>
 		<div class="navigator-container">
-			<div class="nav-counter" id="navCounter"></div>
+			<div class="order-menu">
+				<div class="label-col">
+					<label>Відображено</label>	
+					<label>результатів:</label>
+				</div>
+				<div class="nav-counter" id="navCounter"></div>
+			</div>
 			<label id="counter"></label>
+
 			<div class="order-menu">
 				<div class="order">
 					<label form="param">Сортувати по: </label>
@@ -95,12 +100,13 @@ $city = "Kyiv";
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
 		<div id="navPages"></div>
-		<div style="float: right;">Сторінка
+		<label style="float: right;">Сторінка
 			<label id="page"></label>
 			<label>/</label>
 			<label id="numOfPages"></label>
-		</div>
-		<h1 id="charts-label">Графіки</h1>				
+		</label>
+		<h1 id="charts">Графіки</h1>	
+		<label class="chart-note">*Натисніть на графік для його збільшення</label>			
 		<div class="chart-block"> 						<!--Вивід графіків -->
 			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
 				<label class="chart-label">Температура</label>
@@ -140,8 +146,9 @@ $city = "Kyiv";
 		loadData();										// в таблиці "Дані датчика BME280"
 		changeLocation(city);							// Виклик функції для створення таблиці з даними погоди									
 		loadTable (page, count, param, order);
+		printNavCounter();
+		printNavPages(count);
 	});
 
-	printNavCounter();
-	printNavPages(count);
+	
 </script>

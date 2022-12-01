@@ -190,6 +190,11 @@ th {
 	font-size: 18px;
 	margin-right: 10px;
 }
+.label-col {
+	display: flex; 
+	flex-direction: column; 
+	margin-right: 10px;
+}
 .navigator-item {
 	padding: 10px;
 	cursor: pointer;
@@ -206,9 +211,11 @@ th {
 }
 .order-menu {
 	display: flex;
+	align-items: center;
+	overflow: auto;
 }
 .order {
-	margin: auto 10px;
+	margin-left: 10px;
 }
 select {
 	font-size: 16px;
@@ -275,6 +282,9 @@ canvas {
 	}
 	.chart-label {
 		font-size: 16px;
+	}
+	.chart-note {
+		display: none;
 	}
 }
 

@@ -281,10 +281,12 @@ include "env/.env.php";
         return { temp, press, alt, hum, date };
     }
 
-    function drawCharts(res, labels) {                              // Ф-ція створення графіків
-        for (const key in res)
-            if (Object.hasOwnProperty.call(res, key))
-                res[key].reverse();
+    function drawCharts(res, labels) {                          // Ф-ція створення графіків
+
+        if (document.getElementById("order").value == "DESC")
+            for (const key in res)
+                if (Object.hasOwnProperty.call(res, key))
+                    res[key].reverse();
         [{
             id: 'chart-temp',	                                // Графік температури
             color: 'yellow',

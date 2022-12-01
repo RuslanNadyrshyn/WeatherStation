@@ -19,9 +19,9 @@ TODO:
  + Weather predict from internet
  + refactor css file
  + перенессти запити до БД в інші файли
-  page_navigator to js
-  дані за день, тиждень, місяць
-  Сортування за кожним показником
+ + page_navigator to js
+ + Сортування за кожним показником
+
 
  deploy to server 
 
