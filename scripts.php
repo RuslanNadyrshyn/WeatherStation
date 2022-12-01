@@ -8,6 +8,11 @@ include "env/.env.php";
     
     /* ------------------------------- Weather -------------------------------*/
 
+    function changeLocation(newLocation) {
+        document.getElementById("location").innerHTML = newLocation;
+        loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
+    }
+
     var loadWeather = function (city) {
         $.ajax({													    // ajax-запит до бази даних для динамічного 
             type: "GET",                                                // виводу даних в таблицю "Дані датчика BME280".
@@ -22,7 +27,6 @@ include "env/.env.php";
                     { clouds: result.clouds.all + " %" },
                     { wind: result.wind.speed + " м/с" }
                 ]
-                console.log(result);
 
                 document.getElementById("location-weather").innerHTML = result.main.temp + " °С";
                 document.getElementById("weather-icon").src =
@@ -39,10 +43,6 @@ include "env/.env.php";
         });
     };
 
-    function changeLocation(newLocation) {
-        document.getElementById("location").innerHTML = newLocation;
-        loadWeather(newLocation);						            // Виклик функції для створення таблиці з даними погоди
-    }
 
     /* ------------------------------- Current_BME280 -------------------------------*/
 
@@ -165,11 +165,10 @@ include "env/.env.php";
     function updateTable() {
         var page = document.getElementById("page").innerText;
         var counter = document.getElementById("counter").value;
-        console.log("counter:", counter);
-        // var param = document.getElementById("param").value;
+        var param = document.getElementById("param").value;
         var order = document.getElementById("order").value;
-        console.log("order:", order);
-        loadTable(page, counter, "date", order);
+
+        loadTable(page, counter, param, order);
     }
     
     function loadTable(page, count, param, order) {
@@ -221,6 +220,7 @@ include "env/.env.php";
 
         $table.append($thead);
 
+        console.log(data);
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
             var $line = $("<tr></tr>");
@@ -232,24 +232,32 @@ include "env/.env.php";
 
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
+        var param = document.getElementById("param").value;
+        console.log("param ", param);
+
         if (isHeader) object.forEach(element =>
             $line.append($("<th class='sticky'></th>").html(element)));
         else {
-            for (const key in object)
+            for (const key in object) {
                 if (Object.hasOwnProperty.call(object, key)) {
+                    var $td = $("<td></td>");
+
+                    if (key == param + "_bme280")
+                        $td.addClass("sorted");
+
                     if (key == "date_bme280") {
                         datetime = object[key].split(" ");
                         date = datetime[0];
                         time = datetime[1];
-                        $line.append($("<td></td>").html(date));
-                        $line.append($("<td></td>").html(time));
-                    } else $line.append($("<td></td>").html(object[key]));
+                        
+                        $line.append($td.clone().append(date));
+                        $line.append($td.clone().append(time));    
+                    } else $line.append($td.append(object[key]));
                 }
-
+            }
         }
         return $line;
     }
-
 
     /* --------------------------------- Charts ---------------------------------*/
 

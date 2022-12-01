@@ -35,11 +35,9 @@ $city = "Kyiv";
                     <div id="location-weather"> °С</div>
 					<img class="weather-icon" id="weather-icon" src=""/>
                     <div class="weather-block">
-                        <div class="weather-content">
-							<img class="weather-icon" id="weather-content-icon" src=""/>
-                            <table id="weatherTable"></table>
-                            <a href="https://www.meteo.gov.ua/">Докладніше</a>
-                        </div>
+						<img class="weather-content-icon" id="weather-content-icon" src=""/>
+                        <table id="weatherTable"></table>
+                        <a href="https://www.meteo.gov.ua/">Докладніше</a>
                     </div>
                 </div>
             </div>
@@ -71,6 +69,17 @@ $city = "Kyiv";
 		<div class="navigator-container">
 			<div id="navCounter"></div>
 			<label id="counter"></label>
+			<div class="order">
+                <label form="param">Сортувати по: </label>
+                <select class="select" name="param" id="param" onchange="updateTable()">
+					<option value="id">Id</option>
+					<option value="date">Час</option>
+					<option value="temp">Температура</option>
+                    <option value="press">Тиск</option>
+					<option value="alt">Висота</option>
+					<option value="hum">Вологість</option>
+                </select>
+            </div>
 			<div class="order">
                 <label form="order">Порядок:</label>
                 <select class="select" name="order" id="order" onchange="updateTable()">
@@ -119,7 +128,7 @@ $city = "Kyiv";
 <!-- Поле script -->
 <!----------------------------------------------------------------------------------------->
 <script>
-	var city = <?php echo "\"$city\""; ?>;
+	var city = "Київ";
 	var page = 1;
 	var count = 20;
 	var param = "date";
@@ -127,7 +136,7 @@ $city = "Kyiv";
 	
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
 		loadData();										// в таблиці "Дані датчика BME280"
-		changeLocation('Київ');							// Виклик функції для створення таблиці з даними погоди									
+		changeLocation(city);							// Виклик функції для створення таблиці з даними погоди									
 		loadTable (page, count, param, order);
 	});
 
