@@ -145,7 +145,11 @@ function count_navigator($count) {							// Функція виводу наві
 			<table id="dbTable"></table>
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
-		<div id="navPages">
+		<div id="navPages"></div>
+		<div>Сторінка
+			<label id="page"></label>
+			<label>/</label>
+			<label id="numOfPages"></label>
 		</div>
 		<h1 id="charts-label">Графіки</h1>				
 		<div class="chart-block"> 						<!--Вивід графіків -->
@@ -179,7 +183,7 @@ function count_navigator($count) {							// Функція виводу наві
 <script>
 	var city = <?php echo "\"$city\""; ?>;
 	var page = <?php echo "$page"; ?>;
-	var count = <?php echo "$count"; ?>;
+	var count = 20;
 	var param = "date";
 	var order = "DESC";
 	
@@ -189,5 +193,5 @@ function count_navigator($count) {							// Функція виводу наві
 		loadTable (page, count, param, order);
 	});
 
-	printNavPages();
+	printNavPages(count);
 </script>

@@ -6,16 +6,11 @@ include "env/.env.php";
     const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
     const PNG_ENDING = "@2x.png";
 
-    function printNavPages() {  
-        // var numOfPages = document.getElementById("numOfPages").value;
-        // var count = document.getElementById("count").value;
-        var count = 20;
+    function printNavPages(count) {  
         if(count < 0) return;
-
         var numOfPages = getNumOfPages(count);
-        
         var $pages = createNavList(numOfPages);
-         
+
         $("#navPages").empty();
         $pages.appendTo($("#navPages"));
     }
@@ -35,7 +30,6 @@ include "env/.env.php";
     };
 
     function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
-        console.log("CreateNavList(", numOfPages +")");
         var $nav = $("<nav class=\'navigator-block pages\'></table>");          // масив даних таблиці(data) та головний рядок(header)
         
         for (let i = 1; i <= numOfPages; i++) {
@@ -47,7 +41,7 @@ include "env/.env.php";
             $navItem.append(i);
             $navItem.attr('id', "page"+i);
             $navItem.click(function () {
-                clickPage("page"+i);
+                clickPage(i);
             });
             $nav.append($navItem);
         }
@@ -55,23 +49,25 @@ include "env/.env.php";
     }
 
 
-    function clickPage(id) {
+    function clickPage(i) {
         var elements = document.getElementsByClassName('selected-page');
         for (let j = 0; j < elements.length; j++) 
             elements[j].classList.toggle("selected-page");
 
-        var element = document.getElementById(id).classList.toggle("selected-page");
-        
+        var element = document.getElementById("page"+i).classList.toggle("selected-page");
+
+        document.getElementById("page").innerText = i;
+
         updateTable();
     }
 
 
     function updateTable() {
-        var page = document.getElementById("page").value;
+        var page = document.getElementById("page").innerText;
         // var counter = document.getElementById("counter").value;
         // var param = document.getElementById("param").value;
         var order = document.getElementById("order").value;
-        loadTable(1, 20, "date", order);
+        loadTable(page, 20, "date", order);
     }
 
     var loadData = function () {
@@ -123,7 +119,7 @@ include "env/.env.php";
 
     function loadTable (page, count, param, order) {
 		var _page = "1";
-		var _count = "0";
+		var _count = "20";
 		var _param = "date";
 		var _order = "DESC";
 
@@ -250,11 +246,10 @@ include "env/.env.php";
     }
 
     function drawCharts(res, labels) {                              // Ф-ція створення графіків
-        for (const key in res) {
-            if (Object.hasOwnProperty.call(res, key)) {
+        for (const key in res) 
+            if (Object.hasOwnProperty.call(res, key)) 
                 res[key].reverse();
-            }
-        }
+            
         [{
             id: 'chart-temp',	                                // Графік температури
             color: 'yellow',
