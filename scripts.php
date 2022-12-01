@@ -13,10 +13,8 @@ include "env/.env.php";
         if(count < 0) return;
 
         var numOfPages = getNumOfPages(count);
-        console.log("numOfPages: ", numOfPages);
-
+        
         var $pages = createNavList(numOfPages);
-        console.log("pages", $pages);
          
         $("#navPages").empty();
         $pages.appendTo($("#navPages"));
@@ -29,7 +27,6 @@ include "env/.env.php";
             url: "database/get_num_of_rows.php?count="+count,		// Виклик файла extract.php, в якому виконується запит до БД
             dataType: "json",
             success: function (result) {
-                console.log("NumOf rows: ", result.rows, typeof Number(result.rows));
                 var rows = Number(result.rows);
                 numOfPages = Math.ceil(rows/count);   
             }
@@ -38,35 +35,39 @@ include "env/.env.php";
     };
 
     function createNavList(numOfPages) {                // Функція для створення таблиці, яка приймає               
+        console.log("CreateNavList(", numOfPages +")");
         var $nav = $("<nav class=\'navigator-block pages\'></table>");          // масив даних таблиці(data) та головний рядок(header)
-
-        for (let i = 0; i < count; i++) {
+        
+        for (let i = 1; i <= numOfPages; i++) {
             var $navItem;
-            if(i == 0) 
-                $navItem = $("<a class=\"navigator-item selected\"></a>");
-            else $navItem = $("<a class=\"navigator-item\"></a>");
+            $navItem = $("<a class=\"page-navigator-item\"></a>");
+
+            if(i == 1) $navItem.addClass("selected-page");
+
+            $navItem.append(i);
+            $navItem.attr('id', "page"+i);
+            $navItem.click(function () {
+                clickPage("page"+i);
+            });
             $nav.append($navItem);
         }
         return $nav;
     }
 
-    /*
-    function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
-        if($count < 0) return;
-        echo "<nav class='navigator-block pages'>";
-        for ($i = 1; $i <= $num_of_pages; $i++) {
-            if ($page == $i)
-                echo "<a class=\"navigator-item selected\"";
-            else
-                echo "<a class=\"navigator-item\" ";
-            echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
-	    }
-	    echo "</nav>";
+
+    function clickPage(id) {
+        var elements = document.getElementsByClassName('selected-page');
+        for (let j = 0; j < elements.length; j++) 
+            elements[j].classList.toggle("selected-page");
+
+        var element = document.getElementById(id).classList.toggle("selected-page");
+        
+        updateTable();
     }
-    */
+
 
     function updateTable() {
-        // var page = document.getElementById("page").value;
+        var page = document.getElementById("page").value;
         // var counter = document.getElementById("counter").value;
         // var param = document.getElementById("param").value;
         var order = document.getElementById("order").value;
@@ -130,7 +131,6 @@ include "env/.env.php";
 		if(count) _count=count;
 		if(param) _param=param;
 		if(order) _order=order;
-        // console.log("page="+_page+"&count="+_count+"&param="+_param+"&order="+_order);
 
 		$.ajax({													    
 			type: "GET",                                              

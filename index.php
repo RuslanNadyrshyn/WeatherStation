@@ -56,18 +56,18 @@ function count_navigator($count) {							// Функція виводу наві
 	echo "</nav>";
 }
 
-function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
-	if($count < 0) return;
-	echo "<nav class='navigator-block pages'>";
-	for ($i = 1; $i <= $num_of_pages; $i++) {
-		if ($page == $i)
-			echo "<a class=\"navigator-item selected\"";
-		else
-			echo "<a class=\"navigator-item\" ";
-		echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
-	}
-	echo "</nav>";
-}
+// function page_navigator($count, $page, $num_of_pages) {		// Функція виводу навігатора сторінок БД
+// 	if($count < 0) return;
+// 	echo "<nav class='navigator-block pages'>";
+// 	for ($i = 1; $i <= $num_of_pages; $i++) {
+// 		if ($page == $i)
+// 			echo "<a class=\"navigator-item selected\"";
+// 		else
+// 			echo "<a class=\"navigator-item\" ";
+// 		echo "href=\"index.php?page=${i}&count=${count}\">${i}</a>";
+// 	}
+// 	echo "</nav>";
+// }
 ?>
 
 <!----------------------------------------------------------------------------------------->
@@ -145,10 +145,8 @@ function page_navigator($count, $page, $num_of_pages) {		// Функція ви�
 			<table id="dbTable"></table>
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
-		<div>
-			<nav class="navigator-block pages" id="navPages"></nav>
+		<div id="navPages">
 		</div>
-		<?php page_navigator($count, $page, $num_of_pages); ?>
 		<h1 id="charts-label">Графіки</h1>				
 		<div class="chart-block"> 						<!--Вивід графіків -->
 			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
