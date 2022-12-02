@@ -1,7 +1,6 @@
 <?php
 include "connect_db.php";    			// З'єднання з файлом connect_db.php
 
-$count = 20;
 if (isset($_GET['count']))				// Зчитування з URL змінної $count з кількістю значень, 
 	$count = $_GET['count'];			// які будуть виводитися в таблиці Бази даних
 

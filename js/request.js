@@ -54,7 +54,8 @@ var getNumOfPages = function (count) {    // Функція, яка за доп�
         url: "php/get_num_of_rows.php?count=" + count,
         dataType: "json",
         success: function (result) {
-            var rows = Number(result.rows);
+            console.log(result);
+            var rows = Number(result.num_of_rows);
             numOfPages = Math.ceil(rows / count);
         }
     });
