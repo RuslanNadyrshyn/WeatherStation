@@ -25,4 +25,4 @@ if($counter==$maxcount){								// Внесення даних до таблиц
 }
 ?>
 
-<meta http-equiv="Refresh" content="0; URL=\index.html">	<!-- Перехід на головну сторінку--> 
+<!-- <meta http-equiv="Refresh" content="0; URL=\index.html">	Перехід на головну сторінку  -->
