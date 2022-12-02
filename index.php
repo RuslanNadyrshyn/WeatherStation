@@ -14,6 +14,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 <head>
 	<link rel="stylesheet" href="css/style.css">		<!-- Підключення таблиці стилей-->
 	<meta charset="utf-8"> 								<!-- Підключення кирилиці -->
+	<script src="request.js"></script>
 </head>
 
 <body>													<!-- Блок відображення сторінки -->
@@ -94,21 +95,23 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 			<div class="order-menu">
 				<div class="order">
 					<label form="param">Сортувати по: </label>
-					<select class="select" name="param" onchange="changeValue(name, value)">
+					<select id="selectParam"></select>
+					<!-- <select class="select" name="param" id="param" onchange="changeValue(name, value)">
 						<option value="id">Id</option>
 						<option value="date">Час</option>
 						<option value="temp">Температура</option>
 						<option value="press">Тиск</option>
 						<option value="alt">Висота</option>
 						<option value="hum">Вологість</option>
-					</select>
+					</select> -->
 				</div>
 				<div class="order">
 					<label form="order">Порядок:</label>
-					<select class="select" name="order" onchange="changeValue(name, value)">
+					<select id="selectOrder"></select>
+					<!-- <select class="select" name="order" onchange="changeValue(name, value)">
 						<option value="DESC">По спаданню</option>
 						<option value="ASC">По зростанню</option>
-					</select>
+					</select> -->
 				</div>
 			</div>
 		</div>
@@ -146,6 +149,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 	<script src="js/utils.js"></script> 				<!-- Підключення додаткових бібліотек -->
 	<script src="js/chart.min.js"></script>
 	<script src="js/jquery.js"></script>
+	
 </body>
 </html>
 
@@ -157,7 +161,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 		localStorage.getItem("city") : "Київ";
 
 	$(document).ready(function () { 					// Функція для динамічного оновлення інформації 
-		loadData();										// в таблиці "Дані датчика BME280"
+		getCurrentData();								// в таблиці "Дані датчика BME280"
 		changeLocation(city);							// Виклик функції для створення таблиці з даними погоди									
 		updateTable();
 	});

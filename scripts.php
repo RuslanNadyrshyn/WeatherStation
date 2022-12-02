@@ -2,9 +2,8 @@
 include "env/.env.php";
 ?>
 <script>
-    const APPID = "<?php echo $APPID; ?>";
-    const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
-    const PNG_ENDING = "@2x.png";
+    // const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
+    // const PNG_ENDING = "@2x.png";
     
 /* ------------------------------- Weather -------------------------------*/
 
@@ -12,51 +11,51 @@ include "env/.env.php";
         $("#location").html(newLocation);
         localStorage.setItem("city", newLocation);
 
-        loadWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
+        getWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
     }
 
-    var loadWeather = function (city) {
-        $.ajax({													    // ajax-запит до бази даних для динамічного 
-            type: "GET",                                                // виводу даних в таблицю "Дані датчика BME280".
-            url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
-            dataType: "json",
-            success: function (result) {
-                var $img = $("<img class='weather-content-icon' src=''/>");
-                $img.attr('src', WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
-                $("#weather").append($img);
+    // var loadWeather = function (city) {
+    //     $.ajax({													    // ajax-запит до бази даних для динамічного 
+    //         type: "GET",                                                // виводу даних в таблицю "Дані датчика BME280".
+    //         url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APPID + "&units=metric&lang=ua",
+    //         dataType: "json",
+    //         success: function (result) {
+    //             var $img = $("<img class='weather-content-icon' src=''/>");
+    //             $img.attr('src', WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
+    //             $("#weather").append($img);
 
-                $("#weather").append(result.weather[0].description);
-                $("#temp-weather").text(result.main.temp + " °С");
-                $("#temp-feels-weather").text(result.main.feels_like + " °С");
-                $("#press-weather").text(result.main.pressure + " ГПа");
-                $("#hum-weather").text(result.main.humidity + " %");
-                $("#cloud-weather").text(result.clouds.all + " %");
-                $("#wind-weather").text(result.wind.speed + " м/с");
+    //             $("#weather").append(result.weather[0].description);
+    //             $("#temp-weather").text(result.main.temp + " °С");
+    //             $("#temp-feels-weather").text(result.main.feels_like + " °С");
+    //             $("#press-weather").text(result.main.pressure + " ГПа");
+    //             $("#hum-weather").text(result.main.humidity + " %");
+    //             $("#cloud-weather").text(result.clouds.all + " %");
+    //             $("#wind-weather").text(result.wind.speed + " м/с");
 
-                $("#location-weather").html(result.main.temp + " °С");
-                $("#weather-icon").attr('src', 
-                    WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
-            }
-        });
-    };
+    //             $("#location-weather").html(result.main.temp + " °С");
+    //             $("#weather-icon").attr('src', 
+    //                 WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
+    //         }
+    //     });
+    // };
 
 
 /* ------------------------------- Current_BME280 -------------------------------*/
 
-    var loadData = function () {
-        $.ajax({													// ajax-запит до бази даних для динамічного 
-            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
-            url: "database/extract.php",									// Виклик файла extract.php, в якому виконується запит до БД
-            dataType: "json",
-            success: function (result) {
-                $("#temp").text(result.temp_bme280 + ' °С');
-                $("#press").text(result.press_bme280 + ' гПа');
-                $("#alt").text(result.alt_bme280 + ' м');
-                $("#hum").text(result.hum_bme280 + ' %');
-                setTimeout(loadData, 2000);                         // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
-            }
-        });
-    };
+    // var loadData = function () {
+    //     $.ajax({													// ajax-запит до бази даних для динамічного 
+    //         type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
+    //         url: "database/extract.php",									// Виклик файла extract.php, в якому виконується запит до БД
+    //         dataType: "json",
+    //         success: function (result) {
+    //             $("#temp").text(result.temp_bme280 + ' °С');
+    //             $("#press").text(result.press_bme280 + ' гПа');
+    //             $("#alt").text(result.alt_bme280 + ' м');
+    //             $("#hum").text(result.hum_bme280 + ' %');
+    //             setTimeout(loadData, 2000);                         // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
+    //         }
+    //     });
+    // };
 
     /* ------------------------------- Navigator -------------------------------*/
 
@@ -112,26 +111,52 @@ include "env/.env.php";
         return $navItem;
     }
 
-    var getNumOfPages = function (count) {
-        var numOfPages = 0;
-        $.ajax({
-            async: false,											// ajax-запит до бази даних для динамічного 
-            type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
-            url: "database/get_num_of_rows.php?count=" + count,		// Виклик файла extract.php, в якому виконується запит до БД
-            dataType: "json",
-            success: function (result) {
-                var rows = Number(result.rows);
-                numOfPages = Math.ceil(rows / count);
-            }
-        });
-        return numOfPages;
-    };
+function printOrderList(name, options, param) {
+    var $list = createSelectList(name, options, param);
+
+    $("#selectOrder").empty();
+    $("#selectOrder").replaceWith($list);
+}
+
+function printParamList(name, options, param) {
+    var $list = createSelectList(name, options, param);
+
+    $("#selectParam").empty();
+    $("#selectParam").replaceWith($list);
+}
+
+function createSelectList(name, options, param) {
+    var $list = $("<select></select>");
+    $list.addClass("select");
+    $list.attr('name', name);
+    $list.attr('id', name);
+    $list.val(param);
+
+    $list.change(function() {
+        var value = $(this).find('option:selected').attr('val');
+        localStorage.setItem(name, value);
+		updateTable();
+    });
+
+    for (let i = 0; i < options.length; i++) {
+        const element = options[i];
+        var $option = $("<option></option>");
+        $option.attr('val', element.value);
+        $option.html(element.text);
+
+        if (element.value == param)
+            $option.attr("selected", "selected");
+
+        $list.append($option);
+    }
+    return $list;
+}
 
     function changeValue(itemName, value) {
-		console.log(itemName, value);
 		localStorage.setItem(itemName, value);
 		updateTable();
 	}
+
     /* -------------------------------- Database --------------------------------*/
 
     function updateTable() {
@@ -144,30 +169,32 @@ include "env/.env.php";
         var order = localStorage.getItem("order") != null ? 
             localStorage.getItem("order") : "DESC";
 
+
+        var options = [
+			{value: "id",text: "ID"},
+			{value: "date",text: "Час"},
+			{value: "temp",text: "Температура"},
+			{value: "press",text: "Тиск"},
+			{value: "alt",text: "Висота"},
+			{value: "hum",text: "Вологість"}
+		];
+        var orders = [
+            {value: "DESC",text: "По спаданню"},
+			{value: "ASC",text: "По зростанню"}
+        ]
+
+	    printParamList("param", options, param);
+        printOrderList("order", orders, order);
+
         printNavCounter(count);
         
-        if (printNavPages(count, page))     // оновляти таблицю, якщо кількість сторінок не менше обраної
-            fetchDB(page, count, param, order); 
+        if (printNavPages(count, page)) {     // оновляти таблицю, якщо кількість сторінок не менше обраної
+            fetchDB(page, count, param, order);
+        }
         else                                // Якщо кількість сторінок менше обраної,
             updateTable();                  // видалити з пам'яті номер сторінки та перезапустити функцію
     }
-    
-    function fetchDB(page, count, param, order) {
-        $.ajax({
-            type: "GET",
-            url: "database/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
-            dataType: "json",
-            success: function (result) {    
-                var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-                var $table = createTable(result, dbHeader);            // Функція для створення таблиці "База даних"
-                $("#dbTable").empty();
-                $table.appendTo($("#dbTable"));
 
-                // printDB(result);
-                printCharts(result);
-            }
-        });
-    };
 
     function createTable(data, header) {                // Функція для створення таблиці, яка приймає               
         var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
@@ -190,7 +217,6 @@ include "env/.env.php";
         var $line = $("<tr></tr>");
         var param = localStorage.getItem("param") != null ? 
             localStorage.getItem("param") : "DESC";
-
 
         if (isHeader) object.forEach(element =>
             $line.append($("<th class='sticky'></th>").html(element)));
@@ -217,29 +243,6 @@ include "env/.env.php";
     }
 
     /* --------------------------------- Charts ---------------------------------*/
-
-    function printCharts(data) {                                    // Функція для створення графіків
-        var res = fetchResult(data);
-        drawCharts(res, res.date);
-    }
-
-    function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
-        var temp = [];                                              // показників від загальних даних, отриманих в БД
-        var press = [];
-        var alt = [];
-        var hum = [];
-        var date = [];
-
-        result.forEach(element => {
-            temp.push(element.temp_bme280);
-            press.push(element.press_bme280);
-            alt.push(element.alt_bme280);
-            hum.push(element.hum_bme280);
-            date.push(element.date_bme280);
-        });
-
-        return { temp, press, alt, hum, date };
-    }
 
     function drawCharts(res, labels) {                          // Ф-ція створення графіків
         var order = localStorage.getItem("order") != null ? 
@@ -275,6 +278,25 @@ include "env/.env.php";
         });
     }
 
+    function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
+        var temp = [];                                              // показників від загальних даних, отриманих в БД
+        var press = [];
+        var alt = [];
+        var hum = [];
+        var date = [];
+
+        result.forEach(element => {
+            temp.push(element.temp_bme280);
+            press.push(element.press_bme280);
+            alt.push(element.alt_bme280);
+            hum.push(element.hum_bme280);
+            date.push(element.date_bme280);
+        });
+
+        return { temp, press, alt, hum, date };
+    }
+
+    
     function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
         return {
             type: 'line',
