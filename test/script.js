@@ -26,6 +26,9 @@ var loadData = function () {
     });
 };
 
+
+
+
 var loadWeather = function (city) {
     $.ajax({													// ajax-запит до бази даних для динамічного 
         type: "GET",                                            // виводу даних в таблицю "Дані датчика BME280".
@@ -75,6 +78,49 @@ function printRow(object, isHeader) {                           // Допомі�
 
     }
     return $line;
+}
+
+var options = [
+    {
+        value: "id",
+        text: "ID"
+    },
+    {
+        value: "date",
+        text: "Час"
+    },
+    {
+        value: "temp",
+        text: "Температура"
+    },
+    {
+        value: "press",
+        text: "Тиск"
+    },
+    {
+        value: "alt",
+        text: "Висота"
+    },
+    {
+        value: "hum",
+        text: "Вологість"
+    }
+]
+function printSelectList(name, options) {
+    var $list = $("<select class='select'></select>");
+    $list.attr('name', name);
+
+    for (let i = 0; i < options.length; i++) {
+        const element = options[i];
+        console.log("element", element);
+
+        var $option = $("<option></option>");
+        $option.attr('value', element.value);
+        $option.append(element.text);
+
+        $list.append($option);
+    }
+    return $list;
 }
 
 function createTable(data, header, isVertical) {                // Функція для створення таблиці, яка приймає               
