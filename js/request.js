@@ -47,24 +47,25 @@
         });
     };
 
-    // var getNumOfPages = function (count) {              // Функція, яка за допомогою ajax-запиту до файла 
-    //     var numOfPages = 0;                             // "get_num_of_pages.php" отримує та повертає кількість 
-    //     $.ajax({                                        // сторінок для обраної кількості рядків
-    //         async: false,		
-    //         type: "GET",                                            
-    //         url: "database/get_num_of_pages.php?count=" + count,	
-    //         dataType: "json",
-    //         success: function (result) {
-    //             console.log("result", result);
-    //             numOfPages = Number(result);
-    //             console.log("Num", numOfPages);
-    //         }
-    //     });
-    //     return numOfPages;
-    // };
-      var getNumOfPages = function (count) {
-        var numOfPages = 0;
-        $.ajax({
+    var getNumOfPages = function (count) {              // Функція, яка за допомогою ajax-запиту до файла 
+        var numOfPages = 0;                             // "get_num_of_pages.php" отримує та повертає кількість 
+        $.ajax({                                        // сторінок для обраної кількості рядків
+            async: false,		
+            type: "GET",                                            
+            url: `database/get_num_of_pages.php?count=${count}`,
+            dataType: "json",
+            success: function (result) {
+                console.log("result", result);
+                numOfPages = Number(result);
+                console.log("Num", numOfPages);
+            }
+        });
+        return numOfPages;
+    };
+
+      var getNumOfPages = function (count) {    // Функція, яка за допомогою ajax-запиту до файла 
+        var numOfPages = 0;                     // "get_num_of_rows.php" отримує кількість рядків та  
+        $.ajax({                                // повертає кількість сторінок для обраної кількості рядків
             async: false,											
             type: "GET",                                            
             url: "database/get_num_of_rows.php?count=" + count,		

@@ -14,7 +14,7 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 <head>
 	<link rel="stylesheet" href="css/style.css">		<!-- Підключення таблиці стилей-->
 	<meta charset="utf-8"> 								<!-- Підключення кирилиці -->
-	<script src="request.js"></script>
+	<script src="js/request.js"></script>
 </head>
 
 <body>													<!-- Блок відображення сторінки -->
@@ -96,22 +96,10 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 				<div class="order">
 					<label form="param">Сортувати по: </label>
 					<select id="selectParam"></select>
-					<!-- <select class="select" name="param" id="param" onchange="changeValue(name, value)">
-						<option value="id">Id</option>
-						<option value="date">Час</option>
-						<option value="temp">Температура</option>
-						<option value="press">Тиск</option>
-						<option value="alt">Висота</option>
-						<option value="hum">Вологість</option>
-					</select> -->
 				</div>
 				<div class="order">
 					<label form="order">Порядок:</label>
 					<select id="selectOrder"></select>
-					<!-- <select class="select" name="order" onchange="changeValue(name, value)">
-						<option value="DESC">По спаданню</option>
-						<option value="ASC">По зростанню</option>
-					</select> -->
 				</div>
 			</div>
 		</div>
@@ -146,9 +134,9 @@ include "scripts.php";					// Підключення файлу scripts.php з �
 			</div>
 		</div>
 	</div> <!-- /container -->
-	<script src="js/utils.js"></script> 				<!-- Підключення додаткових бібліотек -->
-	<script src="js/chart.min.js"></script>
-	<script src="js/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/anchorme/2.0.0/node/utils.js"></script> 				<!-- Підключення додаткових бібліотек -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 	
 </body>
 </html>
