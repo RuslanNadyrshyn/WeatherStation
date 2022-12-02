@@ -4,3 +4,8 @@ master branch - Bachelor's diploma code
 
 develop branch - Master's diploma code
 
+
+
+upload favicon
+change structure
+

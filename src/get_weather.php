@@ -1,5 +1,5 @@
 <?php
-include "../env/.env.php";         // Підключення файлу зі змінною $APPID
+include "../config/env/.env.php";         // Підключення файлу зі змінною $APPID
 
 if (isset($_GET['city']))		// Зчитування змінної city з URL
 	$city = $_GET['city'];		
