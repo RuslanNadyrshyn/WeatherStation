@@ -63,7 +63,13 @@ include "env/.env.php";
     function printNavCounter (count) {
         var counterArray = [20, 50, 100, 200, 500, 1000];
 
-        var $counterList = createCounterList(counterArray, count);
+        var $counterList = $("<nav class=\"navigator-block\"></nav>");
+        
+        for (let i = 0; i < counterArray.length; i++) {
+            const element = counterArray[i];
+            var $navItem = createNavItem("count", element, count, "selected");
+            $counterList.append($navItem);
+        }
         
         $("#navCounter").empty();
         $counterList.appendTo($("#navCounter"));
@@ -78,47 +84,21 @@ include "env/.env.php";
         $("#numOfPages").text(numOfPages);
 
         if (page > numOfPages) {
-            console.log(page,">", numOfPages);
             localStorage.removeItem("page");
-            
-            return updateTable();
+            return false;
         }
-
-        var $pages = createNavList(numOfPages, page); 
+                                                                            
+        var $pages = $("<nav class=\'navigator-block pages\'></nav>");     
+            
+        for (let i = 1; i <= numOfPages; i++) {
+            var $navItem = createNavItem("page", i, page, "selected");
+            $pages.append($navItem);
+        }
 
         $("#navPages").empty();
         $pages.appendTo($("#navPages"));
-        
-
-        var param = localStorage.getItem("param") != null ? 
-            localStorage.getItem("param") : "date";
-        var order = localStorage.getItem("order") != null ? 
-            localStorage.getItem("order") : "DESC";
-
-        loadTable(page, count, param, order);
+        return true;
     }
-
-    function createCounterList(counterArray, count) {
-        var $nav = $("<nav class=\"navigator-block\"></nav>");
-        
-        for (let i = 0; i < counterArray.length; i++) {
-            const element = counterArray[i];
-            var $navItem = createNavItem("count", element, count, "selected");
-            $nav.append($navItem);
-        }
-        return $nav;
-    }
-
-    function createNavList(numOfPages, page) {                // Функція для створення таблиці, яка приймає               
-        var $nav = $("<nav class=\'navigator-block pages\'></nav>");          // масив даних таблиці(data) та головний рядок(header)
-        
-        for (let i = 1; i <= numOfPages; i++) {
-            var $navItem = createNavItem("page", i, page, "selected");
-            $nav.append($navItem);
-        }
-        return $nav;
-    }
-
 
     function createNavItem(item, element, selected, itemClass){
         var $navItem = $("<a class=\"navigator-item\"></a>");
@@ -127,7 +107,6 @@ include "env/.env.php";
         $navItem.append(element);
         $navItem.click(function () {
             localStorage.setItem(item, element);
-            console.log("setItem: ", item, ":", element);
             updateTable();
         });
         return $navItem;
@@ -148,6 +127,11 @@ include "env/.env.php";
         return numOfPages;
     };
 
+    function changeValue(itemName, value) {
+		console.log(itemName, value);
+		localStorage.setItem(itemName, value);
+		updateTable();
+	}
     /* -------------------------------- Database --------------------------------*/
 
     function updateTable() {
@@ -155,35 +139,35 @@ include "env/.env.php";
 		    Number(localStorage.getItem("page")) : 1;
         var count = localStorage.getItem("count") != null ? 
             Number(localStorage.getItem("count")) : 20;
-
-        console.log("page", page);
-        console.log("count", count);
-        console.log("param", param);
-        console.log("order", order);
-        console.log("" );
+        var param = localStorage.getItem("param") != null ? 
+            localStorage.getItem("param") : "date";
+        var order = localStorage.getItem("order") != null ? 
+            localStorage.getItem("order") : "DESC";
 
         printNavCounter(count);
-        printNavPages(count, page);
+        
+        if (printNavPages(count, page))     // оновляти таблицю, якщо кількість сторінок не менше обраної
+            fetchDB(page, count, param, order); 
+        else                                // Якщо кількість сторінок менше обраної,
+            updateTable();                  // видалити з пам'яті номер сторінки та перезапустити функцію
     }
     
-    function loadTable(page, count, param, order) {
+    function fetchDB(page, count, param, order) {
         $.ajax({
             type: "GET",
             url: "database/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
             dataType: "json",
-            success: function (result) {
-                printDB(result);
+            success: function (result) {    
+                var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
+                var $table = createTable(result, dbHeader);            // Функція для створення таблиці "База даних"
+                $("#dbTable").empty();
+                $table.appendTo($("#dbTable"));
+
+                // printDB(result);
                 printCharts(result);
             }
         });
     };
-
-    function printDB(data) {                                        // Функція для створення таблиці "База даних"
-        var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-        var $table = createTable(data, dbHeader);            // виклик ф-ції createTable() з відповідними даними
-        $("#dbTable").empty();
-        $table.appendTo($("#dbTable"));
-    }
 
     function createTable(data, header) {                // Функція для створення таблиці, яка приймає               
         var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
@@ -192,7 +176,6 @@ include "env/.env.php";
 
         $thead.append(printRow(header, true));
         $table.append($thead);
-        console.log("data", data);
 
         for (let index = 0; index < data.length; index++) {
             var element = data[index];
@@ -205,7 +188,9 @@ include "env/.env.php";
 
     function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
         var $line = $("<tr></tr>");
-        var param = document.getElementById("param").value;
+        var param = localStorage.getItem("param") != null ? 
+            localStorage.getItem("param") : "DESC";
+
 
         if (isHeader) object.forEach(element =>
             $line.append($("<th class='sticky'></th>").html(element)));
@@ -257,8 +242,10 @@ include "env/.env.php";
     }
 
     function drawCharts(res, labels) {                          // Ф-ція створення графіків
+        var order = localStorage.getItem("order") != null ? 
+            localStorage.getItem("order") : "DESC";
 
-        if (document.getElementById("order").value == "DESC")
+        if (order == "DESC")
             for (const key in res)
                 if (Object.hasOwnProperty.call(res, key))
                     res[key].reverse();
