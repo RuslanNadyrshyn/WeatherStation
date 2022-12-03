@@ -1,5 +1,3 @@
-const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
-const PNG_ENDING = "@2x.png";
 
 /*
     Дані отримуються за допомогою ajax-запиту до файла get_weather.php, який
@@ -11,7 +9,7 @@ const PNG_ENDING = "@2x.png";
 var getWeather = function (city) {      // Функція, яка виконує запит до API для отримання
     $.ajax({							// даних погоди обраного міста
         type: "GET",
-        url: "src/get_weather.php?city=" + city,
+        url: HOST + "/src/get_weather.php?city=" + city,
         dataType: "json",
         success: function (result) {    // Заповнення елементів таблиці даних погоди обраного міста
             console.log(result);
@@ -35,7 +33,7 @@ var getWeather = function (city) {      // Функція, яка виконує
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
     $.ajax({							// за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
-        url: "src/get_current.php",
+        url: HOST + "/src/get_current.php",
         dataType: "json",
         success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці 
             $("#temp").text(result.temp_bme280 + ' °С');
@@ -52,7 +50,7 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
     $.ajax({                            // повертає кількість сторінок для обраної кількості рядків
         async: false,
         type: "GET",
-        url: "src/get_num_of_rows.php?count=" + count,
+        url: HOST + "/src/get_num_of_rows.php?count=" + count,
         dataType: "json",
         success: function (result) {
             var rows = Number(result.num_of_rows);
@@ -70,7 +68,7 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
 function fetchDB(page, count, param, order) {       // Функція, яка за допомогою ajax-запиту до файла
     $.ajax({                                        // "src/fetch_db.php" отримує дані таблиці
         type: "GET",                                // в обраних межах та за відповідними умовами, після чого викликає функції створення таблиці бази даних та графіків
-        url: "src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
+        url: HOST + "/src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
         dataType: "json",
         success: function (result) {
             var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
