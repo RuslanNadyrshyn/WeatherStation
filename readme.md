@@ -6,8 +6,8 @@ develop branch - Master's diploma code
 
 
 
-upload favicon
-move variables to config
+
+
 edit select menus
 
 

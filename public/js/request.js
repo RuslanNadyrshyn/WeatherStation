@@ -1,7 +1,3 @@
-const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
-const PNG_ENDING = "@2x.png";
-const HOST="http://45.136.71.216";
-
 /*
     Дані отримуються за допомогою ajax-запиту до файла get_weather.php, який
 виконує запит необхідними з даними до API.openweathermap.org
