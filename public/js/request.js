@@ -1,5 +1,6 @@
 const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
 const PNG_ENDING = "@2x.png";
+const HOST="http://45.136.71.216";
 
 /*
     Дані отримуються за допомогою ajax-запиту до файла get_weather.php, який
@@ -9,12 +10,13 @@ const PNG_ENDING = "@2x.png";
 (тут картинка как єто віглядит)
 */
 var getWeather = function (city) {      // Функція, яка виконує запит до API для отримання
+    console.log("getWeather of", city);
     $.ajax({							// даних погоди обраного міста
         type: "GET",
-        url: "src/get_weather.php?city=" + city,
+        url: HOST + "/src/get_weather.php?city=" + city,
         dataType: "json",
         success: function (result) {    // Заповнення елементів таблиці даних погоди обраного міста
-            console.log(result);
+            console.log("getWeather", result);
             var $img = $("<img class='weather-content-icon' src=''/>");
             $img.attr('src', WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
             $("#weather").empty();
@@ -33,11 +35,13 @@ var getWeather = function (city) {      // Функція, яка виконує
 };
 
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
+    console.log("getCurrentData");
     $.ajax({							// за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
-        url: "src/get_current.php",
+        url: HOST + "/src/get_current.php",
         dataType: "json",
         success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці 
+            console.log("getCurrentData", result);
             $("#temp").text(result.temp_bme280 + ' °С');
             $("#press").text(result.press_bme280 + ' гПа');
             $("#alt").text(result.alt_bme280 + ' м');
@@ -48,13 +52,15 @@ var getCurrentData = function () {      // Функція, яка виконує
 };
 
 var getNumOfPages = function (count) {  // Функція, яка за допомогою ajax-запиту до файла 
+    console.log("getCurrentData", count);
     var numOfPages = 0;                 // "get_num_of_rows.php" отримує кількість рядків та  
     $.ajax({                            // повертає кількість сторінок для обраної кількості рядків
         async: false,
         type: "GET",
-        url: "src/get_num_of_rows.php?count=" + count,
+        url: HOST + "/src/get_num_of_rows.php?count=" + count,
         dataType: "json",
         success: function (result) {
+            console.log("getCurrentData", result);
             var rows = Number(result.num_of_rows);
             numOfPages = Math.ceil(rows / count);
         }
@@ -68,11 +74,13 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
 таблиці бази даних та графіків
 */
 function fetchDB(page, count, param, order) {       // Функція, яка за допомогою ajax-запиту до файла
+    console.log("fetchDB", page, count, param, order);
     $.ajax({                                        // "src/fetch_db.php" отримує дані таблиці
         type: "GET",                                // в обраних межах та за відповідними умовами, після чого викликає функції створення таблиці бази даних та графіків
-        url: "src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
+        url: HOST + "/src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
         dataType: "json",
         success: function (result) {
+            console.log("fetchDB", result);
             var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
             var $table = createTable(result, dbHeader); // Функція для створення таблиці "База даних"
             $("#dbTable").empty();

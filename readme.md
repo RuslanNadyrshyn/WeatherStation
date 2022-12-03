@@ -10,3 +10,10 @@ upload favicon
 move variables to config
 edit select menus
 
+
+1. переустановить сервер
+2. скопировать бд через phpmyadmin
+3. склонировать репозиторий, подтягивать изменения туда и копировать их в /var/www/html
+
+
+
