@@ -6,11 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="public/css/style.css">		<!-- Підключення таблиці стилей-->
-<<<<<<< HEAD
-	<link rel="icon" type="image/x-icon" href="public/images/favicon.ico">
-=======
 	<link rel="icon" type="image/png" href="http://openweathermap.org/img/wn/04n.png"/>
->>>>>>> develop
 	<title>BME280 Nadyrshyn</title>
 	<script src="config/config.js"></script>
 	<script src="public/js/request.js"></script>
@@ -149,6 +145,6 @@
 	$(document).ready(function () { 					
 		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
 		changeLocation(city);	// Виклик функції для створення таблиці з даними погоди									
-		// updateTable();			// Виклик функції оновлення даних таблиці База даних
+		updateTable();			// Виклик функції оновлення даних таблиці База даних
 	});
 </script>
