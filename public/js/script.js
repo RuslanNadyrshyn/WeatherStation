@@ -27,15 +27,17 @@ function printNavCounter(count) {
 function printNavPages(count, page) {
     if (count < 0) return;
     var numOfPages = getNumOfPages(count);
+    if (numOfPages == undefined || numOfPages == null) 
+        return -1;
+    
     localStorage.setItem("numOfPages", numOfPages);
-
-    $("#page").text(page);
-    $("#numOfPages").text(numOfPages);
-
     if (page > numOfPages) {
         localStorage.removeItem("page");
         return false;
     }
+
+    $("#page").text(page);
+    $("#numOfPages").text(numOfPages);
 
     var $pages = $("<nav class=\'navigator-block pages\'></nav>");
 
@@ -119,28 +121,15 @@ function updateTable() {
     var order = localStorage.getItem("order") != null ?
         localStorage.getItem("order") : "DESC";
 
-
-    var options = [
-        { value: "id", text: "ID" },
-        { value: "date", text: "Час" },
-        { value: "temp", text: "Температура" },
-        { value: "press", text: "Тиск" },
-        { value: "alt", text: "Висота" },
-        { value: "hum", text: "Вологість" }
-    ];
-    var orders = [
-        { value: "DESC", text: "По спаданню" },
-        { value: "ASC", text: "По зростанню" }
-    ]
-
-    printParamList("param", options, param);
-    printOrderList("order", orders, order);
+    printParamList("param", OPTIONS, param);
+    printOrderList("order", ORDERS, order);
 
     printNavCounter(count);
-
-    if (printNavPages(count, page)) {     // оновляти таблицю, якщо кількість сторінок не менше обраної
+    var resp = printNavPages(count, page)
+    if (resp) {     // оновляти таблицю, якщо кількість сторінок не менше обраної
         fetchDB(page, count, param, order);
-    }
+    } else if (resp == -1)  // не оновляти таблицю, якщо трапилась помилка
+        return;
     else                                // Якщо кількість сторінок менше обраної,
         updateTable();                  // видалити з пам'яті номер сторінки та перезапустити функцію
 }
@@ -277,4 +266,25 @@ function createConfig(labels, data, colorName) {                // допомі�
 function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
     var element = document.getElementById(id.id);
     element.classList.toggle("large");
+}
+
+function printError(jqXHR, exception, dest) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+    console.log("msg",msg);
+    $(dest).text(""+ msg);
 }

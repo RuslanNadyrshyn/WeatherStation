@@ -26,12 +26,15 @@ var getWeather = function (city) {      // Функція, яка виконує
             $("#wind-weather").text(result.wind.speed + " м/с");
             $("#location-weather").html(result.main.temp + " °С");
             $("#weather-icon").attr('src', WEATHER_SOURCE + result.weather[0].icon + PNG_ENDING);
-        }
+        },
+        error: function (jqXHR, exception) {
+            printError(jqXHR, exception, '#weather');
+        },
     });
 };
 
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
-    $.ajax({							// за допомогою файла "get_current.php" для динамічного
+    call = $.ajax({							// за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
         url: HOST + "/src/get_current.php",
         dataType: "json",
@@ -41,7 +44,10 @@ var getCurrentData = function () {      // Функція, яка виконує
             $("#alt").text(result.alt_bme280 + ' м');
             $("#hum").text(result.hum_bme280 + ' %');
             setTimeout(getCurrentData, 2000); // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
-        }
+        },
+        error: function (jqXHR, exception) {
+            printError(jqXHR, exception, '#post');
+        },
     });
 };
 
@@ -55,7 +61,10 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
         success: function (result) {
             var rows = Number(result.num_of_rows);
             numOfPages = Math.ceil(rows / count);
-        }
+        }, 
+        error: function (jqXHR, exception) {
+            printError(jqXHR, exception, 'post');
+        },
     });
     return numOfPages;
 };
@@ -78,6 +87,11 @@ function fetchDB(page, count, param, order) {       // Функція, яка з
 
             var res = fetchResult(result);
             drawCharts(res, res.date);
-        }
+        },
+        error: function (jqXHR, exception) {
+            printError(jqXHR, exception, '#post');
+        },
     });
 };
+
+
