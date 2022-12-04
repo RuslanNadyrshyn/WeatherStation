@@ -37,11 +37,14 @@ onPressedNav(item, value)
  }
 
  pressedPage(){
-onPressedNav(item, value)
+    onPressedNav(item, value)
  }
 
  onPressedNav(item, value){
     setItem(item, value);
+
+    updateNavItems()
+
     1.fetchDB(){
         getItems()
         ...

@@ -157,7 +157,6 @@ function printRow(object, isHeader) {                           // Допомі�
                     $td.addClass("sorted");
 
                 if (key == "date_bme280") {
-                    // datetime = object[key].split(" ");
                     var date = object[key][0];
                     var time = object[key][1];
 

@@ -89,6 +89,7 @@ function fetchDB(page, count, param, order) {       // Функція, яка з
                             object[key] = object[key].split(" ");
                     }
                 }
+                result[index] = object;
             }
             
             var $table = createTable(result, DB_HEADER); // Функція для створення таблиці "База даних"
