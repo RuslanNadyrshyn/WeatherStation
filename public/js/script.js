@@ -46,7 +46,6 @@ function printNavPages(numOfPages, page) {
 }
 
 function createNavItem(item, element, selected) {
-    console.log("i:", element, "selected:", selected);
     var $navItem = $("<a class=\"navigator-item\"></a>");
     $navItem.append(element);
 
@@ -59,16 +58,16 @@ function createNavItem(item, element, selected) {
             $navItem.addClass("selected");
 
             var numOfPages = getNumOfPages($navItem.text());
-            page = localStorage.getItem("page");
+            var page = localStorage.getItem("page");
             
             if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
                 localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
-                page = 1; 
-            } else 
+                printNavPages(numOfPages, 1);
+            } else {
                 localStorage.setItem("page", page);
-               
-            printNavPages(numOfPages, page);
-            updateTable();
+                printNavPages(numOfPages, page);
+            }
+            changeValue("count", $navItem.text());
         }
         else if (item == "page"){   
             $(".pages .selected").attr('class', 'navigator-item');

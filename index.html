@@ -140,20 +140,14 @@
 
 <!-- Поле script -->
 <script>
-	
 	$(document).ready(function () { 	
-		setDefaults();
-
 		var items = getItems();
 
 		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
 		changeLocation(items.city);	// Виклик функції для створення таблиці з даними погоди	
-		
 		printNavCounter(items.count, items.page);
-
 		printSelectList("param", OPTIONS, items.param, "#selectParam");
 		printSelectList("order", ORDERS, items.order, "#selectOrder");
-
 		updateTable();			// Виклик функції оновлення даних таблиці База даних
 	});
 </script>
