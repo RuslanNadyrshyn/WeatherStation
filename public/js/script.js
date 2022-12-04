@@ -31,7 +31,6 @@ function printNavCounter(count, page) {
 }
 
 function printNavPages(numOfPages, page) {
-    console.log(numOfPages,"/" ,page);
     $("#page").text(page);
     $("#numOfPages").text(numOfPages);
     
@@ -283,6 +282,12 @@ function printError(jqXHR, exception, dest) {
 
 function setDefaults() {
     localStorage.setItem("ServerError", "");
+    console.log(localStorage.getItem("count"));
+    console.log(localStorage.getItem("param"));
+    console.log(localStorage.getItem("order"));
+    console.log(localStorage.getItem("city"));
+    console.log(localStorage.getItem("page"));
+
     if (localStorage.getItem("count") == null)
         localStorage.setItem("count", COUNTER_LIST[0]);
     if (localStorage.getItem("param") == null)
