@@ -34,7 +34,7 @@ var getWeather = function (city) {      // Функція, яка виконує
 };
 
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
-    call = $.ajax({							// за допомогою файла "get_current.php" для динамічного
+    call = $.ajax({						// за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
         url: HOST + "/src/get_current.php",
         dataType: "json",
@@ -43,7 +43,7 @@ var getCurrentData = function () {      // Функція, яка виконує
             $("#press").text(result.press_bme280 + ' гПа');
             $("#alt").text(result.alt_bme280 + ' м');
             $("#hum").text(result.hum_bme280 + ' %');
-            setTimeout(getCurrentData, 2000); // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
+            setTimeout(getCurrentData, 5000); // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
         },
         error: function (jqXHR, exception) {
             printError(jqXHR, exception, '#post');

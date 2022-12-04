@@ -24,5 +24,3 @@ if($counter==$maxcount){								// Внесення даних до таблиц
 	$result = mysqli_query($conn, $sql);
 }
 ?>
-
-<!-- <meta http-equiv="Refresh" content="0; URL=\index.html">	Перехід на головну сторінку  -->
