@@ -1,6 +1,6 @@
-const WEATHER_SOURCE = "http://openweathermap.org/img/wn/";
+const WEATHER_SOURCE = "https://openweathermap.org/img/wn/";
 const PNG_ENDING = "@2x.png";
-// const HOST="http://weather.vps.webdock.cloud";
+// const HOST="https://weather.vps.webdock.cloud";
 const HOST="";
 
 const COUNTER_LIST = [20, 50, 100, 200, 500, 1000];
