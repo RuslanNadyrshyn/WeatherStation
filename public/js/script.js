@@ -157,9 +157,9 @@ function printRow(object, isHeader) {                           // Допомі�
                     $td.addClass("sorted");
 
                 if (key == "date_bme280") {
-                    datetime = object[key].split(" ");
-                    date = datetime[0];
-                    time = datetime[1];
+                    // datetime = object[key].split(" ");
+                    var date = object[key][0];
+                    var time = object[key][1];
 
                     $line.append($td.clone().append(date));
                     $line.append($td.clone().append(time));
@@ -224,7 +224,6 @@ function fetchResult(result) {                                  // Допомі�
     return { temp, press, alt, hum, date };
 }
 
-
 function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
     return {
         type: 'line',
@@ -241,16 +240,28 @@ function createConfig(labels, data, colorName) {                // допомі�
             plugins: {
                 legend: {
                     display: false,
+                    
                 }
             },
             scales: {
+                x: {
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
                 y: {
                     offset: true
-                }
+                },
             }
         }
     };
 }
+
+/* --------------------------------- Helpers ---------------------------------*/
 
 function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
     var element = document.getElementById(id.id);
@@ -289,7 +300,7 @@ function getItems() {
             localStorage.getItem("param") : "date",
         order: localStorage.getItem("order") != null ?
             localStorage.getItem("order") : "DESC",
-        city: localStorage.getItem("city") != null ? 	// Тернарний оператор для зчитування з пам'яті браузера обраного міста
+        city: localStorage.getItem("city") != null ? 	    // Тернарний оператор для зчитування з пам'яті браузера обраного міста
 			localStorage.getItem("city") : "Київ"			// якщо міста немає в пам'яті, використовувати значення "Київ"	
     };
 

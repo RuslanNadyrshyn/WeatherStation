@@ -1,4 +1,4 @@
-
+const DB_HEADER = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
 /*
     Дані отримуються за допомогою ajax-запиту до файла get_weather.php, який
 виконує запит необхідними з даними до API.openweathermap.org
@@ -80,8 +80,18 @@ function fetchDB(page, count, param, order) {       // Функція, яка з
         url: HOST + "/src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
         dataType: "json",
         success: function (result) {
-            var dbHeader = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
-            var $table = createTable(result, dbHeader); // Функція для створення таблиці "База даних"
+            for (let index = 0; index < result.length; index++) {
+                var object = result[index];
+
+                for (const key in object) {
+                    if (Object.hasOwnProperty.call(object, key)) {
+                        if (key == "date_bme280") 
+                            object[key] = object[key].split(" ");
+                    }
+                }
+            }
+            
+            var $table = createTable(result, DB_HEADER); // Функція для створення таблиці "База даних"
             $("#dbTable").empty();
             $table.appendTo($("#dbTable"));
 

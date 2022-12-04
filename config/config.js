@@ -18,6 +18,3 @@ const ORDERS = [
     { value: "DESC", text: "По спаданню" },
     { value: "ASC", text: "По зростанню" }
 ];
-
-
-
