@@ -28,7 +28,6 @@ function printNavCounter(count, page) {
     }
     
     printNavPages(numOfPages, page);            
-    // updateTable();
 }
 
 function printNavPages(numOfPages, page) {
@@ -57,7 +56,6 @@ function createNavItem(item, element, selected) {
 
     $navItem.click(function () {
         if (item == "count") {
-            console.log("count clicked ", $navItem.text());
             $(".nav-counter .selected").attr('class', 'navigator-item');
             $navItem.addClass("selected");
 
@@ -66,15 +64,14 @@ function createNavItem(item, element, selected) {
             
             if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
                 localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
-                printNavPages(numOfPages, 1); 
-            } else {
+                page = 1; 
+            } else 
                 localStorage.setItem("page", page);
-                printNavPages(numOfPages, page); 
-            }
+               
+            printNavPages(numOfPages, page);
             updateTable();
         }
         else if (item == "page"){   
-            console.log("page clicked ", $navItem.text());
             $(".pages .selected").attr('class', 'navigator-item');
             $(this).addClass("selected");
         
@@ -284,19 +281,29 @@ function printError(jqXHR, exception, dest) {
     $(dest).text(""+ msg);
 }
 
+function setDefaults() {
+    localStorage.setItem("ServerError", "");
+    if (localStorage.getItem("count") == null)
+        localStorage.setItem("count", COUNTER_LIST[0]);
+    if (localStorage.getItem("param") == null)
+        localStorage.setItem("param", DEFAULT_PARAM);
+    if (localStorage.getItem("order") == null)
+        localStorage.setItem("order", DEFAULT_ORDER);
+    if (localStorage.getItem("city") == null)
+        localStorage.setItem("city", DEFAULT_CITY);
+    if (localStorage.getItem("page") == null || 
+        localStorage.getItem("page") > localStorage.getItem("count"))
+         localStorage.setItem("page", DEFAULT_PAGE);
+}
 
 function getItems() {
     var items = {
-        page: localStorage.getItem("page") != null ?
-            Number(localStorage.getItem("page")) : 1,
-        count: localStorage.getItem("count") != null ?
-            Number(localStorage.getItem("count")) : 20,             // TODO: set default value, not 20
-        param: localStorage.getItem("param") != null ?
-            localStorage.getItem("param") : "date",
-        order: localStorage.getItem("order") != null ?
-            localStorage.getItem("order") : "DESC",
-        city: localStorage.getItem("city") != null ? 	// Тернарний оператор для зчитування з пам'яті браузера обраного міста
-			localStorage.getItem("city") : "Київ"			// якщо міста немає в пам'яті, використовувати значення "Київ"		
+        page: localStorage.getItem("page"),
+        count: localStorage.getItem("count"),       
+        param: localStorage.getItem("param"),
+        order: localStorage.getItem("order"),
+        city: localStorage.getItem("city")	    	
     };
+
     return items;
 }

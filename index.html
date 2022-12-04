@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="public/css/style.css">		<!-- Підключення таблиці стилей-->
-	<link rel="icon" type="image/png" href="http://openweathermap.org/img/wn/04n.png"/>
+	<link rel="icon" type="image/png" href="img/04n.png"/>
 	<title>BME280 Nadyrshyn</title>
 	<script src="config/config.js"></script>
 	<script src="public/js/request.js"></script>
@@ -140,8 +140,9 @@
 
 <!-- Поле script -->
 <script>
+	
 	$(document).ready(function () { 	
-		localStorage.setItem("ServerError", "");
+		setDefaults();
 
 		var items = getItems();
 
