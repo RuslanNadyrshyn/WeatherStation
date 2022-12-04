@@ -280,34 +280,18 @@ function printError(jqXHR, exception, dest) {
     $(dest).text(""+ msg);
 }
 
-function setDefaults() {
-    localStorage.setItem("ServerError", "");
-    console.log(localStorage.getItem("count"));
-    console.log(localStorage.getItem("param"));
-    console.log(localStorage.getItem("order"));
-    console.log(localStorage.getItem("city"));
-    console.log(localStorage.getItem("page"));
-
-    if (localStorage.getItem("count") == null)
-        localStorage.setItem("count", COUNTER_LIST[0]);
-    if (localStorage.getItem("param") == null)
-        localStorage.setItem("param", DEFAULT_PARAM);
-    if (localStorage.getItem("order") == null)
-        localStorage.setItem("order", DEFAULT_ORDER);
-    if (localStorage.getItem("city") == null)
-        localStorage.setItem("city", DEFAULT_CITY);
-    if (localStorage.getItem("page") == null || 
-        localStorage.getItem("page") > localStorage.getItem("count"))
-         localStorage.setItem("page", DEFAULT_PAGE);
-}
-
 function getItems() {
     var items = {
-        page: localStorage.getItem("page"),
-        count: localStorage.getItem("count"),       
-        param: localStorage.getItem("param"),
-        order: localStorage.getItem("order"),
-        city: localStorage.getItem("city")	    	
+        page: localStorage.getItem("page") != null ?
+            Number(localStorage.getItem("page")) : 1,
+        count: localStorage.getItem("count") != null ?
+            Number(localStorage.getItem("count")) : 20,             // TODO: set default value, not 20
+        param: localStorage.getItem("param") != null ?
+            localStorage.getItem("param") : "date",
+        order: localStorage.getItem("order") != null ?
+            localStorage.getItem("order") : "DESC",
+        city: localStorage.getItem("city") != null ? 	// Тернарний оператор для зчитування з пам'яті браузера обраного міста
+			localStorage.getItem("city") : "Київ"			// якщо міста немає в пам'яті, використовувати значення "Київ"	
     };
 
     return items;

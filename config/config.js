@@ -17,11 +17,7 @@ const OPTIONS = [
 const ORDERS = [
     { value: "DESC", text: "По спаданню" },
     { value: "ASC", text: "По зростанню" }
-]
+];
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_PARAM = "id";
-const DEFAULT_ORDER = "DESC";
-const DEFAULT_CITY = "Київ";
 
 
