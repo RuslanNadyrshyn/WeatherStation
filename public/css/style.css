@@ -41,6 +41,7 @@ nav {
 .dropdown-title {
 	margin: auto;
 }
+
 i {
 	margin: auto 0;
 }
@@ -204,7 +205,7 @@ th {
 }
 
 label {
-	margin-right: 10px;
+	margin-right: 3px;
 }
 
 .label-col {
@@ -220,9 +221,6 @@ label {
 	justify-content: start;
 	margin: 5px 0;
 
-}
-.navigator-block.pages {
-	justify-content: center;
 }
 
 .navigator-item {

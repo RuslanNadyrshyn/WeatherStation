@@ -21,19 +21,19 @@ function printNavCounter(count, page) {
     $counterList.appendTo($("#navCounter"));
 
     var numOfPages = getNumOfPages(count);    
-        
+    changeValue("numOfPages", numOfPages);
+
     if (numOfPages < page) {
         localStorage.removeItem("page");
         printNavPages(numOfPages, 1); 
     }
-    
-    printNavPages(numOfPages, page);            
+    else printNavPages(numOfPages, page);       
 }
 
 function printNavPages(numOfPages, page) {
     $("#page").text(page);
     $("#numOfPages").text(numOfPages);
-    
+
     var $pages = $("<nav class=\'navigator-block pages\'></nav>");
 
     for (let i = 1; i <= numOfPages; i++) {
@@ -55,25 +55,32 @@ function createNavItem(item, element, selected) {
     $navItem.click(function () {
         if (item == "count") {
             $(".nav-counter .selected").attr('class', 'navigator-item');
-            $navItem.addClass("selected");
+            $(this).addClass("selected");
 
-            var numOfPages = getNumOfPages($navItem.text());
+            var numOfPages = getNumOfPages($(this).text());
             var page = localStorage.getItem("page");
+
+
             
             if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
                 localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
                 printNavPages(numOfPages, 1);
             } else {
                 localStorage.setItem("page", page);
+
                 printNavPages(numOfPages, page);
             }
-            changeValue("count", $navItem.text());
+            changeValue("count", $(this).text());
         }
         else if (item == "page"){   
             $(".pages .selected").attr('class', 'navigator-item');
+
+            var page = localStorage.getItem("numOfPages");
             $(this).addClass("selected");
-        
-            changeValue("page", $navItem.text());
+            
+            $("#page").text($(this).text());
+
+            changeValue("page", $(this).text());
         }
     });
     return $navItem;
