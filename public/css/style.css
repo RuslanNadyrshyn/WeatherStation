@@ -333,7 +333,7 @@ canvas {
 	}
 	.navigator-item {
 		padding: 8px;
-		/* font-size: 14px; */
+		font-size: 14px; 
 	}
 	.chart-label {
 		font-size: 16px;
@@ -344,7 +344,9 @@ canvas {
 	.label-col {
 		flex-direction: row;
 	}
-
+	.container {
+		padding: 0 10px;
+	}
 }
 
 @media (max-width: 550px) {
