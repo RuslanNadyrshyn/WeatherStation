@@ -41,6 +41,9 @@ nav {
 .dropdown-title {
 	margin: auto;
 }
+i {
+	margin: auto 0;
+}
 
 .dropdown-content {
 	padding: 0;
