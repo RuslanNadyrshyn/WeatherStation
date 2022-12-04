@@ -3,6 +3,8 @@ const PNG_ENDING = "@2x.png";
 // const HOST="http://45.136.71.216";
 const HOST="";
 
+const COUNTER_LIST = [20, 50, 100, 200, 500, 1000];
+
 const OPTIONS = [
     { value: "id", text: "ID" },
     { value: "date", text: "Час" },

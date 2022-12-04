@@ -14,21 +14,14 @@ edit select menus
 
 updateTable()
 {
-    localStorage().getItem()
-    ...
-    localStorage().getItems()
+    getItems()
 
     fetchDB
 }
 
 
 pressedCount()
-setItem()
- 1.fetchDB(){
-    getItems()
-    ...
-    drawCharts
- }
+  onPressedNav(item, value)
  2.getpages(){
     getItems()
     ...
@@ -36,30 +29,15 @@ setItem()
  
 
  pressedParam(){
-    setItem()
-    1.fetchDB(){
-        getItems()
-        ...
-        drawCharts
-    }
+onPressedNav(item, value)
  }
 
  pressedOrder(){
-    setItem()
-    1.fetchDB(){
-        getItems()
-        ...
-        drawCharts
-    }
+onPressedNav(item, value)
  }
 
  pressedPage(){
-    setItem()
-    1.fetchDB(){
-        getItems()
-        ...
-        drawCharts
-    }
+onPressedNav(item, value)
  }
 
  onPressedNav(item, value){
@@ -70,3 +48,8 @@ setItem()
         drawCharts
     }
  }
+
+
+ first: 
+    updateTable() 
+

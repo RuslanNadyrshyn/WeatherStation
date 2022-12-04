@@ -140,12 +140,19 @@
 
 <!-- Поле script -->
 <script>
-	var city = localStorage.getItem("city") != null ? 	// Тернарний оператор для зчитування з пам'яті браузера обраного міста
-		localStorage.getItem("city") : "Київ"; 			// якщо міста немає в пам'яті, використовувати значення "Київ"		
+	$(document).ready(function () { 	
+		localStorage.setItem("ServerError", "");
 
-	$(document).ready(function () { 			
+		var items = getItems();
+
 		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
-		changeLocation(city);	// Виклик функції для створення таблиці з даними погоди	
+		changeLocation(items.city);	// Виклик функції для створення таблиці з даними погоди	
+		
+		printNavCounter(items.count, items.page);
+
+		printSelectList("param", OPTIONS, items.param, "#selectParam");
+		printSelectList("order", ORDERS, items.order, "#selectOrder");
+
 		updateTable();			// Виклик функції оновлення даних таблиці База даних
 	});
 </script>

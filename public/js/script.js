@@ -9,72 +9,86 @@ function changeLocation(newLocation) {
 
 /* ------------------------------- Navigator -------------------------------*/
 
-function printNavCounter(count) {
-    var counterArray = [20, 50, 100, 200, 500, 1000];
-
+function printNavCounter(count, page) {
     var $counterList = $("<nav class=\"navigator-block\"></nav>");
 
-    for (let i = 0; i < counterArray.length; i++) {
-        const element = counterArray[i];
-        var $navItem = createNavItem("count", element, count, "selected");
+    for (let i = 0; i < COUNTER_LIST.length; i++) {
+        const element = COUNTER_LIST[i];
+        var $navItem = createNavItem("count", element, count);
         $counterList.append($navItem);
     }
-
     $("#navCounter").empty();
     $counterList.appendTo($("#navCounter"));
+
+    var numOfPages = getNumOfPages(count);    
+        
+    if (numOfPages < page) {
+        localStorage.removeItem("page");
+        printNavPages(numOfPages, 1); 
+    }
+    
+    printNavPages(numOfPages, page);            
+    // updateTable();
 }
 
-function printNavPages(count, page) {
-    if (count < 0) return;
-    var numOfPages = getNumOfPages(count);
-    if (numOfPages == undefined || numOfPages == null) 
-        return -1;
-    
-    localStorage.setItem("numOfPages", numOfPages);
-    if (page > numOfPages) {
-        localStorage.removeItem("page");
-        return false;
-    }
-
+function printNavPages(numOfPages, page) {
+    console.log(numOfPages,"/" ,page);
     $("#page").text(page);
     $("#numOfPages").text(numOfPages);
-
+    
     var $pages = $("<nav class=\'navigator-block pages\'></nav>");
 
     for (let i = 1; i <= numOfPages; i++) {
-        var $navItem = createNavItem("page", i, page, "selected");
+        var $navItem = createNavItem("page", i, page);
         $pages.append($navItem);
     }
 
     $("#navPages").empty();
     $pages.appendTo($("#navPages"));
-    return true;
 }
 
-function createNavItem(item, element, selected, itemClass) {
+function createNavItem(item, element, selected) {
+    console.log("i:", element, "selected:", selected);
     var $navItem = $("<a class=\"navigator-item\"></a>");
-
-    if (element == selected) $navItem.addClass(itemClass);
     $navItem.append(element);
+
+    if (element == selected) 
+        $navItem.addClass("selected");
+
     $navItem.click(function () {
-        localStorage.setItem(item, element);
-        updateTable();
+        if (item == "count") {
+            console.log("count clicked ", $navItem.text());
+            $(".nav-counter .selected").attr('class', 'navigator-item');
+            $navItem.addClass("selected");
+
+            var numOfPages = getNumOfPages($navItem.text());
+            page = localStorage.getItem("page");
+            
+            if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
+                localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
+                printNavPages(numOfPages, 1); 
+            } else {
+                localStorage.setItem("page", page);
+                printNavPages(numOfPages, page); 
+            }
+            updateTable();
+        }
+        else if (item == "page"){   
+            console.log("page clicked ", $navItem.text());
+            $(".pages .selected").attr('class', 'navigator-item');
+            $(this).addClass("selected");
+        
+            changeValue("page", $navItem.text());
+        }
     });
     return $navItem;
 }
 
-function printOrderList(name, options, param) {
+function printSelectList(name, options, param, id) {
     var $list = createSelectList(name, options, param);
 
-    $("#selectOrder").empty();
-    $("#selectOrder").replaceWith($list);
-}
-
-function printParamList(name, options, param) {
-    var $list = createSelectList(name, options, param);
-
-    $("#selectParam").empty();
-    $("#selectParam").replaceWith($list);
+    $(id).empty();
+    $(id).replaceWith($list);
 }
 
 function createSelectList(name, options, param) {
@@ -86,8 +100,7 @@ function createSelectList(name, options, param) {
 
     $list.change(function () {
         var value = $(this).find('option:selected').attr('val');
-        localStorage.setItem(name, value);
-        updateTable();
+        changeValue(name, value);
     });
 
     for (let i = 0; i < options.length; i++) {
@@ -112,26 +125,8 @@ function changeValue(itemName, value) {
 /* -------------------------------- Database --------------------------------*/
 
 function updateTable() {
-    var page = localStorage.getItem("page") != null ?
-        Number(localStorage.getItem("page")) : 1;
-    var count = localStorage.getItem("count") != null ?
-        Number(localStorage.getItem("count")) : 20;
-    var param = localStorage.getItem("param") != null ?
-        localStorage.getItem("param") : "date";
-    var order = localStorage.getItem("order") != null ?
-        localStorage.getItem("order") : "DESC";
-
-    printParamList("param", OPTIONS, param);
-    printOrderList("order", ORDERS, order);
-
-    printNavCounter(count);
-    var resp = printNavPages(count, page)
-    if (resp) {     // оновляти таблицю, якщо кількість сторінок не менше обраної
-        fetchDB(page, count, param, order);
-    } else if (resp == -1)  // не оновляти таблицю, якщо трапилась помилка
-        return;
-    else                                // Якщо кількість сторінок менше обраної,
-        updateTable();                  // видалити з пам'яті номер сторінки та перезапустити функцію
+    var items = getItems();
+    fetchDB(items.page, items.count, items.param, items.order);          
 }
 
 
@@ -145,7 +140,6 @@ function createTable(data, header) {                // Функція для с�
 
     for (let index = 0; index < data.length; index++) {
         var element = data[index];
-        var $line = $("<tr></tr>");
         $tbody.append(printRow(element, false));
     }
     $table.append($tbody);
@@ -286,5 +280,23 @@ function printError(jqXHR, exception, dest) {
         msg = 'Uncaught Error.\n' + jqXHR.responseText;
     }
     console.log("msg",msg);
+    localStorage.setItem("ServerError", msg);
     $(dest).text(""+ msg);
+}
+
+
+function getItems() {
+    var items = {
+        page: localStorage.getItem("page") != null ?
+            Number(localStorage.getItem("page")) : 1,
+        count: localStorage.getItem("count") != null ?
+            Number(localStorage.getItem("count")) : 20,             // TODO: set default value, not 20
+        param: localStorage.getItem("param") != null ?
+            localStorage.getItem("param") : "date",
+        order: localStorage.getItem("order") != null ?
+            localStorage.getItem("order") : "DESC",
+        city: localStorage.getItem("city") != null ? 	// Тернарний оператор для зчитування з пам'яті браузера обраного міста
+			localStorage.getItem("city") : "Київ"			// якщо міста немає в пам'яті, використовувати значення "Київ"		
+    };
+    return items;
 }
