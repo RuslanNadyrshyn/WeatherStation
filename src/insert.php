@@ -19,16 +19,15 @@ if(mysqli_num_rows($query) != 0) {
 	mysqli_query($conn, $sql);				// Оновлення даних у таблиці bme280_current
 }
 else {
-	$result = mysqli_query($conn, "SELECT max_count FROM bme280_current");
-	$maxcount = $result->max_count;
 	$sql = "INSERT INTO bme280_current (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
 	mysqli_query($conn, $sql);				// Внесення даних до таблиці
 }
-	
-if($counter % $maxcount){								// Внесення даних до таблиці bme280
+
+$result = mysqli_query($conn, "SELECT max_count FROM bme280_current");
+$maxcount = $result->max_count;
+
+if($counter % $maxcount == 0){							// Внесення даних до таблиці bme280
 	$sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
 	mysqli_query($conn, $sql);
 }
-
-echo $maxcount;
 ?>
