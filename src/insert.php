@@ -10,7 +10,7 @@ if (isset($_GET['alt']))
 if (isset($_GET['hum']))
 	$hum = $_GET['hum'];                           		// Створення змінної Вологість з URL сторінки
 if (isset($_GET['counter']))
-	$counter = $_GET['counter'];                  		// Створення змінної Лічильник з URL сторінки								
+	(int)$counter = $_GET['counter'];                  		// Створення змінної Лічильник з URL сторінки								
 
 $query = $conn->query("SELECT * FROM bme280_current");	// Створення запиту до БД
 
@@ -24,10 +24,15 @@ else {
 }
 
 $result = $conn->query("SELECT max_count FROM bme280_current LIMIT 1");
-$maxcount = $result->fetch_field_direct(0);
+(int)$maxcount = $result->fetch_field_direct(0);
 
-if ((int)$counter % (int)$maxcount == 0) {                                                      // Внесення даних до таблиці bme280
+if ($counter % $maxcount == 0) {                            // Внесення даних до таблиці bme280
         $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
         mysqli_query($conn, $sql);
 }
+
+$myfile = fopen("output.txt", "w") or die("Unable to open file!");
+fwrite($myfile, "counter $counter type: ", gettype($counter));
+fwrite($myfile, "maxcount $maxcount type: ", gettype($maxcount));
+fclose($myfile);
 ?>
