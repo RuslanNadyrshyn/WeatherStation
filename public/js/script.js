@@ -81,24 +81,25 @@ function createNavItem(item, element, selected) {
     return $navItem;
 }
 
-function printSelectList(name, options, param, id) {
-    var $list = createSelectList(name, options, param);
-
-    $(id).empty();
-    $(id).replaceWith($list);
+function updateTableOnSelect(name) {
+    var value = $(this).find('option:selected').attr('val');
+    changeValue(name, value);
 }
 
-function createSelectList(name, options, param) {
+function updateSelect(name) {
+    var value = $(this).find('option:selected').attr('val');
+    localStorage.setItem(name, value);
+}
+
+function printSelectList(name, options, param, id, func) {
+    console.log("Printing", name);
     var $list = $("<select></select>");
     $list.addClass("select");
     $list.attr('name', name);
     $list.attr('id', name);
     $list.val(param);
 
-    $list.change(function () {
-        var value = $(this).find('option:selected').attr('val');
-        changeValue(name, value);
-    });
+    $list.change(func(name));
 
     for (let i = 0; i < options.length; i++) {
         const element = options[i];
@@ -111,7 +112,9 @@ function createSelectList(name, options, param) {
 
         $list.append($option);
     }
-    return $list;
+
+    $(id).empty();
+    $(id).replaceWith($list);
 }
 
 function changeValue(itemName, value) {

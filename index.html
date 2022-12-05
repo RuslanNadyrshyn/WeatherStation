@@ -94,7 +94,11 @@
 		<h1 id="current">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
 		<nav>
 			<label id="time-current"></label>
-			<label id="max-count"></label>
+			<div>
+				<label id="max-count"></label>
+				<label>Змінити: </label>
+				<select id="select-max-count"></select>
+			</div>
 		</nav>
 		<table class="current-table" cellspacing="0">
 			<tr>
@@ -168,14 +172,25 @@
 
 <!-- Поле script -->
 <script>
+	localStorage.setItem("ServerError", "");
 	$(document).ready(function () { 	
 		var items = getItems();
+		const MAX_COUNTS = [
+			{ value: "Завжди", text: 1 },
+			{ value: "5", text: 5 },
+			{ value: "10", text: 10 },
+			{ value: "20", text: 20 },
+			{ value: "50", text: 50 },
+			{ value: "100", text: 100 }
+		];
 
-		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
+		// getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
 		changeLocation(items.city);	// Виклик функції для створення таблиці з даними погоди	
 		printNavCounter(items.count, items.page);
-		printSelectList("param", OPTIONS, items.param, "#selectParam");
-		printSelectList("order", ORDERS, items.order, "#selectOrder");
+		printSelectList("param", OPTIONS, items.param, "#selectParam", updateTableOnSelect);
+		printSelectList("order", ORDERS, items.order, "#selectOrder", updateTableOnSelect);
+		
+		// printSelectList("max-count", MAX_COUNTS, 10, "#max-count", updateSelect);
 		updateTable();			// Виклик функції оновлення даних таблиці База даних
 	});
 </script>
