@@ -23,7 +23,7 @@ body {
     height: 100%;
 	animation-name: example;
 	animation-iteration-count: infinite;
-	animation-duration: 10s;
+	animation-duration: 100s;
 }
 @keyframes example {
 	0% {background-position: top left;}
@@ -287,6 +287,8 @@ label {
 
 select {
 	font-size: 16px;
+	padding: 5px;
+	border-radius: 4px;
 }
 
 .sorted {
