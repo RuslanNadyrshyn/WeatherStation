@@ -1,16 +1,43 @@
 body {
 	font-family : Arial;
-	background-color: lightgrey;
+	background-color: black;
 	margin: 0px;
 	padding: 0px;
 }
+
+.background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	z-index: -1;
+}
+
+.background-img {
+	background-image: url(/public/img/background.jpg);
+	background-position: 0%;
+	opacity: 0.9;
+    width: 100%;
+    height: 100%;
+	animation-name: example;
+	animation-iteration-count: infinite;
+	animation-duration: 10s;
+}
+@keyframes example {
+	0% {background-position: top left;}
+	25% {background-position: right;}
+	50% {background-position: bottom left;}
+	75% {background-position: right;}
+	100% {background-position: top left;}
+  }
 
 header {
 	position: fixed;
 	top: 0;
 	z-index: 3;
 	width: 100%;
-	background-color: grey;
 }
 
 nav {
@@ -20,7 +47,9 @@ nav {
 	margin: 0 auto;
 	justify-content: space-between;
 }
-
+nav.header-nav {
+	background-color: grey;
+}
 .weather-container, .nav-menu {
 	display: flex;
 	flex-direction: row;
@@ -153,7 +182,7 @@ a {
 .container {
 	max-width: 1160px;
 	padding: 0 20px;
-	background-color: whitesmoke;
+	background-color: rgba(245, 245, 245, 0.93);
 	margin: 0 auto;
 }
 
