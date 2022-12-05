@@ -26,7 +26,7 @@ else {
 $result = mysqli_query($conn, "SELECT max_count FROM bme280_current");
 $maxcount = $result->max_count;
 
-if($counter % $maxcount == 0){							// Внесення даних до таблиці bme280
+if ($maxcount % $counter == 0) {							// Внесення даних до таблиці bme280
 	$sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
 	mysqli_query($conn, $sql);
 }
