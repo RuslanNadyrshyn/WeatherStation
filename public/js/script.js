@@ -58,10 +58,8 @@ function createNavItem(item, element, selected) {
             $(this).addClass("selected");
 
             var numOfPages = getNumOfPages($(this).text());
-            var page = localStorage.getItem("page");
+            var page = getLocalStorageItem("page", 1);
 
-
-            
             if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
                 localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
                 printNavPages(numOfPages, 1);
@@ -75,11 +73,8 @@ function createNavItem(item, element, selected) {
         else if (item == "page"){   
             $(".pages .selected").attr('class', 'navigator-item');
 
-            var page = localStorage.getItem("numOfPages");
             $(this).addClass("selected");
-            
             $("#page").text($(this).text());
-
             changeValue("page", $(this).text());
         }
     });
@@ -150,8 +145,7 @@ function createTable(data, header) {                // Функція для с�
 
 function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
     var $line = $("<tr></tr>");
-    var param = localStorage.getItem("param") != null ?
-        localStorage.getItem("param") : "DESC";
+    var param = getLocalStorageItem("param", "id");
 
     if (isHeader) object.forEach(element =>
         $line.append($("<th class='sticky'></th>").html(element)));
@@ -179,8 +173,7 @@ function printRow(object, isHeader) {                           // Допомі�
 /* --------------------------------- Charts ---------------------------------*/
 
 function drawCharts(res, labels) {                          // Ф-ція створення графіків
-    var order = localStorage.getItem("order") != null ?
-        localStorage.getItem("order") : "DESC";
+    var order = getLocalStorageItem("order", "DESC");
 
     if (order == "DESC")
         for (const key in res)
@@ -298,17 +291,21 @@ function printError(jqXHR, exception, dest) {
 
 function getItems() {
     var items = {
-        page: localStorage.getItem("page") != null ?
-            Number(localStorage.getItem("page")) : 1,
-        count: localStorage.getItem("count") != null ?
-            Number(localStorage.getItem("count")) : 20,             // TODO: set default value, not 20
-        param: localStorage.getItem("param") != null ?
-            localStorage.getItem("param") : "date",
-        order: localStorage.getItem("order") != null ?
-            localStorage.getItem("order") : "DESC",
-        city: localStorage.getItem("city") != null ? 	    // Тернарний оператор для зчитування з пам'яті браузера обраного міста
-			localStorage.getItem("city") : "Київ"			// якщо міста немає в пам'яті, використовувати значення "Київ"	
+        page: getLocalStorageItem("page", 1),
+        count: getLocalStorageItem("count", COUNTER_LIST[0]),            
+        param: getLocalStorageItem("param", OPTIONS[0].value),
+        order: getLocalStorageItem("order", "DESC"),
+        city: getLocalStorageItem("city", "Київ") 			// якщо міста немає в пам'яті, використовувати значення "Київ"	
     };
 
     return items;
+}
+
+function getLocalStorageItem(name, defaultValue) {
+    var item = localStorage.getItem(name);
+    if(item == null) {
+        localStorage.setItem(name, defaultValue);
+        return defaultValue;
+    }
+    return item;
 }
