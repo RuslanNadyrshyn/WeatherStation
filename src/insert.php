@@ -24,15 +24,12 @@ else {
 }
 
 $result = $conn->query("SELECT max_count FROM bme280_current LIMIT 1");
-(int)$maxcount = $result->fetch_field_direct(0);
+$row = $result->fetch_array(MYSQLI_ASSOC);
+(int)$maxcount = $row["max_count"];
 
 if ($counter % $maxcount == 0) {                            // Внесення даних до таблиці bme280
-        $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
-        mysqli_query($conn, $sql);
+    $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
+    mysqli_query($conn, $sql);
 }
-
-$myfile = fopen("output.txt", "w") or die("Unable to open file!");
-fwrite($myfile, "counter $counter type: ", gettype($counter));
-fwrite($myfile, "maxcount $maxcount type: ", gettype($maxcount));
-fclose($myfile);
+echo $maxcount;
 ?>

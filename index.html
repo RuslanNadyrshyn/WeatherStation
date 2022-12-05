@@ -116,7 +116,6 @@
 			<div class="order-menu">
 				<div class="label-col">
 					<label>Відображено </label>	
-					<label>результатів:</label>
 				</div>
 				<div class="nav-counter" id="navCounter"></div>
 			</div>
@@ -168,6 +167,7 @@
 
 <!-- Поле script -->
 <script>
+	localStorage.setItem("ServerError", "");
 	$(document).ready(function () { 	
 		var items = getItems();
 
