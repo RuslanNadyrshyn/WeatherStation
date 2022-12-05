@@ -1,12 +1,18 @@
 <?php
 include "connect_db.php";    							// З'єднання з файлом connect_db.php
- 
-$temp = $_GET['temp'];                        		 	// Створення змінної Температура з URL сторінки
-$press = $_GET['press'];                       			// Створення змінної Тиск з URL сторінки
-$alt = $_GET['alt'];                           			// Створення змінної Висота з URL сторінки
-$hum = $_GET['hum'];                           			// Створення змінної Вологість з URL сторінки
-$counter = $_GET['counter'];                  			// Створення змінної Лічильник з URL сторінки								
-$maxcount = $_GET['maxcount'];							// Створення змінної Максимального лічильника з URL сторінки для запису у БД bme280
+
+if (isset($_GET['temp']))								
+	$temp = $_GET['temp'];                        		// Створення змінної Температура з URL сторінки	
+if (isset($_GET['press']))
+	$press = $_GET['press'];                       		// Створення змінної Тиск з URL сторінки
+if (isset($_GET['alt']))
+	$alt = $_GET['alt'];                           		// Створення змінної Висота з URL сторінки
+if (isset($_GET['hum']))
+	$hum = $_GET['hum'];                           		// Створення змінної Вологість з URL сторінки
+if (isset($_GET['counter']))
+	$counter = $_GET['counter'];                  		// Створення змінної Лічильник з URL сторінки								
+if (isset($_GET['maxcount']))
+	$maxcount = $_GET['maxcount'];						// Створення змінної Максимального лічильника з URL сторінки для запису у БД bme280
 
 $query = $conn->query("SELECT * FROM bme280_current");	// Створення запиту до БД
 
@@ -23,4 +29,6 @@ if($counter==$maxcount){								// Внесення даних до таблиц
 	$sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
 	$result = mysqli_query($conn, $sql);
 }
+
+echo $maxcount;
 ?>
