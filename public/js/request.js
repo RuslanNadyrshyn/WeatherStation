@@ -55,7 +55,7 @@ var getCurrentData = function () {      // Функція, яка виконує
         dataType: "json",
         success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці 
             console.log(result);
-            $("#time-current").text("Останнє оновлення " + result.time);
+            $("#time-current").text(result.time);
             $("#temp").text(result.temp_bme280 + ' °С');
             $("#press").text(result.press_bme280 + ' гПа');
             $("#alt").text(result.alt_bme280 + ' м');
