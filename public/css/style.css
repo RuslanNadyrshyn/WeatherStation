@@ -392,8 +392,8 @@ canvas {
 		display: none;
 	}
 	.navigator-item {
-		padding: 8px;
-		font-size: 14px; 
+		padding: 7px;
+		font-size: 13px; 
 	}
 	.chart-label {
 		font-size: 16px;
@@ -432,24 +432,21 @@ canvas {
 	}
 	.navigator-item {
 		padding: 5px;
-		font-size: 13px;
+		font-size: 12px;
 	}
 	label, select {
 		font-size: 12px;
 		padding: 3px;
 	}
-	.order label, .order select {
-		text-align: left;
-		text-align: end;
-	}
+
 	.order label {
-		min-width: 90px;
+		display: flex;
 	}
 	.order select {
 		min-width: 110px;
 	}
-	.order-menu .order, .order-menu.right {
-		justify-content: right;
+	.order-menu.right {
+		display: table;
 	}
 
 	.container {
