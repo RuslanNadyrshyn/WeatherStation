@@ -274,6 +274,9 @@ label {
 	margin: 5px 0;
 
 }
+#nav-pages .navigator-block {
+	flex-wrap: nowrap;
+}
 
 .navigator-item {
 	min-width: 20px;
