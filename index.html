@@ -93,7 +93,10 @@
 	<div class="container">
 		<h1 id="current">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
 		<nav>
-			<label id="time-current"></label>
+			<div class="label-col">
+				<label>Останнє оновлення:</label>
+				<label id="time-current"></label>
+			</div>
 			<label id="max-count"></label>
 		</nav>
 		<table class="current-table" cellspacing="0">
@@ -117,14 +120,15 @@
 		<div class="navigator-container">
 			<div class="order-menu">
 				<div class="label-col">
-					<label>Відображено </label>	
+					<label>Кількість </label>
+					<label>рядків </label>	
 				</div>
 				<div class="nav-counter" id="navCounter"></div>
 			</div>
-			<div class="order-menu">
+			<div class="order-menu right">
 				<div class="order">
 					<label form="param">Сортувати по: </label>
-					<select id="selectParam"></select>
+					<select title="select title" id="selectParam"></select>
 				</div>
 				<div class="order">
 					<label form="order">Порядок:</label>

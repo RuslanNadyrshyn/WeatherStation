@@ -241,18 +241,19 @@ th {
 .order-menu {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
 	overflow: auto;
+	align-items: center;
 }
-.order-menu .order {
-	margin-left: auto;
+.order-menu.right {
     display: flex;
     flex-wrap: wrap;
-    justify-content: right;
-    align-items: center;
+    align-items: end;
+	justify-content: right;
 }
 
-
+.nav-counter .navigator-item {
+	margin: 3px;
+}
 label {
 	margin-right: 3px;
 }
@@ -265,6 +266,7 @@ label {
 }
 
 .navigator-block {
+	flex-wrap: wrap;
 	overflow: auto;
 	align-items: center;
 	justify-content: start;
@@ -303,13 +305,13 @@ label {
 
 .order {
 	margin: 5px 10px;
+	justify-content: right;
 }
 
 select {
 	font-size: 16px;
 	padding: 5px;
 	border-radius: 4px;
-	min-width: 140px;
 }
 
 .sorted {
@@ -402,6 +404,9 @@ canvas {
 	.label-col {
 		flex-direction: row;
 	}
+	label, select {
+		font-size: 11px;
+	}
 	.container {
 		padding: 10px;
 		margin: 10px 15px;
@@ -432,8 +437,21 @@ canvas {
 	label, select {
 		font-size: 12px;
 		padding: 3px;
+	}
+	.order label, .order select {
+		text-align: left;
+		text-align: end;
+	}
+	.order label {
+		min-width: 90px;
+	}
+	.order select {
 		min-width: 110px;
 	}
+	.order-menu .order, .order-menu.right {
+		justify-content: right;
+	}
+
 	.container {
 		padding: 5px;
 		margin: 5px;

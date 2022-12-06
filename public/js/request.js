@@ -40,7 +40,7 @@ function setMaxCount (maxCount) {
         dataType: "json",
         success: function (result) {    // 
             console.log("maxcount changed to", maxCount);
-            $("#max-count").text("Запис до бази даних кожні " + maxCount + " значень");
+            $("#max-count").text("Запис в БД кожні " + maxCount + " значень");
         },
         error: function (jqXHR, exception) {
             printError(jqXHR, exception, '#post');
