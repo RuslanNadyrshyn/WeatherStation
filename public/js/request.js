@@ -60,7 +60,7 @@ var getCurrentData = function () {      // Функція, яка виконує
             $("#press").text(result.press_bme280 + ' гПа');
             $("#alt").text(result.alt_bme280 + ' м');
             $("#hum").text(result.hum_bme280 + ' %');
-            $("#max-count").text("Запис до бази даних кожні " + result.max_count + " значень");
+            $("#max-count").text("Запис до БД кожне " + result.max_count + " значення");
             setTimeout(getCurrentData, 5000); // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
         },
         error: function (jqXHR, exception) {
