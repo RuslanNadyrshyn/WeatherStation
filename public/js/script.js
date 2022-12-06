@@ -224,6 +224,13 @@ function fetchResult(result) {                                  // Допомі�
 }
 
 function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
+    var pointRadius;
+    console.log(data.length);
+    if (pointRadius >= 500) pointRadius = 0;
+    else if (data.length >= 200) pointRadius = 1;
+    else if (data.length >= 100) pointRadius = 2;
+    else if (data.length >= 50) pointRadius = 3;
+    else pointRadius = 5;
     return {
         type: 'line',
         data: {
@@ -232,6 +239,7 @@ function createConfig(labels, data, colorName) {                // допомі�
                 data: data,
                 borderColor: colorName,
                 borderWidth: 1,
+                pointRadius: pointRadius
             }]
         },
         options: {
@@ -239,7 +247,6 @@ function createConfig(labels, data, colorName) {                // допомі�
             plugins: {
                 legend: {
                     display: false,
-                    
                 }
             },
             scales: {
