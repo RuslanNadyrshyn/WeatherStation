@@ -1,9 +1,16 @@
 /* ------------------------------- Weather -------------------------------*/
 
+function showDropdown() {
+    $(".dropdown .dropdown-content").toggle( function () {
+        $(".dropdown .dropdown-content").addClass("active");
+    }, function () {
+        $(".dropdown .dropdown-content").removeClass("active");
+    });
+}
+
 function changeLocation(newLocation) {
     $("#location").html(newLocation);
     localStorage.setItem("city", newLocation);
-
     getWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
 }
 

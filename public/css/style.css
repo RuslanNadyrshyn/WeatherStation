@@ -55,7 +55,7 @@ nav.header-nav {
 	display: flex;
 	flex-direction: row;
 }
-.nav-menu a{
+.nav-menu a {
 	background-color: rgb(213, 216, 220);
 }
 
@@ -78,13 +78,15 @@ i {
 
 .dropdown-content {
 	border-radius: 4px;
-	padding: 5px 10px;
 	display: none;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
 	position: absolute;
-	max-width: 140px;
 	top: 45px;
+	left: 30px;
+	max-width: 500px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
-	background-color:darkslategrey;
+	background-color: #637586;
 	z-index: 1;
 	max-height: 600px;
 	overflow: auto;
@@ -93,7 +95,8 @@ i {
 .dropdown-content a {
 	display: flex;
 	justify-content: center;
-	padding: 10px;
+	padding: 15px 30px;
+	margin: 5px;
 	color: whitesmoke;
 }
 
@@ -108,13 +111,23 @@ i {
 	align-items: center;
 }
 
-nav a:hover, .dropdown:hover, .dropdown:hover .dropdown-title, .dropdown-weather:hover {
+nav a:hover, .dropdown-weather:hover {
 	background-color: #566573;
 	color:#ffffff;
 }
-
-.dropdown:hover .dropdown-content, .dropdown-weather:hover .weather-block {
+.weather-container .dropdown:hover, .dropdown a:hover {
+	background-color: lightgray;
+	color: black;
+}
+.dropdown a:hover {
+	background-color: lightgray;
+	color: black;
+}
+.active {
 	display: flex;
+}
+
+.dropdown-weather:hover .weather-block {
   	flex-direction: column;	
 }
 
@@ -239,9 +252,6 @@ th {
     align-items: center;
 }
 
-/* .order-menu .nav-counter {
-	overflow: auto;
-} */
 
 label {
 	margin-right: 3px;
@@ -343,9 +353,9 @@ canvas {
 	text-align: center;
 	width: 45%;
 	margin: 10px;
-	align-items: center;
 	padding: 10px;
 	transition: width 800ms;
+	background-color: rgba(255, 255, 255, 0.541);
 }
 
 .chart-container.large {
@@ -395,6 +405,10 @@ canvas {
 	.container {
 		padding: 10px;
 		margin: 10px 15px;
+	}
+	.dropdown-content a {
+		padding: 10px;
+		max-width: 500px;
 	}
 }
 
