@@ -10,8 +10,7 @@
 	<title>BME280 Nadyrshyn</title>
 	<script src="config/config.js"></script>
 	<script src="public/js/request.js"></script>
-	<script src="public/js/script.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/anchorme/2.0.0/node/utils.js"></script> 		<!-- Підключення додаткових бібліотек -->
+	<script src="public/js/script.js"></script>		<!-- Підключення додаткових бібліотек -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 </head>
@@ -141,12 +140,15 @@
 		</div>
 		<!-- Вивід навігатора сторінок БД -->
 		<div id="navPages"></div>
-		<label class="page-numbers">
-			Сторінка
-			<label id="page"></label>
-			<label>/</label>
-			<label id="numOfPages"></label>
-		</label>
+		<nav>
+			<label id="numOfRows"></label>
+			<label class="page-numbers">
+				Сторінка
+				<label id="page"></label>
+				<label>/</label>
+				<label id="numOfPages"></label>
+			</label>
+		</nav>
 	</div>
 	<div class="container">
 		<h1 id="charts">Графіки</h1>	

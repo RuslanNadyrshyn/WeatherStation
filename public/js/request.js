@@ -33,23 +33,8 @@ var getWeather = function (city) {      // Функція, яка виконує
     });
 };
 
-function setMaxCount (maxCount) {
-    $.ajax({							// 
-        type: "GET",
-        url: HOST + "/src/set_maxcount.php?max_count=" + maxCount,
-        dataType: "json",
-        success: function (result) {    // 
-            console.log("maxcount changed to", maxCount);
-            $("#max-count").text("Запис в БД кожні " + maxCount + " значень");
-        },
-        error: function (jqXHR, exception) {
-            printError(jqXHR, exception, '#post');
-        },
-    });
-}
-
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
-    call = $.ajax({						// за допомогою файла "get_current.php" для динамічного
+    $.ajax({						// за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
         url: HOST + "/src/get_current.php",
         dataType: "json",
@@ -78,6 +63,7 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
         dataType: "json",
         success: function (result) {
             var rows = Number(result.num_of_rows);
+            $("#numOfRows").text("Всього записів в базі даних: " + rows);
             numOfPages = Math.ceil(rows / count);
         }, 
         error: function (jqXHR, exception) {

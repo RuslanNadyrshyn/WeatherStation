@@ -209,7 +209,6 @@ h1 {
 table {
 	margin: 0 auto;
 	width: 100%;
-	border-spacing: 0;
 }
 tbody tr:hover, tbody tr:hover .sorted{
 	background-color: lightgray;
@@ -242,19 +241,18 @@ th {
 .order-menu {
 	display: flex;
 	flex-wrap: wrap;
-	overflow: auto;
 	align-items: center;
+	overflow: auto;
 }
-.order-menu.right {
+.order-menu .order {
+	margin-left: auto;
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
-	justify-content: right;
+    justify-content: right;
+    align-items: center;
 }
 
-.nav-counter .navigator-item {
-	margin: 3px;
-}
+
 label {
 	margin-right: 3px;
 }
@@ -267,15 +265,11 @@ label {
 }
 
 .navigator-block {
-	flex-wrap: wrap;
 	overflow: auto;
 	align-items: center;
 	justify-content: start;
 	margin: 5px 0;
 
-}
-#navPages .navigator-block {
-	flex-wrap: nowrap;
 }
 
 .navigator-item {
@@ -309,13 +303,13 @@ label {
 
 .order {
 	margin: 5px 10px;
-	justify-content: right;
 }
 
 select {
 	font-size: 16px;
 	padding: 5px;
 	border-radius: 4px;
+	min-width: 140px;
 }
 
 .sorted {
@@ -327,10 +321,11 @@ select {
 .db-table-container {
 	border: 3px solid lightblue;
 	font-size: 20px; 
+	width: 100%;
 	overflow: auto;
     height: 500px;
 }
-.page-numbers{
+.page-numbers {
 	text-align: right;
 }
 
@@ -395,8 +390,8 @@ canvas {
 		display: none;
 	}
 	.navigator-item {
-		padding: 7px;
-		font-size: 13px; 
+		padding: 8px;
+		font-size: 14px; 
 	}
 	.chart-label {
 		font-size: 16px;
@@ -406,9 +401,6 @@ canvas {
 	}
 	.label-col {
 		flex-direction: row;
-	}
-	label, select {
-		font-size: 11px;
 	}
 	.container {
 		padding: 10px;
@@ -420,7 +412,7 @@ canvas {
 	}
 }
 
-@media (max-width: 550px) {
+@media (max-width: 560px) {
 	.current-table {
 		font-size: 14px;
 	}
@@ -435,23 +427,13 @@ canvas {
 	}
 	.navigator-item {
 		padding: 5px;
-		font-size: 12px;
+		font-size: 13px;
 	}
 	label, select {
 		font-size: 12px;
 		padding: 3px;
-	}
-
-	.order label {
-		display: flex;
-	}
-	.order select {
 		min-width: 110px;
 	}
-	.order-menu.right {
-		display: table;
-	}
-
 	.container {
 		padding: 5px;
 		margin: 5px;
