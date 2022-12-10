@@ -16,7 +16,7 @@ if (isset($_GET['order']))
 $start = ($page * $count) - $count; 	// Визначення початкового значення для діапазону
 
 // Отримання даних таблиці bme280 відповідно вказаній кількості та номеру сторінки
-	$result = $conn->query("SELECT * FROM bme280 ORDER BY ${param}_bme280 ${order} LIMIT $start, $count;"); 
+$result = $conn->query("SELECT * FROM bme280 ORDER BY ${param}_bme280 ${order} LIMIT $start, $count;"); 
 while($r=$result->fetch_array(MYSQLI_ASSOC)) {
     $rows[] = $r;
 }

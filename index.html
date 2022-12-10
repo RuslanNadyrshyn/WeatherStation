@@ -25,32 +25,7 @@
 				<div class="dropdown" onclick="showDropdown()">
                     <a id="location"></a>
                     <i class="fa fa-caret-down"></i>
-                    <nav class="dropdown-content">
-                        <a onclick="changeLocation('Київ')">Київ</a>
-                        <a onclick="changeLocation('Львів')">Львів</a>
-                        <a onclick="changeLocation('Харків')">Харків</a>
-						<a onclick="changeLocation('Дніпро')">Дніпро</a>
-                        <a onclick="changeLocation('Тернопіль')">Тернопіль</a>
-                        <a onclick="changeLocation('Івано-Франківськ')">Івано-Франківськ</a>
-						<a onclick="changeLocation('Вінниця')">Вінниця</a>
-                        <a onclick="changeLocation('Запоріжжя')">Запоріжжя</a>
-                        <a onclick="changeLocation('Хмельницький')">Хмельницький</a>
-						<a onclick="changeLocation('Одеса')">Одеса</a>
-                        <a onclick="changeLocation('Луцьк')">Луцьк</a>
-                        <a onclick="changeLocation('Рівне')">Рівне</a>
-						<a onclick="changeLocation('Полтава')">Полтава</a>
-                        <a onclick="changeLocation('Черкаси')">Черкаси</a>
-                        <a onclick="changeLocation('Житомир')">Житомир</a>
-						<a onclick="changeLocation('Кропивницький')">Кропивницький</a>
-                        <a onclick="changeLocation('Чернівці')">Чернівці</a>
-                        <a onclick="changeLocation('Миколаїв')">Миколаїв</a>
-						<a onclick="changeLocation('Чернігів')">Чернігів</a>
-                        <a onclick="changeLocation('Суми')">Суми</a>
-                        <a onclick="changeLocation('Ужгород')">Ужгород</a>
-						<a onclick="changeLocation('Херсон')">Херсон</a>
-						<a onclick="changeLocation('Донецьк')">Донецьк</a>
-                        <a onclick="changeLocation('Луганськ')">Луганськ</a>
-                    </nav>
+                    <nav class="dropdown-content" id="cities"></nav>
                 </div>
                 <div class="dropdown-weather">
                     <div id="location-weather"> °С</div>
@@ -181,7 +156,7 @@
 	localStorage.setItem("ServerError", "");
 	$(document).ready(function () { 	
 		var items = getItems();
-
+		showCities();
 		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
 		changeLocation(items.city);	// Виклик функції для створення таблиці з даними погоди	
 		printNavCounter(items.count, items.page);

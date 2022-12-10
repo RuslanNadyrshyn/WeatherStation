@@ -1,10 +1,10 @@
 /* ------------------------------- Weather -------------------------------*/
 
 function showDropdown() {
-    $(".dropdown .dropdown-content").toggle( function () {
-        $(".dropdown .dropdown-content").addClass("active");
+    $(".dropdown-content").toggle( function () {
+        $(".dropdown-content").addClass("active");
     }, function () {
-        $(".dropdown .dropdown-content").removeClass("active");
+        $(".dropdown-content").removeClass("active");
     });
 }
 
@@ -12,6 +12,21 @@ function changeLocation(newLocation) {
     $("#location").html(newLocation);
     localStorage.setItem("city", newLocation);
     getWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
+}
+
+function showCities() {
+    var $content = $("<nav class=\"dropdown-content\"></nav>");
+    CITIES.forEach(city => {
+        var $city = $("<a></a>");
+        $city.text(city);
+        $city.click(function () {
+            changeLocation(city);
+        });
+
+        $content.append($city);
+    });
+
+    $("#cities").replaceWith($content);
 }
 
 /* ------------------------------- Navigator -------------------------------*/
@@ -72,7 +87,6 @@ function createNavItem(item, element, selected) {
                 printNavPages(numOfPages, 1);
             } else {
                 localStorage.setItem("page", page);
-
                 printNavPages(numOfPages, page);
             }
             changeValue("count", $(this).text());

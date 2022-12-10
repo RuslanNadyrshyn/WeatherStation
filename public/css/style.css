@@ -115,6 +115,9 @@ nav a:hover, .dropdown-weather:hover {
 	background-color: #566573;
 	color:#ffffff;
 }
+.dropdown-weather:hover .weather-block {
+	display: flex;
+}
 .weather-container .dropdown:hover, .dropdown a:hover {
 	background-color: lightgray;
 	color: black;
