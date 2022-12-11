@@ -35,7 +35,7 @@ void sendData(float temp, float pressure, float alt, float hum, int counter) {
   if (https.begin(client, fullUrl)) {
     int httpCode = https.GET();                   // Відправлення URL запиту
     Serial.println("Response code: " + String(httpCode)); // Вивід коду відповіді
-    if (httpCode>0) 
+    if (httpCode>0)                               // Вивід відповіді на запит
       Serial.println("Response: " + https.getString());
     https.end();                                  // Завершення роботи протоколу
   } else {                                        // Вивід повідомлення при помилці
@@ -47,7 +47,7 @@ void setup()
 {
   Serial.begin(115200);                           // Ініціалізація послідовного зв'язку
   
-  pinMode(LED, OUTPUT);
+  pinMode(LED, OUTPUT);                           // Ініціалізація світлодіоду
   if (!bme.begin(0x76)) {                         // Перевірка ініціалізації датчика
     Serial.println("Could not find a valid BME280 sensor!");
     while (1);                                       
@@ -61,7 +61,7 @@ void setup()
     Serial.print(".");
   }
   Serial.println(" connected");
-  Serial.println("IP address: ");                 // Виведення локальної адреси 
+  Serial.println("IP address: ");                 // Виведення локальної IP-адреси 
   Serial.println(WiFi.localIP());                 // до Serial порта   
 }
 

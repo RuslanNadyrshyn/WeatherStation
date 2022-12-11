@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<meta charset="utf-8"> 								<!-- Підключення кирилиці -->
+	<meta charset="utf-8"> 									<!-- Підключення кирилиці -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="public/css/style.css">		<!-- Підключення таблиці стилей-->
@@ -10,27 +10,27 @@
 	<title>BME280 Nadyrshyn</title>
 	<script src="config/config.js"></script>
 	<script src="public/js/request.js"></script>
-	<script src="public/js/script.js"></script>		<!-- Підключення додаткових бібліотек -->
+	<script src="public/js/script.js"></script>				<!-- Підключення додаткових бібліотек -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 </head>
 
-<body>						<!-- Блок відображення сторінки -->	
+<body>														<!-- Блок відображення сторінки -->	
 	<div class="background">
 		<div class="background-img"></div>
 	</div>
 	<header>
         <nav class="header-nav">
             <div class="weather-container">
-				<div class="dropdown" onclick="showDropdown()">
+				<div class="dropdown" onclick="showDropdown()">	<!-- Елемент випадаючого списку міст -->
                     <a id="location"></a>
                     <i class="fa fa-caret-down"></i>
                     <nav class="dropdown-content" id="cities"></nav>
                 </div>
-                <div class="dropdown-weather">
+                <div class="dropdown-weather">				<!-- Елемент відображення температури в обраному місті -->
                     <div id="location-weather"> °С</div>
 					<img class="weather-icon" id="weather-icon" src=""/>
-                    <div class="weather-block">
+                    <div class="weather-block">				<!-- Елемент випадаючої таблиці з даними погоди в обраному місті -->
 						<table class="weather-table" cellspacing='0'>
 							<thead>
 								<tr><th>Погода</th></tr>
@@ -56,7 +56,7 @@
                 </div>
 				
             </div>
-            <div class="nav-menu">						<!-- Блок навігації по сторінці-->
+            <div class="nav-menu">							<!-- Блок навігації по сторінці-->
                 <a href="#current">Дані датчика BME280</a>
                 <a href="#db">База даних</a>
                 <a href="#charts">Графіки</a>
@@ -65,7 +65,7 @@
     </header>
 	<div style="height: 45px;"></div>
 	<div class="container">
-		<h1 id="current">Дані датчика BME280</h1> <!-- Створення таблиці "Дані датчика BME280" -->
+		<h1 id="current">Дані датчика BME280</h1> 			<!-- Створення таблиці "Дані датчика BME280" -->
 		<nav>
 			<div class="label-col">
 				<label>Останнє оновлення:</label>
@@ -73,7 +73,7 @@
 			</div>
 			<label id="max-count"></label>
 		</nav>
-		<table class="current-table" cellspacing="0">
+		<table class="current-table" cellspacing="0">		
 			<tr>
 				<th>Температура</th>
 				<th>Тиск</th>
@@ -91,30 +91,29 @@
 	</div>
 	<div class="container">
 		<h1 id="db">База даних</h1>
-		<div class="navigator-container">
+		<div class="navigator-container">					
 			<div class="order-menu">
 				<div class="label-col">
 					<label>Кількість </label>
 					<label>рядків </label>	
 				</div>
-				<div class="nav-counter" id="navCounter"></div>
+				<div class="nav-counter" id="navCounter"></div>	<!-- Елемент навігатора кількості рядків -->
 			</div>
 			<div class="order-menu right">
-				<div class="order">
-					<label form="param">Сортувати по: </label>
-					<select title="select title" id="selectParam"></select>
+				<div class="order">							<!-- Елемент випадаючого списку параметрів сортування -->
+					<label form="param">Сортувати по: </label>	
+					<select title="select title" id="selectParam"></select> 
 				</div>
-				<div class="order">
-					<label form="order">Порядок:</label>
+				<div class="order">							<!-- Елемент випадаючого списку порядку сортування -->
+					<label form="order">Порядок:</label>	
 					<select id="selectOrder"></select>
 				</div>
 			</div>
 		</div>
-		<div class="db-table-container">
-			<table id="dbTable"></table>
+		<div class="db-table-container">					
+			<table id="dbTable"></table>					<!-- Елемент таблиці "База Даних" -->
 		</div>
-		<!-- Вивід навігатора сторінок БД -->
-		<div id="navPages"></div>
+		<div id="navPages"></div>							<!-- Елемент навігатора сторінок БД -->
 		<nav>
 			<label id="numOfRows"></label>
 			<label class="page-numbers">
@@ -128,7 +127,7 @@
 	<div class="container">
 		<h1 id="charts">Графіки</h1>	
 		<label class="chart-note">*Натисніть на графік для його збільшення</label>			
-		<div class="chart-block"> 						<!--Вивід графіків -->
+		<div class="chart-block"> 							<!--Вивід графіків -->
 			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
 				<label class="chart-label">Температура</label>
 				<canvas id="chart-temp"></canvas>
@@ -152,15 +151,15 @@
 
 <!-- Поле script -->
 <script>
-	localStorage.setItem("ServerError", "");
-	$(document).ready(function () { 	
-		var items = getItems();
-		showCities();
-		getCurrentData();		// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
-		changeLocation(items.city);	// Виклик функції для створення таблиці з даними погоди	
-		printNavCounter(items.count, items.page);
-		printSelectList("param", OPTIONS, items.param, "#selectParam");
-		printSelectList("order", ORDERS, items.order, "#selectOrder");
-		fetchDB();			// Виклик функції оновлення даних таблиці База даних
+	localStorage.setItem("ServerError", "");							// Очищення повідомлення про помилку 
+	$(document).ready(function () { 									// Виконання після того, як сторінка завантажить усі залежності
+		var items = getItems();											// Виклик функції, яка повертає параметри з локального сховища браузера
+		showCities();													// Виклик функції заповнення списку міст
+		getCurrentData();												// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
+		changeLocation(items.city);										// Виклик функції для створення таблиці з даними погоди	
+		printNavCounter(items.count, items.page);						// Виклик функції створення меню навігацій (меню кількості та меню сторінок)
+		printSelectList("param", OPTIONS, items.param, "#selectParam"); // Виклик функції створення випадаючого списку для параметрів сортування
+		printSelectList("order", ORDERS, items.order, "#selectOrder");	// Виклик функції створення випадаючого списку для порядку сортування
+		fetchDB();														// Виклик функції оновлення даних таблиці База даних
 	});
 </script>

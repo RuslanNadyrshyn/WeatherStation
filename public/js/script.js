@@ -9,18 +9,18 @@ function showDropdown() {                                           // Функ�
 }
 
 function changeLocation(newLocation) {                              // Функція отримання погоди для обраного міста
-    $("#location").html(newLocation);
-    localStorage.setItem("city", newLocation);
-    getWeather(newLocation);						                // Виклик функції для отримання даних погоди обраного міста
-}                                                                   // та створення таблиці з даними погоди
+    $("#location").html(newLocation);                               // Заміна обраного міста
+    localStorage.setItem("city", newLocation);                      // Зберігання значення міста до локального сховища браузера
+    getWeather(newLocation);						                // Виклик функції для отримання даних погоди обраного міста та створення таблиці з даними погоди
+}
 
 function showCities() {                                             // Функція ініціалізації списка міст
     var $content = $("<nav class=\"dropdown-content\"></nav>");
     CITIES.forEach(city => {
         var $city = $("<a></a>");
         $city.text(city);
-        $city.click(function () {
-            changeLocation(city);
+        $city.click(function () {                                   // Обробка натискання на елемент списку міст
+            changeLocation(city);                                   // Виклик функції отримання погоди для обраного міста
         });
 
         $content.append($city);
@@ -36,20 +36,19 @@ function printNavCounter(count, page) {                             // Функ�
 
     for (let i = 0; i < COUNTER_LIST.length; i++) {
         const element = COUNTER_LIST[i];
-        var $navItem = createNavItem("count", element, count);
+        var $navItem = createNavItem("count", element, count);      // Заповнення меню елементами
         $counterList.append($navItem);
     }
     $("#navCounter").empty();
-    $counterList.appendTo($("#navCounter"));
+    $counterList.appendTo($("#navCounter"));                        
 
     var numOfPages = getNumOfPages(count);    
     changeValue("numOfPages", numOfPages);
 
-    if (numOfPages < page) {
+    if (numOfPages < page) {                                        // Встановлення 1 сторінки, якщо нова кількість сторінок менше, ніж попередньо обрана сторінка
         localStorage.removeItem("page");
         printNavPages(numOfPages, 1); 
-    }
-    else printNavPages(numOfPages, page);       
+    } else printNavPages(numOfPages, page);       
 }
 
 function printNavPages(numOfPages, page) {                          // Функція виводу навігаційного меню сторінок
@@ -74,24 +73,22 @@ function createNavItem(item, element, selected) {                   // Функ�
     if (element == selected) 
         $navItem.addClass("selected");
 
-    $navItem.click(function () {                    // Обробка натискання на елемент навігації
-        if (item == "count") {                      // якщо меню кількості рядків
+    $navItem.click(function () {                                    // Обробка натискання на елемент навігації
+        if (item == "count") {                                      // Якщо меню кількості рядків
             $(".nav-counter .selected").attr('class', 'navigator-item');
             $(this).addClass("selected");
 
             var numOfPages = getNumOfPages($(this).text());
             var page = getLocalStorageItem("page", 1);
 
-            if (numOfPages < page) {                // Якщо кількість сторінок менше обраної,
-                localStorage.setItem("page", 1);    // видалити з пам'яті номер сторінки 
-                printNavPages(numOfPages, 1);
-            } else {
-                localStorage.setItem("page", page);
-                printNavPages(numOfPages, page);
+            if (numOfPages < page) {                                // Якщо кількість сторінок менше обраної,
+                localStorage.setItem("page", 1);                    // видалити з пам'яті номер сторінки 
+                page = 1;
             }
+            printNavPages(numOfPages, page);
             changeValue("count", $(this).text());
         }
-        else if (item == "page"){                   // якщо елемент сторінки
+        else if (item == "page"){                                   // Якщо елемент сторінки
             $(".pages .selected").attr('class', 'navigator-item');
 
             $(this).addClass("selected");
@@ -102,7 +99,7 @@ function createNavItem(item, element, selected) {                   // Функ�
     return $navItem;
 }
 
-function printSelectList(name, options, param, id) {    // Функція створення меню з випадаючим списком
+function printSelectList(name, options, param, id) {                // Функція створення меню з випадаючим списком
     var $list = $("<select></select>");
     $list.addClass("select");
     $list.attr('name', name);
@@ -129,15 +126,15 @@ function printSelectList(name, options, param, id) {    // Функція ств
     $(id).replaceWith($list);
 }
 
-function changeValue(itemName, value) {             // Функція обробки натискання на елемент сортування
-    localStorage.setItem(itemName, value);          // та оновлення таблиці "База даних"
+function changeValue(itemName, value) {                             // Функція обробки натискання на елемент сортування
+    localStorage.setItem(itemName, value);                          // та оновлення таблиці "База даних"
     fetchDB();
 }
 
 /* -------------------------------- Database --------------------------------*/
 
-function createTable(data, header) {                            // Функція для створення таблиці, яка приймає               
-    var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
+function createTable(data, header) {                                // Функція для створення таблиці, яка приймає               
+    var $table = $("<table cellspacing='0'></table>");              // масив даних таблиці(data) та головний рядок(header)
     var $thead = $("<thead></thead>");
     var $tbody = $("<tbody></tbody>");
 
@@ -152,7 +149,7 @@ function createTable(data, header) {                            // Функці�
     return $table;
 }
 
-function printRow(object, isHeader) {                           // Допоміжна функція для створення рядка таблиці
+function printRow(object, isHeader) {                               // Допоміжна функція для створення рядка таблиці
     var $line = $("<tr></tr>");
     var param = getLocalStorageItem("param", "id");
 
@@ -181,7 +178,7 @@ function printRow(object, isHeader) {                           // Допомі�
 
 /* --------------------------------- Charts ---------------------------------*/
 
-function drawCharts(res, labels) {                          // Ф-ція створення графіків
+function drawCharts(res, labels) {                                  // Ф-ція створення графіків
     var order = getLocalStorageItem("order", "DESC");
 
     if (order == "DESC")
@@ -189,19 +186,19 @@ function drawCharts(res, labels) {                          // Ф-ція ств�
             if (Object.hasOwnProperty.call(res, key))
                 res[key].reverse();
     [{
-        id: 'chart-temp',	                                // Графік температури
+        id: 'chart-temp',	                                        // Графік температури
         color: 'yellow',
         data: res.temp,
     }, {
-        id: 'chart-press',	                                // Графік тиску
+        id: 'chart-press',	                                        // Графік тиску
         color: 'red',
         data: res.press,
     }, {
-        id: 'chart-alt', 	                                // Графік висоти
+        id: 'chart-alt', 	                                        // Графік висоти
         color: 'green',
         data: res.alt,
     }, {
-        id: 'chart-hum', 	                                // Графік вологості
+        id: 'chart-hum', 	                                        // Графік вологості
         color: 'blue',
         data: res.hum,
     }].forEach(function (details) {
@@ -213,8 +210,8 @@ function drawCharts(res, labels) {                          // Ф-ція ств�
     });
 }
 
-function fetchResult(result) {                                  // Допоміжна функція для відокремлення окремих 
-    var temp = [];                                              // показників від загальних даних, отриманих в БД
+function fetchResult(result) {                                      // Допоміжна функція для відокремлення окремих 
+    var temp = [];                                                  // показників від загальних даних, отриманих в БД
     var press = [];
     var alt = [];
     var hum = [];
@@ -231,7 +228,7 @@ function fetchResult(result) {                                  // Допомі�
     return { temp, press, alt, hum, date };
 }
 
-function createConfig(labels, data, colorName) {                // допоміжна ф-ція для налаштування виводу графіків
+function createConfig(labels, data, colorName) {                    // допоміжна ф-ція для налаштування виводу графіків
     var pointRadius;
     console.log(data.length);
     if (pointRadius >= 500) pointRadius = 0;
@@ -275,14 +272,14 @@ function createConfig(labels, data, colorName) {                // допомі�
     };
 }
 
-function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
+function toggleChart(id) {                                          // Функція збільшення графіка при натисканні
     var element = document.getElementById(id.id);
     element.classList.toggle("large");
 }
 
 /* --------------------------------- Helpers ---------------------------------*/
 
-function printError(jqXHR, exception, dest) {                   // Функція виводу помилки запиту
+function printError(jqXHR, exception, dest) {                       // Функція виводу помилки запиту
     var msg = '';
     if (jqXHR.status === 0) {
         msg = 'Not connect.\n Verify Network.';
@@ -304,8 +301,8 @@ function printError(jqXHR, exception, dest) {                   // Функці�
     $(dest).text(""+ msg);
 }
 
-function getItems() {                                       // Функція зчитування параметрів з локального сховища браузера
-    var items = {                                           // та встановлення стандартних значень
+function getItems() {                                               // Функція зчитування параметрів з локального сховища браузера
+    var items = {                                                   // та встановлення стандартних значень
         page: getLocalStorageItem("page", 1),
         count: getLocalStorageItem("count", COUNTER_LIST[0]),            
         param: getLocalStorageItem("param", OPTIONS[0].value),
@@ -316,8 +313,8 @@ function getItems() {                                       // Функція з
     return items;
 }
 
-function getLocalStorageItem(name, defaultValue) {          // Функція отримання параметра з локального сховища
-    var item = localStorage.getItem(name);                  // при його відсутності встановити стандартне значення
+function getLocalStorageItem(name, defaultValue) {                  // Функція отримання параметра з локального сховища
+    var item = localStorage.getItem(name);                          // при його відсутності встановити стандартне значення
     if(item == null) {
         localStorage.setItem(name, defaultValue);
         return defaultValue;
