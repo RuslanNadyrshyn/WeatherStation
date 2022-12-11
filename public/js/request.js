@@ -1,4 +1,3 @@
-const DB_HEADER = ["ID", "Дата", "Час", "Температура", "Тиск", "Висота", "Вологість"];
 /*
     Дані отримуються за допомогою ajax-запиту до файла get_weather.php, який
 виконує запит необхідними з даними до API.openweathermap.org
@@ -9,7 +8,7 @@ const DB_HEADER = ["ID", "Дата", "Час", "Температура", "Тис
 var getWeather = function (city) {      // Функція, яка виконує запит до API для отримання
     $.ajax({							// даних погоди обраного міста
         type: "GET",
-        url: HOST + "/src/get_weather.php?city=" + city,
+        url: "/src/get_weather.php?city=" + city,
         dataType: "json",
         success: function (result) {    // Заповнення елементів таблиці даних погоди обраного міста
             console.log(result);
@@ -34,9 +33,9 @@ var getWeather = function (city) {      // Функція, яка виконує
 };
 
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
-    $.ajax({						// за допомогою файла "get_current.php" для динамічного
+    $.ajax({						    // за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
-        url: HOST + "/src/get_current.php",
+        url: "/src/get_current.php",
         dataType: "json",
         success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці 
             console.log(result);
@@ -59,7 +58,7 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
     $.ajax({                            // повертає кількість сторінок для обраної кількості рядків
         async: false,
         type: "GET",
-        url: HOST + "/src/get_num_of_rows.php?count=" + count,
+        url: "/src/get_num_of_rows.php?count=" + count,
         dataType: "json",
         success: function (result) {
             var rows = Number(result.num_of_rows);
@@ -81,7 +80,7 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
 function fetchDB(page, count, param, order) {       // Функція, яка за допомогою ajax-запиту до файла
     $.ajax({                                        // "src/fetch_db.php" отримує дані таблиці
         type: "GET",                                // в обраних межах та за відповідними умовами, після чого викликає функції створення таблиці бази даних та графіків
-        url: HOST + "/src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
+        url: "/src/fetch_db.php?" + "page=" + page + "&count=" + count + "&param=" + param + "&order=" + order,
         dataType: "json",
         success: function (result) {
             for (let index = 0; index < result.length; index++) {

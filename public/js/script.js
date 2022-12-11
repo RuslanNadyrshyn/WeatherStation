@@ -1,6 +1,6 @@
 /* ------------------------------- Weather -------------------------------*/
 
-function showDropdown() {
+function showDropdown() {                                           // Функція розгортки випадаючого списку при натисканні
     $(".dropdown-content").toggle( function () {
         $(".dropdown-content").addClass("active");
     }, function () {
@@ -8,13 +8,13 @@ function showDropdown() {
     });
 }
 
-function changeLocation(newLocation) {
+function changeLocation(newLocation) {                              // Функція отримання погоди для обраного міста
     $("#location").html(newLocation);
     localStorage.setItem("city", newLocation);
-    getWeather(newLocation);						                // Виклик функції для створення таблиці з даними погоди
-}
+    getWeather(newLocation);						                // Виклик функції для отримання даних погоди обраного міста
+}                                                                   // та створення таблиці з даними погоди
 
-function showCities() {
+function showCities() {                                             // Функція ініціалізації списка міст
     var $content = $("<nav class=\"dropdown-content\"></nav>");
     CITIES.forEach(city => {
         var $city = $("<a></a>");
@@ -31,8 +31,8 @@ function showCities() {
 
 /* ------------------------------- Navigator -------------------------------*/
 
-function printNavCounter(count, page) {
-    var $counterList = $("<nav class=\"navigator-block\"></nav>");
+function printNavCounter(count, page) {                             // Функція виводу меню кількості виводимих рядків 
+    var $counterList = $("<nav class=\"navigator-block\"></nav>");  // для таблиці бази даних
 
     for (let i = 0; i < COUNTER_LIST.length; i++) {
         const element = COUNTER_LIST[i];
@@ -52,7 +52,7 @@ function printNavCounter(count, page) {
     else printNavPages(numOfPages, page);       
 }
 
-function printNavPages(numOfPages, page) {
+function printNavPages(numOfPages, page) {                          // Функція виводу навігаційного меню сторінок
     $("#page").text(page);
     $("#numOfPages").text(numOfPages);
 
@@ -67,15 +67,15 @@ function printNavPages(numOfPages, page) {
     $pages.appendTo($("#navPages"));
 }
 
-function createNavItem(item, element, selected) {
+function createNavItem(item, element, selected) {                   // Функція створення елементу навігації
     var $navItem = $("<a class=\"navigator-item\"></a>");
     $navItem.append(element);
 
     if (element == selected) 
         $navItem.addClass("selected");
 
-    $navItem.click(function () {
-        if (item == "count") {
+    $navItem.click(function () {                    // Обробка натискання на елемент навігації
+        if (item == "count") {                      // якщо меню кількості рядків
             $(".nav-counter .selected").attr('class', 'navigator-item');
             $(this).addClass("selected");
 
@@ -91,7 +91,7 @@ function createNavItem(item, element, selected) {
             }
             changeValue("count", $(this).text());
         }
-        else if (item == "page"){   
+        else if (item == "page"){                   // якщо елемент сторінки
             $(".pages .selected").attr('class', 'navigator-item');
 
             $(this).addClass("selected");
@@ -102,14 +102,7 @@ function createNavItem(item, element, selected) {
     return $navItem;
 }
 
-function printSelectList(name, options, param, id) {
-    var $list = createSelectList(name, options, param);
-
-    $(id).empty();
-    $(id).replaceWith($list);
-}
-
-function createSelectList(name, options, param) {
+function printSelectList(name, options, param, id) {    // Функція створення меню з випадаючим списком
     var $list = $("<select></select>");
     $list.addClass("select");
     $list.attr('name', name);
@@ -132,23 +125,24 @@ function createSelectList(name, options, param) {
 
         $list.append($option);
     }
-    return $list;
+    $(id).empty();
+    $(id).replaceWith($list);
 }
 
-function changeValue(itemName, value) {
-    localStorage.setItem(itemName, value);
+function changeValue(itemName, value) {             // Функція обробки натискання на елемент сортування
+    localStorage.setItem(itemName, value);          // та оновлення таблиці "База даних"
     updateTable();
 }
 
 /* -------------------------------- Database --------------------------------*/
 
-function updateTable() {
+function updateTable() {                            // Функція оновлення таблиці за збереженими параметрами
     var items = getItems();
     fetchDB(items.page, items.count, items.param, items.order);          
 }
 
 
-function createTable(data, header) {                // Функція для створення таблиці, яка приймає               
+function createTable(data, header) {                            // Функція для створення таблиці, яка приймає               
     var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
     var $thead = $("<thead></thead>");
     var $tbody = $("<tbody></tbody>");
@@ -219,7 +213,6 @@ function drawCharts(res, labels) {                          // Ф-ція ств�
     }].forEach(function (details) {
         let chartStatus = Chart.getChart(details.id);
         if (chartStatus != undefined) chartStatus.destroy();
-
         var ctx = document.getElementById(details.id).getContext('2d');
         var config = createConfig(labels, details.data, details.color);
         new Chart(ctx, config);
@@ -288,14 +281,14 @@ function createConfig(labels, data, colorName) {                // допомі�
     };
 }
 
-/* --------------------------------- Helpers ---------------------------------*/
-
 function toggleChart(id) {                                      // Функція збільшення графіка при натисканні
     var element = document.getElementById(id.id);
     element.classList.toggle("large");
 }
 
-function printError(jqXHR, exception, dest) {
+/* --------------------------------- Helpers ---------------------------------*/
+
+function printError(jqXHR, exception, dest) {                   // Функція виводу помилки запиту
     var msg = '';
     if (jqXHR.status === 0) {
         msg = 'Not connect.\n Verify Network.';
@@ -317,20 +310,20 @@ function printError(jqXHR, exception, dest) {
     $(dest).text(""+ msg);
 }
 
-function getItems() {
-    var items = {
+function getItems() {                                       // Функція зчитування параметрів з локального сховища браузера
+    var items = {                                           // та встановлення стандартних значень
         page: getLocalStorageItem("page", 1),
         count: getLocalStorageItem("count", COUNTER_LIST[0]),            
         param: getLocalStorageItem("param", OPTIONS[0].value),
-        order: getLocalStorageItem("order", "DESC"),
-        city: getLocalStorageItem("city", "Київ") 			// якщо міста немає в пам'яті, використовувати значення "Київ"	
+        order: getLocalStorageItem("order", "DESC"),        
+        city: getLocalStorageItem("city", "Київ") 			
     };
 
     return items;
 }
 
-function getLocalStorageItem(name, defaultValue) {
-    var item = localStorage.getItem(name);
+function getLocalStorageItem(name, defaultValue) {          // Функція отримання параметра з локального сховища
+    var item = localStorage.getItem(name);                  // при його відсутності встановити стандартне значення
     if(item == null) {
         localStorage.setItem(name, defaultValue);
         return defaultValue;

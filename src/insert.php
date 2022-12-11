@@ -17,8 +17,7 @@ $query = $conn->query("SELECT * FROM bme280_current");	// Створення з�
 if(mysqli_num_rows($query) != 0) {
 	$sql = "UPDATE bme280_current SET temp_bme280 = $temp, press_bme280 = $press, alt_bme280 = $alt, hum_bme280 = $hum";
 	mysqli_query($conn, $sql);				// Оновлення даних у таблиці bme280_current
-}
-else {
+} else {
 	$sql = "INSERT INTO bme280_current (temp_bme280, press_bme280, alt_bme280, hum_bme280, max_count) VALUES ($temp, $press, $alt, $hum, 10)";
 	mysqli_query($conn, $sql);				// Внесення даних до таблиці
 }
