@@ -147,7 +147,6 @@
 			</div>
 		</div>
 	</div> <!-- /container -->
-
 </body>
 </html>
 
@@ -162,6 +161,6 @@
 		printNavCounter(items.count, items.page);
 		printSelectList("param", OPTIONS, items.param, "#selectParam");
 		printSelectList("order", ORDERS, items.order, "#selectOrder");
-		updateTable();			// Виклик функції оновлення даних таблиці База даних
+		fetchDB();			// Виклик функції оновлення даних таблиці База даних
 	});
 </script>

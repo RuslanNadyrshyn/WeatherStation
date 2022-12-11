@@ -131,16 +131,10 @@ function printSelectList(name, options, param, id) {    // Функція ств
 
 function changeValue(itemName, value) {             // Функція обробки натискання на елемент сортування
     localStorage.setItem(itemName, value);          // та оновлення таблиці "База даних"
-    updateTable();
+    fetchDB();
 }
 
 /* -------------------------------- Database --------------------------------*/
-
-function updateTable() {                            // Функція оновлення таблиці за збереженими параметрами
-    var items = getItems();
-    fetchDB(items.page, items.count, items.param, items.order);          
-}
-
 
 function createTable(data, header) {                            // Функція для створення таблиці, яка приймає               
     var $table = $("<table cellspacing='0'></table>");          // масив даних таблиці(data) та головний рядок(header)
