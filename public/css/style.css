@@ -264,7 +264,6 @@ label {
 	display: flex; 
 	flex-direction: column; 
 	font-size: 15px;
-	text-align: center;
 }
 
 .navigator-block {
@@ -403,7 +402,7 @@ canvas {
 		display: none;
 	}
 	.label-col {
-		flex-direction: row;
+		flex-direction: column;
 	}
 	.container {
 		padding: 10px;
