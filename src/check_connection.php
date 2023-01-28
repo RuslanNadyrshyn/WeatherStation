@@ -9,7 +9,7 @@ $query = $conn->query("SELECT time FROM bme280_current");	// Створення 
 $row = $query->fetch_array(MYSQLI_ASSOC);
 $time=$row["time"];
 
-if (strtotime("now") - strtotime($time) > 300) {
+if (strtotime("now") - strtotime($time) > 180) {
     $message = "Соединение потеряно $time";
 
     $data = [
@@ -18,5 +18,8 @@ if (strtotime("now") - strtotime($time) > 300) {
     ];
     $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" .
                                        http_build_query($data) );
+    echo 0;
+} else {
+    echo 1;
 }
 ?>
