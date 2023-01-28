@@ -8,12 +8,10 @@ function send_interval ($time) {
     $interval = $last->diff($current);
 
 	$message = $interval->format('Connection restored after %H:%i:%s');
-	echo $message;
 	$data = [
 		'chat_id' => '440970782', 
 		'text' => $message,
 	];
-	echo $data;
 
 	file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?chat_id=440970782&text=$message");
 }
