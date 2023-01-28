@@ -6,20 +6,6 @@ date_default_timezone_set("Europe/Kyiv");
 $apiToken = '5937017661:AAED742kwRVWtcu1ci5Ro8KtO7P07OtPRjo';
 $chat_id = '-1001824604451';
 
-/*
-	баш скрипт:
-		while()
-		do {
-			delay 5 min
-			res = check_conn.php
-			if (res > 5 min) {
-				send Message To bot
-			}
-		}
-
-
-*/
-
 function send_interval ($time, $chat_id, $apiToken) {
 	$last = new DateTime($time);						// Send query to Telegram bot with message:
 	$current = new DateTime("now");
@@ -33,6 +19,7 @@ function send_interval ($time, $chat_id, $apiToken) {
 	];
 	$response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" .
 									   http_build_query($data) );
+	shell_exec("cd src; setsid check_connection.sh");
 }
 
 if (isset($_GET['temp']))								
