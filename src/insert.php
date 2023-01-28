@@ -15,7 +15,7 @@ function send_interval ($time) {
 	];
 	echo $data;
 
-	file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?". http_build_query($data));
+	file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?chat_id=440970782&text=$message");
 }
 
 
