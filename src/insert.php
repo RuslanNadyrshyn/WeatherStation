@@ -13,7 +13,7 @@ function send_interval ($time) {
 
 	$apiToken = '5937017661:AAED742kwRVWtcu1ci5Ro8KtO7P07OtPRjo';
 	$data = [
-		'chat_id' => '440970782',
+		'chat_id' => '-1001824604451',
 		'text' => $message
 	];
 	$response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" .
