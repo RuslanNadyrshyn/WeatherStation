@@ -9,7 +9,7 @@ $query = $conn->query("SELECT time FROM bme280_current");	// Створення 
 $row = $query->fetch_array(MYSQLI_ASSOC);
 $time=$row["time"];
 
-if (strtotime("now") - strtotime($time) > 180) {
+if (strtotime("now") - strtotime($time) > 240) {
     $message = "Соединение потеряно $time";
 
     $data = [
