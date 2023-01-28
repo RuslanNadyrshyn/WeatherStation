@@ -3,17 +3,7 @@ include "connect_db.php";    							// З'єднання з файлом connect
 include "../config/env/.env.php";
 
 function send_interval ($time) {
-    $last = new DateTime($time);						// Send query to Telegram bot with message:
-    $current = new DateTime("now");
-    $interval = $last->diff($current);
-
-	$message = $interval->format('Connection restored after %H:%i:%s');
-	$data = [
-		'chat_id' => '440970782', 
-		'text' => $message,
-	];
-
-	file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?chat_id=440970782&text=$message");
+    
 }
 
 
@@ -36,7 +26,17 @@ if(mysqli_num_rows($query) != 0) {
 	$time=$row["time"];
 
 	if (strtotime("now") - strtotime($time) > 300) { // If no connection more than 5 minutes
-		send_interval($time);
+		$last = new DateTime($time);						// Send query to Telegram bot with message:
+		$current = new DateTime("now");
+		$interval = $last->diff($current);
+
+		$message = $interval->format('Connection restored after %H:%i:%s');
+
+		$data = [
+			'chat_id' => $chat_id,
+			'text' => $message
+		];
+		$response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data) );
 	}
 
 	$sql = "UPDATE bme280_current SET temp_bme280 = $temp, press_bme280 = $press, alt_bme280 = $alt, hum_bme280 = $hum";
