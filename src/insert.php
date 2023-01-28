@@ -11,6 +11,7 @@ function send_interval ($time) {
 
 	$message = $interval->format('Connection restored after %H:%i:%s');
 
+	$apiToken = '5937017661:AAED742kwRVWtcu1ci5Ro8KtO7P07OtPRjo';
 	$data = [
 		'chat_id' => '440970782',
 		'text' => $message
