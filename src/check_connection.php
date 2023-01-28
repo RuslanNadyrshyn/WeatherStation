@@ -1,6 +1,7 @@
 <?php
 include "connect_db.php";    							// З'єднання з файлом connect_db.php
 
+date_default_timezone_set("Europe/Kyiv");
 $apiToken = '5937017661:AAED742kwRVWtcu1ci5Ro8KtO7P07OtPRjo';
 $chat_id = '-1001824604451';
 
