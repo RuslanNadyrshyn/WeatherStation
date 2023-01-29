@@ -11,7 +11,7 @@ function send_interval ($time, $chat_id, $apiToken) {
 	$current = new DateTime("now");
 	$interval = $last->diff($current);
 
-	$message = $interval->format('Подключение восстановлено \n Соединение отсутствовало %H:%i:%s');
+	$message = $interval->format("Подключение восстановлено \n Соединение отсутствовало %H:%i:%s");
 
 	$data = [
 		'chat_id' => $chat_id,
