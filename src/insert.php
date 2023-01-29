@@ -11,7 +11,7 @@ function send_interval ($time, $chat_id, $apiToken) {
 	$current = new DateTime("now");
 	$interval = $last->diff($current);
 
-	$message = $interval->format('Connection restored after %H:%i:%s');
+	$message = $interval->format('Подключение восстановлено \n Соединение отсутствовало %H:%i:%s');
 
 	$data = [
 		'chat_id' => $chat_id,
@@ -40,7 +40,7 @@ if(mysqli_num_rows($query) != 0) {
 	$row = $query->fetch_array(MYSQLI_ASSOC);
 	$time=$row["time"];
 
-	if (strtotime("now") - strtotime($time) > 300) { 	// If was no connection more than 5 minutes
+	if (strtotime("now") - strtotime($time) > 180) { 	// If was no connection more than 5 minutes
 		send_interval($time, $chat_id, $apiToken);
 	}
 
