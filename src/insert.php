@@ -19,7 +19,6 @@ function send_interval ($time, $chat_id, $apiToken) {
 	];
 	$response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" .
 									   http_build_query($data) );
-	shell_exec("cd /var/www/html/src; bash check_connection.sh & disown");
 }
 
 if (isset($_GET['temp']))								
@@ -46,6 +45,7 @@ if(mysqli_num_rows($query) != 0) {
 
 	$sql = "UPDATE bme280_current SET temp_bme280 = $temp, press_bme280 = $press, alt_bme280 = $alt, hum_bme280 = $hum";
 	mysqli_query($conn, $sql);							// Оновлення даних у таблиці bme280_current
+	shell_exec("cd /var/www/html/src; bash check_connection.sh & disown");
 } else {
 	$sql = "INSERT INTO bme280_current (temp_bme280, press_bme280, alt_bme280, hum_bme280, max_count) VALUES ($temp, $press, $alt, $hum, 10)";
 	mysqli_query($conn, $sql);							// Внесення даних до таблиці
