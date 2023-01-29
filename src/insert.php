@@ -19,7 +19,7 @@ function send_interval ($time, $chat_id, $apiToken) {
 	];
 	$response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" .
 									   http_build_query($data) );
-	shell_exec("cd /var/www/html/src; setsid check_connection.sh");
+	shell_exec("cd /var/www/html/src; bash check_connection.sh & disown");
 }
 
 if (isset($_GET['temp']))								
