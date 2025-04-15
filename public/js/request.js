@@ -31,18 +31,19 @@ var getWeather = function (city) {      // Функція, яка виконує
 };
 
 var getCurrentData = function () {      // Функція, яка виконує ajax-запит до бази даних  
+    ledSlider = getLocalStorageItem("ledSlider", 0);
     $.ajax({						    // за допомогою файла "get_current.php" для динамічного
         type: "GET",                    // виводу даних в таблицю "Дані датчика BME280".
-        url: "/src/get_current.php",
+        url: "/src/get_current.php?ledSlider=" + ledSlider,
         dataType: "json",
-        success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці 
-            console.log(result);
+        success: function (result) {    // Заповнення отриманими даними відповідних елементів таблиці
             $("#time-current").text(result.time);
             $("#temp").text(result.temp_bme280 + ' °С');
             $("#press").text(result.press_bme280 + ' гПа');
             $("#alt").text(result.alt_bme280 + ' м');
             $("#hum").text(result.hum_bme280 + ' %');
             $("#max-count").text("Запис до БД кожне " + result.max_count + " значення");
+
             setTimeout(getCurrentData, 5000); // Рекурсійний виклик функції для оновлення інформації кожні 2 секунди
         },
         error: function (jqXHR, exception) {
@@ -68,6 +69,24 @@ var getNumOfPages = function (count) {  // Функція, яка за допо�
         },
     });
     return numOfPages;
+};
+
+var getLedSliderValue = function () {  // Get slider value from database by calling /src/get_slider.php
+    var sliderValue = 0;
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "/src/get_slider.php",
+        dataType: "json",
+        success: function (result) {
+            sliderValue = Number(result.slider);
+            document.getElementById("ledSlider").value = sliderValue;
+        },
+        error: function (jqXHR, exception) {
+            printError(jqXHR, exception, 'post');
+        },
+    });
+    return sliderValue;
 };
 
 /*

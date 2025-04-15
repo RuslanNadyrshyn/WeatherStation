@@ -442,3 +442,9 @@ canvas {
 	}
 
 }
+
+.slidecontainer:hover {
+	background-color: rgb(213, 216, 220);
+	color: black;
+	max-width: 100%;
+}

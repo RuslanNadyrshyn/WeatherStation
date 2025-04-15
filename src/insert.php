@@ -33,10 +33,10 @@ if (isset($_GET['hum']))
 if (isset($_GET['counter']))
 	(int)$counter = $_GET['counter'];                  	// Створення змінної Лічильник з URL сторінки								
 
+
 $query = $conn->query("SELECT time FROM bme280_current");	// Створення запиту до БД
 
-
-if(mysqli_num_rows($query) != 0) {
+if(mysqli_num_rows(result: $query) != 0) {
 	$row = $query->fetch_array(MYSQLI_ASSOC);
 	$time=$row["time"];
 
@@ -50,13 +50,16 @@ if(mysqli_num_rows($query) != 0) {
 	mysqli_query($conn, $sql);							// Внесення даних до таблиці
 }
 
-$result = $conn->query("SELECT max_count FROM bme280_current LIMIT 1");
+$result = $conn->query("SELECT max_count, slider FROM bme280_current LIMIT 1");
 $row = $result->fetch_array(MYSQLI_ASSOC);
 (int)$maxcount = $row["max_count"];
+(int)$slider = $row["slider"];
 
 if ($counter % $maxcount == 0) {                        // Внесення даних до таблиці bme280
     $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
     mysqli_query($conn, $sql);
 }
-echo $maxcount;
+
+# Return slider value to the device
+echo $slider;
 ?>

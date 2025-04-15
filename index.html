@@ -56,6 +56,12 @@
                 </div>
 				
             </div>
+			<div class="nav-menu">
+				<a class="slidecontainer">
+					<p>LED Brightness:</p>
+					<input type="range" id="ledSlider" onchange="updateSlider()" min="0" max="255" value="200" step="1" class="slider">
+				</a>
+			</div>
             <div class="nav-menu">							<!-- Блок навігації по сторінці-->
                 <a href="#current">Дані датчика BME280</a>
                 <a href="#db">База даних</a>
@@ -152,6 +158,7 @@
 	$(document).ready(function () { 									// Виконання після того, як сторінка завантажить усі залежності
 		var items = getItems();											// Виклик функції, яка повертає параметри з локального сховища браузера
 		showCities();													// Виклик функції заповнення списку міст
+		getSlider();
 		getCurrentData();												// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
 		changeLocation(items.city);										// Виклик функції для створення таблиці з даними погоди	
 		printNavCounter(items.count, items.page);						// Виклик функції створення меню навігацій (меню кількості та меню сторінок)

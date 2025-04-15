@@ -306,8 +306,9 @@ function getItems() {                                               // Функ�
         page: getLocalStorageItem("page", 1),
         count: getLocalStorageItem("count", COUNTER_LIST[0]),            
         param: getLocalStorageItem("param", OPTIONS[0].value),
-        order: getLocalStorageItem("order", "DESC"),        
-        city: getLocalStorageItem("city", "Київ") 			
+        order: getLocalStorageItem("order", "DESC"),
+        city: getLocalStorageItem("city", "Київ"),
+        ledSlider: getLocalStorageItem("ledSlider", 255),
     };
 
     return items;
@@ -315,9 +316,20 @@ function getItems() {                                               // Функ�
 
 function getLocalStorageItem(name, defaultValue) {                  // Функція отримання параметра з локального сховища
     var item = localStorage.getItem(name);                          // при його відсутності встановити стандартне значення
-    if(item == null) {
+    if (item == null) {
         localStorage.setItem(name, defaultValue);
         return defaultValue;
     }
     return item;
 }
+
+// Get slider value from database and set it to the item
+function getSlider () {
+    sliderValue = getLedSliderValue();
+    localStorage.setItem("ledSlider", sliderValue);
+};
+
+function updateSlider() {
+    var sliderValue = document.getElementById("ledSlider").value;
+    localStorage.setItem("ledSlider", sliderValue);
+};
