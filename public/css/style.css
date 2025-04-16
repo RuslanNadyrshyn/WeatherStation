@@ -5,6 +5,11 @@ body {
 	padding: 0px;
 }
 
+p {
+	height: 0;
+	padding: 0;
+}
+
 .background {
 	position: fixed;
 	top: 0;
@@ -58,6 +63,11 @@ nav.header-nav {
 .nav-menu a {
 	background-color: rgb(213, 216, 220);
 }
+.nav-menu-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
 
 .dropdown {
 	overflow: hidden;
@@ -106,6 +116,11 @@ i {
     color: white;
 	cursor: pointer;
 	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.weather-label-icon {
+	display: flex;
     flex-direction: row;
 	justify-content: center;
 	align-items: center;
@@ -116,7 +131,7 @@ nav a:hover, .dropdown-weather:hover {
 	color:#ffffff;
 }
 .dropdown-weather:hover .weather-block {
-	display: flex;
+	display:inline-block;
 }
 .weather-container .dropdown:hover, .dropdown a:hover {
 	background-color: lightgray;
@@ -384,11 +399,26 @@ canvas {
 	}
 	td, th, .current-table-td {
 		padding: 5px;
+		height: 20px;
+	}
+	.weather-table td, .weather-table th{
+		height: 30px;
+		padding: 0 5px;
 	}
 	.chart-container {
 		width: 90%;
 	}
-	.nav-menu {
+	.dropdown {
+		min-width: 50px;
+		padding: 2px 2px;
+		margin: 2px;
+	}
+	.dropdown-weather {
+		min-width: 50px;
+		padding: 2px 2px;
+		margin: 2px;
+	}
+	.nav-menu-buttons {
 		display: none;
 	}
 	.navigator-item {
@@ -415,8 +445,17 @@ canvas {
 }
 
 @media (max-width: 560px) {
+	p {
+		font-size: 10px;
+	}
+	.dropdown-weather {
+		font-size: 10px;
+	}
 	.current-table {
 		font-size: 14px;
+	}
+	.weather-icon {
+		display: none;
 	}
 	.db-table-container {
 		font-size: 12px;
@@ -441,6 +480,10 @@ canvas {
 		margin: 5px;
 	}
 
+}
+
+.slidecontainer {
+	flex-direction: column;
 }
 
 .slidecontainer:hover {

@@ -28,8 +28,10 @@
                     <nav class="dropdown-content" id="cities"></nav>
                 </div>
                 <div class="dropdown-weather">				<!-- Елемент відображення температури в обраному місті -->
-                    <div id="location-weather"> °С</div>
-					<img class="weather-icon" id="weather-icon" src=""/>
+					<div class="weather-label-icon">
+						<div id="location-weather"> °С</div>
+						<img class="weather-icon" id="weather-icon" src=""/>
+					</div>
                     <div class="weather-block">				<!-- Елемент випадаючої таблиці з даними погоди в обраному місті -->
 						<table class="weather-table" cellspacing='0'>
 							<thead>
@@ -62,11 +64,13 @@
 					<input type="range" id="ledSlider" onchange="updateSlider()" min="0" max="255" value="200" step="1" class="slider">
 				</a>
 			</div>
-            <div class="nav-menu">							<!-- Блок навігації по сторінці-->
-                <a href="#current">Дані датчика BME280</a>
-                <a href="#db">База даних</a>
-                <a href="#charts">Графіки</a>
-            </div>
+			<div class="nav-menu">							<!-- Блок навігації по сторінці-->
+				<div class="nav-menu-buttons">
+					<a href="#current">Дані датчика BME280</a>
+					<a href="#db">База даних</a>
+					<a href="#charts">Графіки</a>
+				</div>
+			</div>
         </nav>
     </header>
 	<div style="height: 45px;"></div>
