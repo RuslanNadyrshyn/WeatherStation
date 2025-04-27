@@ -14,7 +14,6 @@ const OPTIONS = [
     { value: "date", text: "Час" },
     { value: "temp", text: "Температура" },
     { value: "press", text: "Тиск" },
-    { value: "alt", text: "Висота" },
     { value: "hum", text: "Вологість" }
 ];
 

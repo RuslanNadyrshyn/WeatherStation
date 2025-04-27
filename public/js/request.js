@@ -40,7 +40,6 @@ var getCurrentData = function () {      // Функція, яка виконує
             $("#time-current").text(result.time);
             $("#temp").text(result.temp_bme280 + ' °С');
             $("#press").text(result.press_bme280 + ' гПа');
-            $("#alt").text(result.alt_bme280 + ' м');
             $("#hum").text(result.hum_bme280 + ' %');
             $("#max-count").text("Запис до БД кожне " + result.max_count + " значення");
 

@@ -26,8 +26,6 @@ if (isset($_GET['temp']))
 	$temp = $_GET['temp'];                        		// Створення змінної Температура з URL сторінки	
 if (isset($_GET['press']))
 	$press = $_GET['press'];                       		// Створення змінної Тиск з URL сторінки
-if (isset($_GET['alt']))
-	$alt = $_GET['alt'];                           		// Створення змінної Висота з URL сторінки
 if (isset($_GET['hum']))
 	$hum = $_GET['hum'];                           		// Створення змінної Вологість з URL сторінки
 if (isset($_GET['counter']))
@@ -40,13 +38,13 @@ if(mysqli_num_rows(result: $query) != 0) {
 	$row = $query->fetch_array(MYSQLI_ASSOC);
 	$time=$row["time"];
 
-	$sql = "UPDATE bme280_current SET temp_bme280 = $temp, press_bme280 = $press, alt_bme280 = $alt, hum_bme280 = $hum";
+	$sql = "UPDATE bme280_current SET temp_bme280 = $temp, press_bme280 = $press, hum_bme280 = $hum";
 	mysqli_query($conn, $sql);							// Оновлення даних у таблиці bme280_current
 	if (strtotime("now") - strtotime($time) > 180) { 	// If was no connection more than 3 minutes
 		send_interval($time, $chat_id, $apiToken);
 	}
 } else {
-	$sql = "INSERT INTO bme280_current (temp_bme280, press_bme280, alt_bme280, hum_bme280, max_count) VALUES ($temp, $press, $alt, $hum, 10)";
+	$sql = "INSERT INTO bme280_current (temp_bme280, press_bme280, hum_bme280, max_count) VALUES ($temp, $press, $hum, 10)";
 	mysqli_query($conn, $sql);							// Внесення даних до таблиці
 }
 
@@ -56,7 +54,7 @@ $row = $result->fetch_array(MYSQLI_ASSOC);
 (int)$slider = $row["slider"];
 
 if ($counter % $maxcount == 0) {                        // Внесення даних до таблиці bme280
-    $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, alt_bme280, hum_bme280) VALUES ($temp, $press, $alt, $hum)";
+    $sql = "INSERT INTO bme280 (temp_bme280, press_bme280, hum_bme280) VALUES ($temp, $press, $hum)";
     mysqli_query($conn, $sql);
 }
 

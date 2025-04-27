@@ -87,13 +87,11 @@
 			<tr>
 				<th>Температура</th>
 				<th>Тиск</th>
-				<th>Висота над рівнем моря</th>
 				<th>Вологість</th>
 			</tr>
 			<tr>
 				<td class="current-table-td" id="temp"></td>
 				<td class="current-table-td" id="press"></td>
-				<td class="current-table-td" id="alt"></td>
 				<td class="current-table-td" id="hum"></td>
 			</tr>
 		</table>
@@ -142,10 +140,6 @@
 			<div class="chart-container" onclick="toggleChart({id})" id="container-press">
 				<label class="chart-label">Тиск</label>
 				<canvas id="chart-press"></canvas>
-			</div>
-			<div class="chart-container" onclick="toggleChart({id})" id="container-alt">
-				<label class="chart-label">Висота над рівнем моря</label>
-				<canvas id="chart-alt"></canvas>
 			</div>
 			<div class="chart-container" onclick="toggleChart({id})" id="container-hum">
 				<label class="chart-label">Вологість</label>

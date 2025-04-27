@@ -194,10 +194,6 @@ function drawCharts(res, labels) {                                  // Ф-ція
         color: 'red',
         data: res.press,
     }, {
-        id: 'chart-alt', 	                                        // Графік висоти
-        color: 'green',
-        data: res.alt,
-    }, {
         id: 'chart-hum', 	                                        // Графік вологості
         color: 'blue',
         data: res.hum,
@@ -213,19 +209,17 @@ function drawCharts(res, labels) {                                  // Ф-ція
 function fetchResult(result) {                                      // Допоміжна функція для відокремлення окремих 
     var temp = [];                                                  // показників від загальних даних, отриманих в БД
     var press = [];
-    var alt = [];
     var hum = [];
     var date = [];
 
     result.forEach(element => {
         temp.push(element.temp_bme280);
         press.push(element.press_bme280);
-        alt.push(element.alt_bme280);
         hum.push(element.hum_bme280);
         date.push(element.date_bme280);
     });
 
-    return { temp, press, alt, hum, date };
+    return { temp, press, hum, date };
 }
 
 function createConfig(labels, data, colorName) {                    // допоміжна ф-ція для налаштування виводу графіків
