@@ -1,0 +1,46 @@
+Current:
++ remove altitude value
++ update styles, colors
++ remove id column (at least do not display)
++ (?) remove weather feature as redundant
+
+- fix current data functionality
+- fix charts functionality 
+- add icon for pressure
+
+
+Base:
+= update styles, colors
+- translate all comments to English
+- update background according to the data from weather site
+- light/dark themes switch button
+- show/hide items for database table and charts 
+- alert for high/low temperature, humidity etc. (can be alerted by telegram bot)
+- database and charts date from calendar
+
+Weather:
+- Search line to select city weather
+- show weather by users location
+- add telegram bot with same functionality
+
+Database table:
+= remove id column (at least do not display)
+- (?) add selections of columns to display
+
+Adaptivity:
+- Configure styles for mobile view
+
+Low priority:
+= (?) remove weather feature as redundant
+- remove navigation buttons
+
+Global features:
+- Authentification (to allow changes (led_slider etc.) only for authentificated user, for others view mode only)
+- mobile app/widget with current data
+- add new sensors (light, CO₂), air quality (IAQ)
+- Move frontend to Vue.js
+- Move backend from php to other language
+- (?) Add new microcontollers to the same environment
+
+
+

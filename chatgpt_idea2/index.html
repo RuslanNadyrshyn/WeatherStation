@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Моніторинг мікроконтролера</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Моніторинг мікроконтролера</h1>
+  </header>
+
+  <main>
+    <div id="led-control">
+      <label for="led-brightness">Яскравість LED:</label>
+      <input type="range" id="led-brightness" min="0" max="100" value="50">
+    </div>
+    <section id="current-data">
+      <div class="card">
+        <span class="icon">🌡️</span>
+        <div class="value" id="temp">23</div>
+      </div>
+      <div class="card">
+        <span class="icon">💧</span>
+        <div class="value" id="humidity">23</div>
+      </div>
+      <div class="card">
+        <span class="icon">🌪️</span>
+        <div class="value" id="pressure">1233</div>
+      </div>
+      <div id="post"></div>
+    </section>
+
+    <div id="last-update">
+      Оновлено: <span id="time-current"></span>
+    </div>
+
+    <button id="toggle-history">Показати історію 🔽</button>
+
+    <section id="history-section">
+      <div class="controls">
+        <label for="rowsPerPage">Показувати:</label>
+        <select id="rowsPerPage">
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="data-table">
+          <thead>
+            <tr>
+              <th data-column="time">Час</th>
+              <th data-column="temp">Температура (°C)</th>
+              <th data-column="humidity">Вологість (%)</th>
+              <th data-column="pressure">Тиск (hPa)</th>
+            </tr>
+          </thead>
+          <tbody id="data-table-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+      <div class="record-count" id="recordCount"></div>
+
+      <div id="chart-wrapper">
+        <canvas id="history-chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -2,138 +2,93 @@
 <html>
 
 <head>
-	<meta charset="utf-8"> 									<!-- Підключення кирилиці -->
+	<meta charset="utf-8"> <!-- Підключення кирилиці -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="public/css/style.css">		<!-- Підключення таблиці стилей-->
-	<link rel="icon" type="image/png" href="public/img/04n.png"/>
-	<title>BME280 Nadyrshyn</title>
-	<script src="config/config.js"></script>
-	<script src="public/js/request.js"></script>
-	<script src="public/js/script.js"></script>				<!-- Підключення додаткових бібліотек -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+	<link rel="stylesheet" href="public/css/styles.css"> <!-- Підключення таблиці стилей-->
+	<link rel="icon" type="image/png" href="public/img/pressure.png" />
+	<title>Home MeteoStation</title>
 </head>
 
-<body>														<!-- Блок відображення сторінки -->	
-	<div class="background">
-		<div class="background-img"></div>
-	</div>
+<body> <!-- Блок відображення сторінки -->
 	<header>
-        <nav class="header-nav">
-            <div class="weather-container">
-				<div class="dropdown" onclick="showDropdown()">	<!-- Елемент випадаючого списку міст -->
-                    <a id="location"></a>
-                    <i class="fa fa-caret-down"></i>
-                    <nav class="dropdown-content" id="cities"></nav>
-                </div>
-                <div class="dropdown-weather">				<!-- Елемент відображення температури в обраному місті -->
-					<div class="weather-label-icon">
-						<div id="location-weather"> °С</div>
-						<img class="weather-icon" id="weather-icon" src=""/>
-					</div>
-                    <div class="weather-block">				<!-- Елемент випадаючої таблиці з даними погоди в обраному місті -->
-						<table class="weather-table" cellspacing='0'>
-							<thead>
-								<tr><th>Погода</th></tr>
-								<tr><th>Температура</th></tr>
-								<tr><th>Відчувається як</th></tr>
-								<tr><th>Тиск</th></tr>
-								<tr><th>Вологість</th></tr>
-								<tr><th>Хмарність</th></tr>
-								<tr><th>Вітер</th></tr>
-							</thead>
-							<tbody>
-								<tr><td id="weather"></td></tr>
-								<tr><td id="temp-weather"></td></tr>
-								<tr><td id="temp-feels-weather"></td></tr>
-								<tr><td id="press-weather"></td></tr>
-								<tr><td id="hum-weather"></td></tr>
-								<tr><td id="cloud-weather"></td></tr>
-								<tr><td id="wind-weather"></td></tr>
-							</tbody>
-						</table>
-                        <a href="https://www.meteo.gov.ua/">Докладніше</a>
-                    </div>
-                </div>
-				
-            </div>
-			<div class="nav-menu">
-				<a class="slidecontainer">
-					<p>LED Brightness:</p>
-					<input type="range" id="ledSlider" onchange="updateSlider()" min="0" max="255" value="200" step="1" class="slider">
-				</a>
+		<h1>Домашня метеостанція</h1>
+	</header>
+
+	<main>
+		<section id="led-control">
+			<h2>Яскравість LED</h2>
+			<input type="range" id="ledSlider" onchange="updateSlider()" min="0" max="255" value="128" class="slider">
+		</section>
+
+		<section id="current-data">
+			<div class="card">
+				<span class="icon">🌡️</span>
+				<div class="value" id="temp"></div>
 			</div>
-			<div class="nav-menu">							<!-- Блок навігації по сторінці-->
-				<div class="nav-menu-buttons">
-					<a href="#current">Дані датчика BME280</a>
-					<a href="#db">База даних</a>
-					<a href="#charts">Графіки</a>
-				</div>
+			<div class="card">
+				<span class="icon">💧</span>
+				<div class="value" id="hum"></div>
 			</div>
-        </nav>
-    </header>
-	<div style="height: 45px;"></div>
-	<div class="container">
-		<h1 id="current">Дані датчика BME280</h1> 			<!-- Створення таблиці "Дані датчика BME280" -->
-		<nav>
-			<div class="label-col">
-				<label>Останнє оновлення:</label>
-				<label id="time-current"></label>
+			<div class="card">
+				<span class="icon">🌪️</span>
+				<div class="value" id="press"></div>
 			</div>
-			<label id="max-count"></label>
-		</nav>
-		<table class="current-table" cellspacing="0">		
-			<tr>
-				<th>Температура</th>
-				<th>Тиск</th>
-				<th>Вологість</th>
-			</tr>
-			<tr>
-				<td class="current-table-td" id="temp"></td>
-				<td class="current-table-td" id="press"></td>
-				<td class="current-table-td" id="hum"></td>
-			</tr>
-		</table>
-		<div id="post"></div>
-	</div>
-	<div class="container">
-		<h1 id="db">База даних</h1>
-		<div class="navigator-container">					
-			<div class="order-menu">
-				<label>Рядків: </label>	
-				<div class="nav-counter" id="navCounter"></div>	<!-- Елемент навігатора кількості рядків -->
-			</div>
-			<div class="order-menu right">
-				<div class="order">							<!-- Елемент випадаючого списку параметрів сортування -->
-					<label form="param">Сортувати по: </label>	
-					<select title="select title" id="selectParam"></select> 
-				</div>
-				<div class="order">							<!-- Елемент випадаючого списку порядку сортування -->
-					<label form="order">Порядок:</label>	
-					<select id="selectOrder"></select>
-				</div>
-			</div>
+			<div id="post"></div>
+		</section>
+
+		<div id="last-update">
+			Оновлено: <span id="time-current">12:12:12 23.04.2020</span>
+		  </div>
+
+		<div class="button-wrapper">
+			<button id="toggle-history">Показати історію 🔽</button>
 		</div>
-		<div class="db-table-container">					
-			<table id="dbTable"></table>					<!-- Елемент таблиці "База Даних" -->
-		</div>
-		<div id="navPages"></div>							<!-- Елемент навігатора сторінок БД -->
-		<nav>
-			<label id="numOfRows"></label>
-			<label class="page-numbers">
-				Сторінка
-				<label id="page"></label>
-				<label>/</label>
-				<label id="numOfPages"></label>
-			</label>
-		</nav>
-	</div>
-	<div class="container">
-		<h1 id="charts">Графіки</h1>	
-		<label class="chart-note">*Натисніть на графік для його збільшення</label>			
-		<div class="chart-block"> 							<!--Вивід графіків -->
-			<div class="chart-container" onclick="toggleChart({id})" id="container-temp"> 
+
+		<!-- TODO: update table structure -->
+		<section id="history-section">
+			<div class="controls">
+				<label for="rowsPerPage">Показувати:</label>
+				<select id="rowsPerPage">
+					<option value="20">20</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+					<option value="200">200</option>
+					<option value="500">500</option>
+					<option value="1000">1000</option>
+				</select>
+			</div>
+
+
+			<div class="table-wrapper">
+				<table id="data-table">
+					<thead>
+						<tr>
+							<th data-column="date">Час</th>
+							<th data-column="temp">Температура (°C)</th>
+							<th data-column="hum">Вологість (%)</th>
+							<th data-column="press">Тиск (hPa)</th>
+						</tr>
+					</thead>
+					<tbody id="data-table-body">
+					</tbody>
+				</table>
+			</div>
+
+			<div class="pagination" id="pagination"></div>
+			<div class="record-count" id="recordCount"></div>
+
+			<div id="chart-wrapper">
+				<canvas id="history-chart"></canvas>
+			</div>
+
+		</section>
+	</main>
+	<div class="container" style="display: none;">
+		<h1 id="charts">Графіки</h1>
+		<label class="chart-note">*Натисніть на графік для його збільшення</label>
+		<div class="chart-block">
+			<div class="chart-container" onclick="toggleChart({id})" id="container-temp">
 				<label class="chart-label">Температура</label>
 				<canvas id="chart-temp"></canvas>
 			</div>
@@ -146,22 +101,25 @@
 				<canvas id="chart-hum"></canvas>
 			</div>
 		</div>
-	</div> 
+	</div>
+
+	<script src="config/config.js"></script>
+	<script src="public/js/request.js"></script>
+	<script src="public/js/script.js"></script> <!-- Підключення додаткових бібліотек -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
 </body>
+
 </html>
 
 <!-- Поле script -->
 <script>
-	localStorage.setItem("ServerError", "");							// Очищення повідомлення про помилку 
-	$(document).ready(function () { 									// Виконання після того, як сторінка завантажить усі залежності
-		var items = getItems();											// Виклик функції, яка повертає параметри з локального сховища браузера
-		showCities();													// Виклик функції заповнення списку міст
+	localStorage.setItem("ServerError", "");              // Очищення повідомлення про помилку 
+	$(document).ready(function () {                   // Виконання після того, як сторінка завантажить усі залежності
+		var items = getItems();                      // Виклик функції, яка повертає параметри з локального сховища браузера
 		getSlider();
-		getCurrentData();												// Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
-		changeLocation(items.city);										// Виклик функції для створення таблиці з даними погоди	
-		printNavCounter(items.count, items.page);						// Виклик функції створення меню навігацій (меню кількості та меню сторінок)
-		printSelectList("param", OPTIONS, items.param, "#selectParam"); // Виклик функції створення випадаючого списку для параметрів сортування
-		printSelectList("order", ORDERS, items.order, "#selectOrder");	// Виклик функції створення випадаючого списку для порядку сортування
-		fetchDB();														// Виклик функції оновлення даних таблиці База даних
+		getCurrentData();                        // Виклик функції динамічного оновлення інформації в таблиці "Дані датчика BME280"
+		renderTable();                            // Виклик функції оновлення даних таблиці База даних
 	});
 </script>

@@ -1,180 +1,171 @@
-/* ------------------------------- Weather -------------------------------*/
+const rowsPerPageSelect = document.getElementById('rowsPerPage');
+const tbody = document.getElementById('data-table-body');
+const pagination = document.getElementById('pagination');
+const recordCount = document.getElementById('recordCount');
+const toggleButton = document.getElementById('toggle-history'); //
+const historySection = document.getElementById('history-section');
+const tableWrapper = document.querySelector('.table-wrapper');
+const headers = document.querySelectorAll('thead th');
 
-function showDropdown() {                                           // Функція розгортки випадаючого списку при натисканні
-    $(".dropdown-content").toggle( function () {
-        $(".dropdown-content").addClass("active");
-    }, function () {
-        $(".dropdown-content").removeClass("active");
+let currentPage = 1;
+let totalRows = 0;
+let rowsPerPage = parseInt(rowsPerPageSelect.value);
+let currentSort = { column: 'date', order: 'asc' };
+let isExpanded = false;
+
+rowsPerPageSelect.addEventListener('change', () => {
+    rowsPerPage = parseInt(rowsPerPageSelect.value);
+    currentPage = 1;
+    renderTable();
+  });
+
+toggleButton.addEventListener('click', () => {
+    isExpanded = !isExpanded;
+    if (isExpanded) {
+        historySection.classList.add('expanded');
+        toggleButton.textContent = "Сховати історію 🔼";
+        renderTable();
+        //   createChart();
+    } else {
+        historySection.classList.remove('expanded');
+        toggleButton.textContent = "Показати історію 🔽";
+    }
+});
+
+// Клік по заголовку таблиці для сортування
+headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const column = header.dataset.column;
+      if (currentSort.column === column) {
+        currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSort.column = column;
+        currentSort.order = 'asc';
+      }
+      currentPage = 1;
+      renderTable();
+    });
+  });
+
+function renderTable() {
+    $.ajax({
+        type: "GET",
+        url: "/src/fetch_db.php?" + "page=" + currentPage + "&count=" + rowsPerPage + "&param=" + currentSort.column + "&order=" + currentSort.order,
+        dataType: "json",
+        success: function (result) {
+            for (let index = 0; index < result.length; index++) {
+                var object = result[index];
+
+                for (const key in object) {
+                    if (Object.hasOwnProperty.call(object, key)) {
+                        if (key == "date_bme280")           // Розділення строки на дату та час
+                            object[key] = object[key].split(" ");
+                    }
+                }
+                result[index] = object;
+            }
+
+            // var res = fetchResult(result);                  // Вибірка з результатів даних для кожного графіка
+            // drawCharts(res, res.date);                      // Функція заповнення графіків
+
+            tbody.innerHTML = '';
+
+            headers.forEach(h => h.classList.remove('sorted'));
+
+            let sortedData = result;
+            if (currentSort.column) {
+                const sortedHeader = Array.from(headers).find(h => h.dataset.column === currentSort.column);
+
+                if (sortedHeader) {
+                    sortedHeader.classList.add('sorted');
+                }
+            }
+            
+            sortedData.forEach(entry => {
+                const row = `<tr>
+                    <td>${entry.date_bme280}</td>
+                    <td>${entry.temp_bme280}</td>
+                    <td>${entry.hum_bme280}</td>
+                    <td>${entry.press_bme280}</td>
+                </tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+
+            renderPagination(sortedData.length);
+
+            tableWrapper.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        },
+        error: function (jqXHR, exception) {                // Повідомлення у випадку помилки
+            printError(jqXHR, exception, '#post');
+        },
     });
 }
 
-function changeLocation(newLocation) {                              // Функція отримання погоди для обраного міста
-    $("#location").html(newLocation);                               // Заміна обраного міста
-    localStorage.setItem("city", newLocation);                      // Зберігання значення міста до локального сховища браузера
-    getWeather(newLocation);						                // Виклик функції для отримання даних погоди обраного міста та створення таблиці з даними погоди
-}
+function renderPagination(totalItems) {
+    pagination.innerHTML = '';
 
-function showCities() {                                             // Функція ініціалізації списка міст
-    var $content = $("<nav class=\"dropdown-content\"></nav>");
-    CITIES.forEach(city => {
-        var $city = $("<a></a>");
-        $city.text(city);
-        $city.click(function () {                                   // Обробка натискання на елемент списку міст
-            changeLocation(city);                                   // Виклик функції отримання погоди для обраного міста
+    numOfPages = getNumOfPages(rowsPerPage);
+
+    const pageCount = numOfPages;
+
+    const prevButton = document.createElement('button');
+    prevButton.innerText = '← Назад';
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
+    pagination.appendChild(prevButton);
+
+    if (currentPage > 3) {
+        addPageButton(1);
+        addEllipsis();
+    }
+
+    for (let i = Math.max(1, currentPage - 2); i <= Math.min(pageCount, currentPage + 2); i++) {
+        addPageButton(i);
+    }
+
+    if (currentPage + 2 < pageCount) {
+        addEllipsis();
+        addPageButton(pageCount);
+    }
+
+    const nextButton = document.createElement('button');
+    nextButton.innerText = 'Вперед →';
+    nextButton.disabled = currentPage === pageCount;
+    nextButton.addEventListener('click', () => {
+        if (currentPage < pageCount) {
+            currentPage++;
+            renderTable();
+        }
+    });
+    pagination.appendChild(nextButton);
+
+    function addPageButton(page) {
+        const btn = document.createElement('button');
+        btn.innerText = page;
+        if (page === currentPage) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+            currentPage = page;
+            renderTable();
         });
-
-        $content.append($city);
-    });
-
-    $("#cities").replaceWith($content);
-}
-
-/* ------------------------------- Navigator -------------------------------*/
-
-function printNavCounter(count, page) {                             // Функція виводу меню кількості виводимих рядків 
-    var $counterList = $("<nav class=\"navigator-block\"></nav>");  // для таблиці бази даних
-
-    for (let i = 0; i < COUNTER_LIST.length; i++) {
-        const element = COUNTER_LIST[i];
-        var $navItem = createNavItem("count", element, count);      // Заповнення меню елементами
-        $counterList.append($navItem);
-    }
-    $("#navCounter").empty();
-    $counterList.appendTo($("#navCounter"));                        
-
-    var numOfPages = getNumOfPages(count);    
-    changeValue("numOfPages", numOfPages);
-
-    if (numOfPages < page) {                                        // Встановлення 1 сторінки, якщо нова кількість сторінок менше, ніж попередньо обрана сторінка
-        localStorage.removeItem("page");
-        printNavPages(numOfPages, 1); 
-    } else printNavPages(numOfPages, page);       
-}
-
-function printNavPages(numOfPages, page) {                          // Функція виводу навігаційного меню сторінок
-    $("#page").text(page);
-    $("#numOfPages").text(numOfPages);
-
-    var $pages = $("<nav class=\'navigator-block pages\'></nav>");
-
-    for (let i = 1; i <= numOfPages; i++) {
-        var $navItem = createNavItem("page", i, page);
-        $pages.append($navItem);
+        pagination.appendChild(btn);
     }
 
-    $("#navPages").empty();
-    $pages.appendTo($("#navPages"));
-}
-
-function createNavItem(item, element, selected) {                   // Функція створення елементу навігації
-    var $navItem = $("<a class=\"navigator-item\"></a>");
-    $navItem.append(element);
-
-    if (element == selected) 
-        $navItem.addClass("selected");
-
-    $navItem.click(function () {                                    // Обробка натискання на елемент навігації
-        if (item == "count") {                                      // Якщо меню кількості рядків
-            $(".nav-counter .selected").attr('class', 'navigator-item');
-            $(this).addClass("selected");
-
-            var numOfPages = getNumOfPages($(this).text());
-            var page = getLocalStorageItem("page", 1);
-
-            if (numOfPages < page) {                                // Якщо кількість сторінок менше обраної,
-                localStorage.setItem("page", 1);                    // видалити з пам'яті номер сторінки 
-                page = 1;
-            }
-            printNavPages(numOfPages, page);
-            changeValue("count", $(this).text());
-        }
-        else if (item == "page"){                                   // Якщо елемент сторінки
-            $(".pages .selected").attr('class', 'navigator-item');
-
-            $(this).addClass("selected");
-            $("#page").text($(this).text());
-            changeValue("page", $(this).text());
-        }
-    });
-    return $navItem;
-}
-
-function printSelectList(name, options, param, id) {                // Функція створення меню з випадаючим списком
-    var $list = $("<select></select>");
-    $list.addClass("select");
-    $list.attr('name', name);
-    $list.attr('id', name);
-    $list.val(param);
-
-    $list.change(function () {
-        var value = $(this).find('option:selected').attr('val');
-        changeValue(name, value);
-    });
-
-    for (let i = 0; i < options.length; i++) {
-        const element = options[i];
-        var $option = $("<option></option>");
-        $option.attr('val', element.value);
-        $option.html(element.text);
-
-        if (element.value == param)
-            $option.attr("selected", "selected");
-
-        $list.append($option);
+    function addEllipsis() {
+        const span = document.createElement('span');
+        span.innerText = '...';
+        pagination.appendChild(span);
     }
-    $(id).empty();
-    $(id).replaceWith($list);
 }
 
-function changeValue(itemName, value) {                             // Функція обробки натискання на елемент сортування
-    localStorage.setItem(itemName, value);                          // та оновлення таблиці "База даних"
-    fetchDB();
-}
 
-/* -------------------------------- Database --------------------------------*/
-
-function createTable(data, header) {                                // Функція для створення таблиці, яка приймає               
-    var $table = $("<table cellspacing='0'></table>");              // масив даних таблиці(data) та головний рядок(header)
-    var $thead = $("<thead></thead>");
-    var $tbody = $("<tbody></tbody>");
-
-    $thead.append(printRow(header, true));
-    $table.append($thead);
-
-    for (let index = 0; index < data.length; index++) {
-        var element = data[index];
-        $tbody.append(printRow(element, false));
-    }
-    $table.append($tbody);
-    return $table;
-}
-
-function printRow(object, isHeader) {                               // Допоміжна функція для створення рядка таблиці
-    var $line = $("<tr></tr>");
-    var param = getLocalStorageItem("param", "id");
-
-    if (isHeader) object.forEach(element =>
-        $line.append($("<th class='sticky'></th>").html(element)));
-    else {
-        for (const key in object) {
-            if (Object.hasOwnProperty.call(object, key)) {
-                var $td = $("<td></td>");
-
-                if (key == param + "_bme280")
-                    $td.addClass("sorted");
-
-                if (key == "date_bme280") {
-                    var date = object[key][0];
-                    var time = object[key][1];
-
-                    $line.append($td.clone().append(date));
-                    $line.append($td.clone().append(time));
-                } else $line.append($td.append(object[key]));
-            }
-        }
-    }
-    return $line;
-}
 
 /* --------------------------------- Charts ---------------------------------*/
 
@@ -224,7 +215,6 @@ function fetchResult(result) {                                      // Допо�
 
 function createConfig(labels, data, colorName) {                    // допоміжна ф-ція для налаштування виводу графіків
     var pointRadius;
-    console.log(data.length);
     if (pointRadius >= 500) pointRadius = 0;
     else if (data.length >= 200) pointRadius = 1;
     else if (data.length >= 100) pointRadius = 2;
@@ -290,15 +280,14 @@ function printError(jqXHR, exception, dest) {                       // Функ�
     } else {
         msg = 'Uncaught Error.\n' + jqXHR.responseText;
     }
-    console.log("msg",msg);
     localStorage.setItem("ServerError", msg);
-    $(dest).text(""+ msg);
+    $(dest).text("" + msg);
 }
 
 function getItems() {                                               // Функція зчитування параметрів з локального сховища браузера
     var items = {                                                   // та встановлення стандартних значень
         page: getLocalStorageItem("page", 1),
-        count: getLocalStorageItem("count", COUNTER_LIST[0]),            
+        count: getLocalStorageItem("count", COUNTER_LIST[0]),
         param: getLocalStorageItem("param", OPTIONS[0].value),
         order: getLocalStorageItem("order", "DESC"),
         city: getLocalStorageItem("city", "Київ"),
@@ -318,7 +307,7 @@ function getLocalStorageItem(name, defaultValue) {                  // Функ�
 }
 
 // Get slider value from database and set it to the item
-function getSlider () {
+function getSlider() {
     sliderValue = getLedSliderValue();
     localStorage.setItem("ledSlider", sliderValue);
 };
